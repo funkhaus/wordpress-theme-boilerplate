@@ -1,41 +1,47 @@
 /*
-Theme Name: Custom Theme 2015
+Theme Name: Client Name 2015
 Theme URI: http://www.example.com/
 Description: A theme for WordPress.
 Author: Dave Funkhouser, Drew Baker, Funkhaus
 Author URI: http://www.funkhaus.us
 Version: 1.0
 
-
 Fonts:
     font-family: Helvetica, Arial, sans-serif;
+        font-weight: 400;     
+        font-weight: 500;
 
+    font-family: 'franklin-gothic-cond', sans-serif;
+        font-weight: 500;
+        font-weight: 700;       
 
 Colors:
     Black: #222222;
-    Color 2: #;
-    Color 3: #;
+    Blue: #??????;
+    Pink: #??????;
 
 /*-------------------------------------------------------------- */
 
-	/* @import url("fonts/fonts.css"); */
+/*
+ * Fonts
+ */
+    @import url('fonts/fonts.css');
+
 
 /*
  * Globals 
  */
-	body { 
-	    font-family: Helvetica, Arial, sans-serif; 
-	    font-size: 11px; 
-	    color: #333;
-	    -webkit-font-smoothing: antialiased;
-	    text-rendering: optimizeLegibility;
-	}
+    body { 
+        font-family: Helvetica, Arial, sans-serif; 
+        font-size: 11px; 
+        color: #333;
+    }
     h1,h2,h3,h4,h5,h6 {
         margin: 0;
         padding: 0;
         line-height: 1;
         font-weight: normal;
-    }	
+    }
     ::selection {
         color: #ebebe3;
         background: #222;
@@ -43,48 +49,49 @@ Colors:
     ::-moz-selection {
         color: #ebebe3;
         background: #222;
-    }	
+    }   
+
 
 /* 
  * Links 
  */
-	a { 
-	    color: #333; 
-	    text-decoration: none;
-	    outline: none;	    
-	}
-	a:hover { 
-	    color: #666;
-	    text-decoration: underline;
-	}
-	a img {
-	   border: none;
-	}
-	
+    a { 
+        color: #333; 
+        text-decoration: none;
+        outline: none;      
+    }
+    a:hover { 
+        color: #666;
+        text-decoration: underline;
+    }
+    a img {
+       border: none;
+    }
+
 
 /* 
  * Page Structure 
  */
- 	#container {
-	 	
- 	}
- 	#header {
-	 	
- 	}
- 	#content {
-	 	
- 	}
- 	#footer {
-	 	
- 	}
+    #container {
+
+    }
+    #header {
+
+    }
+    #content {
+
+    }
+    #footer {
+
+    }
 
 
 /* 
  * Menus
- */ 
+ */
 
 
- 
+
 /* 
  * Header
  */ 
@@ -102,14 +109,12 @@ Colors:
  */
 
 
- 
- 
-/* 
+
+ /* 
  * Work Detail
  */ 
 
- 
- 
+
 
 /* 
  * Category
@@ -122,7 +127,7 @@ Colors:
  */ 
 
 
- 
+
 /* 
  * Footer
  */ 
@@ -134,41 +139,20 @@ Colors:
  */
     /* Color */
     a {
-    	transition: color 0.4s;
+        transition: color 0.4s;
     }    
-    
+
     /* Opacity */
     .browse {
-		transition: opacity 0.4s;
+        transition: opacity 0.4s;
     }
 
     /* Everything */
     svg path {
-		transition: 0.4s;
+        transition: 0.4s;
     }
-
-
-
-/*
- * Tools 
- */
-    #tagline {
-        display: none;
-    }
-    #infscr-loading {
-	    display: none !important;
-    }
-
-
-
-/*
- * 404 Error
- */
-    .error-404 {
-        text-align: center;
-        font-size: 32px;
-    }
-
+    
+    
 
 /*
  * Wordpress Required 
