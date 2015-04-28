@@ -1,8 +1,8 @@
 # Funkhaus Programming Style Guide
 
-This is the Funkhaus programming style guide and WordPress template theme.
+This is the [Funkhaus](http://funkhaus.us) programming style guide and WordPress template theme.
 
-The purpose of this style guide is to provide guidance on building WordPress sites in the style Funkhaus has developed over the years. The aim is to make code readable,  very easy for fresh eyes to understand, and standardize the many ways things can be done in WordPress.
+The purpose of this style guide is to provide guidance on building WordPress sites in the style [Funkhaus](http://funkhaus.us) has developed over the years. The aim is to make code readable,  very easy for fresh eyes to understand, and standardize the many ways things can be done in WordPress.
 
 ## Table of Contents
 1. [Theme Setup](#theme-setup)
