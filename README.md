@@ -1484,5 +1484,6 @@ ___
 ## To Do List
 
 1. Replace all @TODO in this document with correct examples
+1. Add WordPress page structure example. Also when to use a post or a page or a custom post type.
 1. Advanced pagination (next_page() and how to build correct back buttons using sessions)
 1. How to use pre_get_posts for advanced queries (like search results)
