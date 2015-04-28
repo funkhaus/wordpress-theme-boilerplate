@@ -1477,7 +1477,7 @@ ___
 
 ___
 
-## M0obile & Responsive
+## Mobile & Responsive
 
 @TODO
 
