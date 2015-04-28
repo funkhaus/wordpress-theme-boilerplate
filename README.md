@@ -26,7 +26,7 @@ The purpose of this style guide is to provide guidance on building WordPress sit
 1. [Open Graph Tags](#open-graph-tags)
 1. [Admin & Login Pages](#admin-login)
 1. [Mobile & Responsive](#mobile-responsive)
-1. [To Do List](#todo)
+1. [To Do List](#to-do-list)
 
 ___
 
@@ -1477,7 +1477,7 @@ ___
 
 ___
 
-## Mobile
+## M0obile & Responsive
 
 @TODO
 
