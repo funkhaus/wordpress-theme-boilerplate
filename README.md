@@ -564,7 +564,7 @@ Whitespace in code is very important, but there is a wide variety of approaches 
 
 
 ### PHP
-4 space tabs. Everything indented. New lines for anything opening or closing. New line for major code separations.
+4 space tabs. Everything indented. New lines for anything opening or closing. New line for major code separations. Always use <?php (not <? or <?=),
 
 ```
 <div>
@@ -590,7 +590,7 @@ Whitespace in code is very important, but there is a wide variety of approaches 
 ```
 
 ### PHP
-For when inside function.php for example. 4 space tabs. New lines for everything. Single quotes for parameters. New lines for opening and closing of PHP (if required). Use [output buffering](http://stackoverflow.com/a/4402045/503546) for anything major that needs to be returned, rather than concatenating a string (so never do `$output .= '<div class="example">Something</div>'`).
+When inside function.php for example. 4 space tabs. New lines for everything. Single quotes for parameters. New lines for opening and closing of PHP (if required). Use [output buffering](http://stackoverflow.com/a/4402045/503546) for anything major that needs to be returned, rather than concatenating a string (so never do `$output .= '<div class="example">Something</div>'`).
 
 ```php
 /*
@@ -631,11 +631,11 @@ if($foo)
 	return true;
 ```
 
-Extending this example further, here is an exmaple of what not to do:
+Extending this example further, here is an example of what not to do:
 
-```
+```php
 // A more complicated example of what not to do
-<?php
+<?=
 
 	foreach ( $images as $image ) : $count++;
 		$class = 'thumb';
@@ -1201,7 +1201,7 @@ We use Vimeo Pro for most websites we build. Make sure cleint has locked down th
 
 The [Vimeo jQuery API](https://github.com/jrue/Vimeo-jQuery-API) has made working with Vimeo much easier now. Best practice is to use that plugin now. Note that it includes the Froogaloop2 script files for you, so no need to enqueue them too.
 
-There is also an exmaple of using the manual [Froogaloop2 method here](http://labs.funkhausdesign.com/examples/vimeo/froogaloop2-api-basics.html).
+There is also an example of using the manual [Froogaloop2 method here](http://labs.funkhausdesign.com/examples/vimeo/froogaloop2-api-basics.html).
 
 ### Scaling Video
 
@@ -1483,5 +1483,6 @@ ___
 
 ## To Do List
 
-1. Replace all @TODO in this document with correct exmaples
+1. Replace all @TODO in this document with correct examples
 1. Advanced pagination (next_page() and how to build correct back buttons using sessions)
+1. How to use pre_get_posts for advanced queries (like search results)
