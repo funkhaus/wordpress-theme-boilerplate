@@ -1,32 +1,32 @@
 # Funkhaus Programming Style Guide
 
-This is the [Funkhaus](http://funkhaus.us) programming style guide and WordPress template theme.
+This is the Funkhaus programming style guide and WordPress template theme.
 
-The purpose of this style guide is to provide guidance on building WordPress sites in the style [Funkhaus](http://funkhaus.us) has developed over the years. The aim is to make code readable,  very easy for fresh eyes to understand, and standardize the many ways things can be done in WordPress.
+The purpose of this style guide is to provide guidance on building WordPress sites in the style Funkhaus has developed over the years. The aim is to make code readable, easy for fresh eyes to understand, and to standardize the many ways things can be done in WordPress.
 
 ## Table of Contents
 1. [Theme Setup](#theme-setup)
-1. [JavaScript Setup](#javascript-setup)
-1. [Plugins](#plugins)
-1. [CSS](#css)
-1. [Template Routing](#template-routing)
-1. [Whitespace](#whitespace)
-1. [Enqueue Scripts](#enqueue-scripts)
-1. [Loops](#loops)
-1. [SVGs](#svgs)
-1. [Menus](#menus)
-1. [Metaboxes](#metaboxes)
-1. [Vimeo](#vimeo)
-1. [Galleries](#galleries)
-1. [Image Sizes](#images-sizes)
-1. [Slideshows](#slideshows)
-1. [Z-Index](#z-index)
-1. [Contact Pages](#contact-pages)
-1. [Break Points](#break-points)
-1. [Open Graph Tags](#open-graph-tags)
-1. [Admin & Login Pages](#admin--login)
-1. [Mobile & Responsive](#mobile--responsive)
-1. [To Do List](#to-do-list)
+2. [JavaScript Setup](#javascript-setup)
+3. [CSS Setup](#css)
+4. [Plugins](#plugins)
+5. [Template Routing](#template-routing)
+6. [Whitespace](#whitespace)
+7. [Enqueue Scripts](#enqueue-scripts)
+8. [Loops](#loops)
+9. [SVGs](#svgs)
+10. [Menus](#menus)
+2. [Metaboxes](#metaboxes)
+12. [Vimeo](#vimeo)
+13. [Galleries](#galleries)
+14. [Image Sizes](#images-sizes)
+15. [Slideshows](#slideshows)
+16. [Z-Index](#z-index)
+17. [Contact Pages](#contact-pages)
+18. [Break Points](#break-points)
+19. [Open Graph Tags](#open-graph-tags)
+20. [Admin & Login Pages](#admin-login)
+21. [Mobile & Responsive](#mobile-responsive)
+22. [To Do List](#todo)
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 The theme directory name should be something short and indicative of the client's name, with the year the theme was built. For example, `bmw2015`, or `prettybird2015`. We do it this way so we can quickly tell how old a code base is, and easily build a new theme years later, and not worry about local caching of files.
 
-Your directory structure would generally look something like this:
+Generally, the structure of your theme directory will look like this:
 
 ```
 clientname2015
@@ -53,7 +53,7 @@ clientname2015
 	footer.php
 ```
 
-A good basic HTML structure that we use for all our themes. Obviously things will need to be changed on a a case by case basis, but if you find yourself deviating form this basic structure significantly, it might be worth thinking about simplifying things.
+Here is an example of the basic HTML structure that we use for all our themes. Obviously things will need to be changed on a case by case basis, but if you find yourself deviating from this basic structure significantly it might be worth thinking about simplifying things.
 
 ```html
 <html>
@@ -115,108 +115,76 @@ A good basic HTML structure that we use for all our themes. Obviously things wil
 	<?php wp_footer();?>
 </body>
 </html>
-
 ```
 
 ___
 
 ## JavaScript Setup
 
-The main JavaScript file for the theme should be named similar to the theme directory, like `bmw2015.js`, or `prettybrid2015.js`. 
+We put all the main JavaScript file for the site in one file, named just like the theme: `bmw2015.js`, or `prettybrid2015.js`, etc.
 
-You should avoid anonymous functions clogging the namespace, the best way to do this is to include everything in an object. This also allows you to turn off entire sections of the code, or change the run order, which makes debugging easier.
-
+To avoid any namespace issues and keep things simple, all the main logic of the site gets wrapped in one large object. The main js file on the site might look something like this in its most stripped down form:
 ```javascript
-var prettybrid2015 = {
+var client2015 = {
     init: function() {
-		// SVG things
-        prettybrid2015.initSVG();
-        		
-		// Size things
-		prettybrid2015.sizeSections();
+        client2015.firstFunction();
+		client2015.secondFunction();
+		client2015.thirdFunction();
+    },
+    firstFunction: function(){
 		
-		// Init things
-		prettybrid2015.initFitVids();
     },
-    
-    onResize: function(){
-		// Do these things on window resize
-		prettybrid2015.sizeSections();
+	secondFunction: function(){
+		
     },
-    
-    initSVG: function(){
-	    // If needed, include SVG code from here:
-	    // http://stackoverflow.com/questions/11978995/how-to-change-color-of-svg-image-using-css-jquery-svg-image-replacement/11978996#11978996.
-    },
-    
-    sizeSections: function(){
-	    // You might need to dynamically size things depending on browser height/width. 
-	    // This is less needed now that we have VH and VW units in CSS, but sometimes it works better this way, specially when doing 100VH on mobile.
-    },
-    
-    initFitVids: function(){
-	    // You'd include code here to init the FitVids plugin
+	thirdFunction: function(){
+
     }
 };
 jQuery(document).ready(function($){
-    
-    prettybrid2015.init();
-    jQuery(window).resize(function(){
-	    prettybrid2015.onResize();
-    });
+    client2015.init();
 });
-
 ```
 
-If you are using globals, or need to pass in data form PHP (using `wp_localize_script`), be sure to declare them all at the beginning of the JS file. This way it's easy to see what is being used, and we remove the risk of conflicts.
-
-```
-var prettybird2015 = {
-	homeURL: prettybird2015_vars.homeURL,
-	themeURL: prettybird2015_vars.themeURL,
+This also allows you to turn off entire sections of the code, or change the run order, which makes debugging easier. It has the added benefit of providing a clear way to safely set global values:
+```javascript
+var client2015 = {
+	homeURL: client2015_vars.homeURL,
+	themeURL: client2015_vars.themeURL,
 	winHeight: null,
 	winwidth: null,	
     init: function() {
 		// Size things
-		prettybird2015.setWinSize();
+		client2015.setWinSize();
     },
     
     setWinSize: function({
 	    // Set window size
-	    prettybird2015.winHeight = jQuery(window).height();
-	    prettybird2015.winWidth = jQuery(window).width();
+	    client2015.winHeight = jQuery(window).height();
+	    client2015.winWidth = jQuery(window).width();
     }
-}
+};
+jQuery(document).ready(function($){
+    client2015.init();
+    jQuery(window).resize(function(){
+    	client2015.onResize();
+    });
+});
 ```
+In this example we're setting globals brought in from Wordpress (via [wp_localize_script](https://codex.wordpress.org/Function_Reference/wp_localize_script)) and setting them at the top. We're also setting the window dimensions globally every time the browser is resized. Be sure to set any global values at the top of the script in order to make it obvious that they exist.
+
+Have a look through the [main JS file](template/js/site.js) in the template for a more in-depth example of how this js structure can be expanded.
+
 
 ___
 
-
-## Plugins
-
-We try not to use plugins (both WordPress and jQuery), and when we do it's as a last resort to save on a large amount of effort. Using less plugins helps with code relaibility, and avoid situations where the site might stop working, if the plugin stops working. It also reducers th elearning curve for new developers look at the code.
-
-The most common one to avoid is Advanced Custom Fields. It's such a big plugin, and it quickly becomes a critical part of a website. If it breaks or stops working, the site breaks. We have never had a situation that can't be solved by page herachy and a custom metabox.
-
-Here is a list of common plugins that we do use.
-
-
-1. [Simple Page Ordering](https://wordpress.org/plugins/simple-page-ordering/)
-1. [Cycle2](http://jquery.malsup.com/cycle2/api/) (Don't use HTML data attributes, use it as jQuery('.slides').cycle() )
-1. [CaroFredSel](http://docs.dev7studios.com/caroufredsel-old/) (Although Cycle2 is better in most circumstances)
-1. [Vimeo jQuery API](https://github.com/jrue/Vimeo-jQuery-API)
-1. [FitVids](https://github.com/davatron5000/FitVids.js)
-1. [Velocity](http://julian.com/research/velocity/)
-
-___
-
-## CSS
+## CSS Setup
 
 Class names should all be lower case, with hyphens as spaces. So use `work-grid`, not `WorkGrid` or `work_grid`.
 
-ID's should be used very sparingly, and the mostly for top level elements. Some acceptable examples are for elements commons elements like `#menu`, `#sidebar` or `#overlay`.
+ID's should be used very sparingly, and the mostly for top level elements. Some acceptable examples are `#menu`, `#sidebar` or `#overlay`.
 
-When defining styles, try to use classes, and keep things as least specific as needed. For example:
+When defining styles try to keep things as simple as possible. Overcomplicated css definitetions are [more taxing on the browser](https://developers.google.com/speed/docs/best-practices/rendering#UseEfficientCSSSelectors) and make it more difficult to fix problems down the road. So for example:
 
 ```css
 /* This is good */
@@ -233,14 +201,22 @@ When defining styles, try to use classes, and keep things as least specific as n
 
 ### CSS naming conventions
 
-We like to use a semantic approach to CSS, but up until a point. The idea is for you to be able to read the CSS, and get some idea of what the HTML would look like, but still be flexible enough. Using classes like `three-col` and `blue_font` or `largeText` is bad.
+We like to use a semantic approach to CSS up to a certain point. The idea is for you to be able to read the CSS and get some idea of what the HTML would look like. In most cases we avoid making extremely general classes, doing things like `.three-col`, `.blue_font`, or `.largeText` is bad. We'd rather things be intuitive and easy to read when going through the stylesheet.
 
-This goes a little against the trend of completely semantic CSS, but the fact is all these site we build aren't large enough to warrant in depth semantic names and intricate grid systems. We'd rather things be easy to read, and somewhat intuitive when going through the CSS. 
+Here are some base style names we commonly use: 
+	* .block
+	* .section
+	* .grid
+    * .detail
+    * .title
+    * .credit
+    * .meta
+    * .browse
+    * .component
+We use variations of these to describe different parts of the site (i.e. `.director-grid` or `.director-detail`).
 
-We like to use `.block`, `.section`, `.grid`, `.detail`, `.title`, '.credit`. `.meta`, `.browse`, `.component` variations.
 
-
-```ccs
+```css
 /* Good */
 .work-block {
 	display: inline-block;
@@ -261,7 +237,7 @@ We like to use `.block`, `.section`, `.grid`, `.detail`, `.title`, '.credit`. `.
 	color: red;	
 }
 .center-align {
-	text-transform: uppercase;		
+	text-align: center;
 }
 .work-block .title {
 	margin-bottom: 10px;
@@ -281,9 +257,9 @@ We like to use `.block`, `.section`, `.grid`, `.detail`, `.title`, '.credit`. `.
 
 ### Style Sheet Struture
 
-Our preferred approach with CSS is to structure it similar to the sites visual structure. So things that appear at the top of the browser window, should be higher in the CSS document. This makes it faster for us to find a section of code, based on the visual hierarchy of the site. 
+Our preferred approach with CSS is to structure it similar to the sites' visual structure. So things that appear at the top of the browser window, should be higher in the CSS document. This makes it faster to find a section of code, based on the visual hierarchy of the site.
 
-This also applies to individual elements too, so when defining things that might be inside a `.block` for example, try to keep the visual hierarchy in mind. For example:
+This also applies to individual elements too, so when defining things that might be inside a `.block` try to keep the visual hierarchy in mind. For example:
 
 ```html
 <div id="content" class="work-detail">
@@ -305,169 +281,32 @@ This also applies to individual elements too, so when defining things that might
 
 If possible, try to group transitions/animation definitions into one area at the bottom. These are common definitions, and it helps to standardize their application on elements. It's quiet common for a feedback note to be "make all hover states faster", so combing through code looking for all transitions is hard. 
 
-```css
-/*
-Theme Name: Client Name 2015
-Theme URI: http://www.example.com/
-Description: A theme for WordPress.
-Author: Dave Funkhouser, Drew Baker, Funkhaus
-Author URI: http://www.funkhaus.us
-Version: 1.0
+Check out [the stylesheet in the template](template/style.css) folder to see how the stylesheet should be laid out.
 
-Fonts:
-    font-family: Helvetica, Arial, sans-serif;
-    	font-weight: 400;     
-    	font-weight: 500;
-    	
-    font-family: 'franklin-gothic-cond', sans-serif;
-    	font-weight: 500;
-    	font-weight: 700;    	
+___
 
-Colors:
-    Black: #222222;
-    Blue: #??????;
-    Pink: #??????;
+## Plugins
 
-/*-------------------------------------------------------------- */
+We take an extremely conservative approach to using Wordpress and js plugins. If you can build it yourself relatively easily, then you don't need a plugin for it. This helps keep our code reliable and prevents situations where the site might stop working altogether. It also minimizes the learning curve for any new developers looking at the code.
 
-/*
- * Fonts
- */
-	@import url('fonts/fonts.css');
+The most common Wordpress plugin to avoid is Advanced Custom Fields. It's such a big plugin, and it quickly becomes a critical part of a site. If it breaks or stops being supported, the site breaks. We have never had a situation that can't be solved by a combination of page hierachy and custom metaboxes.
 
-/*
- * Globals 
- */
-	body { 
-	    font-family: Helvetica, Arial, sans-serif; 
-	    font-size: 11px; 
-	    color: #333;
-	}
-    h1,h2,h3,h4,h5,h6 {
-        margin: 0;
-        padding: 0;
-        line-height: 1;
-        font-weight: normal;
-    }
-    ::selection {
-        color: #ebebe3;
-        background: #222;
-    }
-    ::-moz-selection {
-        color: #ebebe3;
-        background: #222;
-    }	
+Here's a list of common plugins that we do use:
 
-
-/* 
- * Links 
- */
-	a { 
-	    color: #333; 
-	    text-decoration: none;
-	    outline: none;	    
-	}
-	a:hover { 
-	    color: #666;
-	    text-decoration: underline;
-	}
-	a img {
-	   border: none;
-	}
-	
-
-/* 
- * Page Structure 
- */
-	#container {
-		
-	}
-	#header {
-		
-	}
-	#content {
-		
-	}
-	#footer {
-		
-	}
-
-
-/* 
- * Menus
- */
-
-
- 
-/* 
- * Header
- */ 
-
-
-
-/* 
- * Home
- */
-
-
-
-/* 
- * Work Grid
- */
-
- 
-
- /* 
- * Work Detail
- */ 
-
-
-
-/* 
- * Category
- */ 
-
-
-
-/* 
- * Single (Blog detail)
- */ 
-
-
- 
-/* 
- * Footer
- */ 
-
-
-
-/*
- * Animations
- */
-    /* Color */
-    a {
-    	transition: color 0.4s;
-    }    
-    
-    /* Opacity */
-    .browse {
-		transition: opacity 0.4s;
-    }
-
-    /* Everything */
-    svg path {
-		transition: 0.4s;
-    }
-
-```
+1. [Simple Page Ordering](https://wordpress.org/plugins/simple-page-ordering/)
+1. [Cycle2](http://jquery.malsup.com/cycle2/api/) (Don't use HTML data attributes, use it as jQuery('.slides').cycle() )
+1. [CaroFredSel](http://docs.dev7studios.com/caroufredsel-old/) (Although Cycle2 is better in most circumstances)
+1. [Vimeo jQuery API](https://github.com/jrue/Vimeo-jQuery-API)
+1. [FitVids](https://github.com/davatron5000/FitVids.js)
+1. [Velocity](http://julian.com/research/velocity/)
 
 ___
 
 ## Template Routing
 
-The way Funkhaus does template selection is a little different than most. Normally you'd use a [custom page template](https://codex.wordpress.org/Page_Templates#Custom_Page_Template), but that gets very repetitive for the user when building a site with lots of pages.
+The way Funkhaus does template selection is a little different than most. Normally you'd rely on [custom page templates](https://codex.wordpress.org/Page_Templates#Custom_Page_Template), but that gets very repetitive for the user when building a page-heavy site.
 
-So we use a parent/child relationship conditional, or a few other novel ways to determine the correct template to use. Here are a few common ways to do that in page.php:
+We use parent/child relationships to conditionally determine what template should be used, and we add all the logic into, or a few other novel ways to determine the correct template to use. Here are a few common ways to do that in page.php:
 
 ```php
 global $post;
@@ -564,7 +403,7 @@ Whitespace in code is very important, but there is a wide variety of approaches 
 
 
 ### PHP
-4 space tabs. Everything indented. New lines for anything opening or closing. New line for major code separations. Always use <?php (not <? or <?=),
+4 space tabs. Everything indented. New lines for anything opening or closing. New line for major code separations.
 
 ```
 <div>
@@ -590,7 +429,7 @@ Whitespace in code is very important, but there is a wide variety of approaches 
 ```
 
 ### PHP
-When inside function.php for example. 4 space tabs. New lines for everything. Single quotes for parameters. New lines for opening and closing of PHP (if required). Use [output buffering](http://stackoverflow.com/a/4402045/503546) for anything major that needs to be returned, rather than concatenating a string (so never do `$output .= '<div class="example">Something</div>'`).
+For when inside function.php for example. 4 space tabs. New lines for everything. Single quotes for parameters. New lines for opening and closing of PHP (if required). Use [output buffering](http://stackoverflow.com/a/4402045/503546) for anything major that needs to be returned, rather than concatenating a string (so never do `$output .= '<div class="example">Something</div>'`).
 
 ```php
 /*
@@ -631,11 +470,11 @@ if($foo)
 	return true;
 ```
 
-Extending this example further, here is an example of what not to do:
+Extending this example further, here is an exmaple of what not to do:
 
-```php
+```
 // A more complicated example of what not to do
-<?=
+<?php
 
 	foreach ( $images as $image ) : $count++;
 		$class = 'thumb';
@@ -1201,7 +1040,7 @@ We use Vimeo Pro for most websites we build. Make sure cleint has locked down th
 
 The [Vimeo jQuery API](https://github.com/jrue/Vimeo-jQuery-API) has made working with Vimeo much easier now. Best practice is to use that plugin now. Note that it includes the Froogaloop2 script files for you, so no need to enqueue them too.
 
-There is also an example of using the manual [Froogaloop2 method here](http://labs.funkhausdesign.com/examples/vimeo/froogaloop2-api-basics.html).
+There is also an exmaple of using the manual [Froogaloop2 method here](http://labs.funkhausdesign.com/examples/vimeo/froogaloop2-api-basics.html).
 
 ### Scaling Video
 
@@ -1215,15 +1054,15 @@ Using galleries effectively in WordPress requires the following in your function
 
 ```
 /*
- * Enqueue Custom Gallery
- */
-    function custom_gallery($atts) {
-		if ( !is_admin() ) {
-			include('part-gallery.php');
-		}
-		return $output;
-    }
-	add_shortcode('gallery', 'custom_gallery');
+* Enqueue Custom Gallery
+   */
+   function custom_gallery($atts) {
+  	if ( !is_admin() ) {
+  		include('part-gallery.php');
+  	}
+  	return $output;
+   }
+  add_shortcode('gallery', 'custom_gallery');
 ```	
 
 And then in `part-gallery.php` you'd have code that looks something like this:
@@ -1477,13 +1316,11 @@ ___
 
 ___
 
-## Mobile & Responsive
+## Mobile
 
 @TODO
 
 ## To Do List
 
-1. Replace all @TODO in this document with correct examples
-1. Add WordPress page structure example. Also when to use a post or a page or a custom post type.
-1. Advanced pagination (next_page() and how to build correct back buttons using sessions)
-1. How to use pre_get_posts for advanced queries (like search results)
+1. Replace all @TODO in this document with correct exmaples
+2. Advanced pagination (next_page() and how to build correct back buttons using sessions)
