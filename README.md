@@ -204,15 +204,16 @@ When defining styles try to keep things as simple as possible. Overcomplicated c
 We like to use a semantic approach to CSS up to a certain point. The idea is for you to be able to read the CSS and get some idea of what the HTML would look like. In most cases we avoid making extremely general classes, doing things like `.three-col`, `.blue_font`, or `.largeText` is bad. We'd rather things be intuitive and easy to read when going through the stylesheet.
 
 Here are some base style names we commonly use: 
-	* .block
-	* .section
-	* .grid
-    * .detail
-    * .title
-    * .credit
-    * .meta
-    * .browse
-    * .component
+* `.block`
+* `.section`
+* `.grid`
+* `.detail`
+* `.title`
+* `.credit`
+* `.meta`
+* `.browse`
+* `.component`
+
 We use variations of these to describe different parts of the site (i.e. `.director-grid` or `.director-detail`).
 
 
