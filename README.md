@@ -12,7 +12,7 @@ The purpose of this style guide is to provide guidance on building WordPress sit
    - [Markup Guidelines](#markup-guidelines)
    - [Plugins](#plugins)
    - [Template Routing](#template-routing)
-   - [Image Sizes](#images-sizes)
+   - [Image Sizes](#image-sizes)
    - [Open Graph Tags](#open-graph-tags)
 2. **Front-End Guidelines**
    - [Whitespace](#whitespace)
@@ -75,12 +75,13 @@ All template files should be prefixed with the word `template-`. Common examples
 - `template-video-detail.php`
 
 Icons and image assets should be named describing what they are, not what they represent:
-* Good: 
-  - `icon-envelope.svg`
-  - `icon-arrow-left.svg`
-* Bad
-  - `icon-email.svg`
-  - `icon-previous.svg`
+
+* **Good:**
+	- `icon-envelope.svg`
+	- `icon-arrow-left.svg`
+* **Bad:**
+	- `icon-email.svg`
+	- `icon-previous.svg`
 
 ___
 
@@ -220,16 +221,16 @@ We use variations of these to describe different parts of the site (i.e. `.direc
 ```
 
 There are a few class names that should *always* be used in certain situations:
-1. `.entry`
-   - every time you use `the_content()` it should be wrapped in an element with this class.
-2. `.grid` or `.grid-X` where `X` is the type of grid being used.
-   - any time you are displaying a loop of posts or pages, wrap the loop in this class
-3. `.block`
-   - Use this for individual elements within a grid.
-4. `#content.template-name` where `template-name` describes what template is being used.
-   - Every template should have all the main content in a `#content` div
-   - Every `#content` div should have a class name like `.contact` or `.video-detail`, describing what page template is being used.
-   
+
+* `.entry`
+	- every time you use `the_content()` it should be wrapped in an element with this class.
+* `.grid` or `.grid-X` where `X` is the type of grid being used.
+	- any time you are displaying a loop of posts or pages, wrap the loop in this class
+* `.block`
+	- Use this for individual elements within a grid.
+* `#content.template-name` where `template-name` describes what template is being used.
+	- Every template should have all the main content in a `#content` div
+	- Every `#content` div should have a class name like `.contact` or `.video-detail`, describing what page template is being used.
 
 #### Style Sheet Struture
 
@@ -237,7 +238,7 @@ Our preferred approach with CSS is to structure it similar to the sites' visual 
 
 This also applies to individual elements too, so when defining things that might be inside a `.block` try to keep the visual hierarchy in mind. For example:
 
-```html
+```
 <div id="content" class="work-detail">
 	<div class="media-player">
 		<iframe>
@@ -347,135 +348,14 @@ If you are building a theme that has several variations of single.php, or catego
 ___
 
 ## Front-End Guidelines
-
+Below are some general guidelines for formatting your code in a way that keeps it easily usable for our team. By far the most important thing when it comes to code etiquette is commenting. **Comment everything,** even if it seems obvious to you it needs to be commented. This is especially true for everything in both the main javascript file and the functions.php file.
 
 ### Whitespace
 
 Whitespace in code is very important, but there is a wide variety of approaches people take. This is how we like it to look, in an effort to make code consistent and readable.
 
-
-#### PHP
-4 space tabs. Everything indented. New lines for anything opening or closing. New line for major code separations.
-
-```
-<div>
-
-	<?php
-		// Argument arrays declared on multple lines, properly spaced.
-	    $args = array(
-	        'post_type'        => 'page',
-	    	'orderby'          => 'menu_order',
-	    	'posts_per_page'   => -1,
-	    	'post_parent'      => $post->ID,
-	    	'order'            => 'ASC'
-	    );
-	    $posts = get_posts($args);		
-	?>	
-	<?php foreach($posts as $post) : setup_postdata($post); ?>
-		<p>
-			Four space tabs, opening and closing tags (including <?php ?>) on new lines.
-		</p>
-	<?php endforeach; ?>
-
-</div>
-```
-
-#### PHP
-For when inside function.php for example. 4 space tabs. New lines for everything. Single quotes for parameters. New lines for opening and closing of PHP (if required). Use [output buffering](http://stackoverflow.com/a/4402045/503546) for anything major that needs to be returned, rather than concatenating a string (so never do `$output .= '<div class="example">Something</div>'`).
-
-```php
-/*
- * Add custom metabox to the new/edit page
- */
-    function custom2015_add_metaboxes(){
-        add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');     
-    }
-    add_action('add_meta_boxes', 'custom2015_add_metaboxes');    
-
-    // Media meta box
-    function custom_media_meta() {
-        global $post;
-
-        ?>
-        	<div class="custom-meta">
-				<label for="video-url">Enter the video URL for this page:</label>            
-				<input id="video-url" class="short" title="This is needed for all video pages" name="_custom_video_url" type="text" value="<?php echo $post->_custom_video_url; ?>">
-				<br/>				
-        	</div>
-        <?php
-    }
-    
-```
-
-In PHP, we try to use long form wher epossible, to aid in reability.
-
-```php
-// This is good
-if( $foo ) {
-	return true;
-}
-
-// This is bad
-if($foo) return true;
-
-if($foo) 
-	return true;
-```
-
-Extending this example further, here is an exmaple of what not to do:
-
-```
-// A more complicated example of what not to do
-<?php
-
-	foreach ( $images as $image ) : $count++;
-		$class = 'thumb';
-		if ( $total === 1 ) continue; // skip if only child
-		if ( $count == 1 ) $class .= ' active';
-
-			echo wp_get_attachment_image($image->ID, 'store-gallery-thumb', false, array( 'class' => $class, 'data-image-id' => $image->ID ));
-
-	endforeach; ?>
-```
-
-And here is that same code, but in a way more readable format and debuggable format:
-
-```	
-// This is a correct example of the above code
-<?php
-	foreach ( $images as $image ) {
-		
-		// Set vars
-		$count++;
-		$class = 'thumb';
-		
-		// Skip if only child	
-		if ( $total === 1 ) {
-			continue; 
-		}
-		
-		// If on the first item, set class
-		if ( $count == 1 ) {
-			$class = 'active';
-		} 
-		
-		// Set args
-		$args = array( 
-			'class' 		=> $class,
-			'data-image-id' => $image->ID 
-		);
-		
-		// Show image
-		echo wp_get_attachment_image($image->ID, 'store-gallery-thumb', false, $args);
-
-	};
-?>
-
-```
-
-
 #### CSS
-4 space tabs. New lines for everything. Double lines between sections.
+All CSS should have 4-space tabs and everything should be on new lines. Whenever making a list of selectors be sure to have a line-break between each one.
 
 ```css
 /*
@@ -497,11 +377,10 @@ And here is that same code, but in a way more readable format and debuggable for
 		font-size: 120%;
 		text-transform: none;
 	}
-
 ```
 
 #### JavaScript
-4 space tabs. New line for everything. Liberal use of comments. Try to group similar functions in one comment.
+All javascript should also have 4-space tabs. New line for everything. Extremely liberal use of comments. Try to group similar functions in one comment.
 ```javascript
 
 // Cache image
@@ -538,9 +417,122 @@ $svgs.each(function(){
     });
 
 });
-
 ```
 
+#### PHP
+4-space tabs. Everything indented. New lines for anything opening or closing. New line for major code separations.
+
+```html
+<div>
+
+	<?php
+		// Argument arrays declared on multple lines, properly spaced.
+	    $args = array(
+	        'post_type'        => 'page',
+	    	'orderby'          => 'menu_order',
+	    	'posts_per_page'   => -1,
+	    	'post_parent'      => $post->ID,
+	    	'order'            => 'ASC'
+	    );
+	    $posts = get_posts($args);		
+	?>	
+	<?php foreach($posts as $post) : setup_postdata($post); ?>
+		<p>
+			Four space tabs, opening and closing tags (including <?php ?>) on new lines.
+		</p>
+	<?php endforeach; ?>
+
+</div>
+```
+
+For when inside function.php for example. 4 space tabs. New lines for everything. Single quotes for parameters. New lines for opening and closing of PHP (if required). Use [output buffering](http://stackoverflow.com/a/4402045/503546) for anything major that needs to be returned, rather than concatenating a string (so never do `$output .= '<div class="example">Something</div>'`).
+
+```php
+/*
+ * Add custom metabox to the new/edit page
+ */
+    function custom2015_add_metaboxes(){
+        add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');     
+    }
+    add_action('add_meta_boxes', 'custom2015_add_metaboxes');    
+
+    // Media meta box
+    function custom_media_meta() {
+        global $post;
+
+        ?>
+        	<div class="custom-meta">
+				<label for="video-url">Enter the video URL for this page:</label>            
+				<input id="video-url" class="short" title="This is needed for all video pages" name="_custom_video_url" type="text" value="<?php echo $post->_custom_video_url; ?>">
+				<br/>				
+        	</div>
+        <?php
+    }
+```
+
+In PHP, we try to use long form where possible, to aid in reability.
+
+```php
+// This is good
+if( $foo ) {
+	return true;
+}
+
+// This is bad
+if($foo) return true;
+
+if($foo) 
+	return true;
+```
+
+Extending this example further, here is an exmaple of what **not** to do:
+
+```php
+<?php
+
+	foreach ( $images as $image ) : $count++;
+		$class = 'thumb';
+		if ( $total === 1 ) continue; // skip if only child
+		if ( $count == 1 ) $class .= ' active';
+
+			echo wp_get_attachment_image($image->ID, 'store-gallery-thumb', false, array( 'class' => $class, 'data-image-id' => $image->ID ));
+
+	endforeach; ?>
+```
+
+And here is that same code, but in a way more readable format and debuggable format:
+
+```php
+// This is a correct example of the above code
+<?php
+	foreach ( $images as $image ) {
+		
+		// Set vars
+		$count++;
+		$class = 'thumb';
+		
+		// Skip if only child	
+		if ( $total === 1 ) {
+			continue; 
+		}
+		
+		// If on the first item, set class
+		if ( $count == 1 ) {
+			$class = 'active';
+		} 
+		
+		// Set args
+		$args = array( 
+			'class' 		=> $class,
+			'data-image-id' => $image->ID 
+		);
+		
+		// Show image
+		echo wp_get_attachment_image($image->ID, 'store-gallery-thumb', false, $args);
+
+	};
+?>
+```
 
 ___
 
@@ -552,12 +544,7 @@ You should include style.css in your header.php file like so:
 <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>?v1.0" />
 ```
 
-And then use `wp_enqueue_scripts` to load in each required JS file as need. For example, in functions.php you'd do something like below. 
-
-Be sure to set version numbers and dependencies. Each `wp_register_script` and `wp_enqueue_script` should be on a new line. We do this so it is easy to turn off scripts for debugging. Unless it is a major web project (like Vimeo or Goggle Maps) avoid using 3rd party CDNs.
-
-Be sure to check what scripts ship by default with WordPress (Masnory and jQuery are good examples).
-
+And then use `wp_enqueue_scripts` to load in each required JS file as need. For example, in functions.php you'd do something like this: 
 
 ```php
 /*
@@ -584,7 +571,11 @@ Be sure to check what scripts ship by default with WordPress (Masnory and jQuery
     add_action('wp_enqueue_scripts', 'custom_scripts', 10);
 ```
 
-If you need to multple style sheets, you can register and enqueue them in a simalar way:
+Be sure to set version numbers and dependencies. Each `wp_register_script` and `wp_enqueue_script` should be on a new line. We do this so it is easy to turn off scripts for debugging. Unless it is a major web project (like Vimeo or Goggle Maps) avoid using 3rd party CDNs.
+
+Be sure to check what scripts ship by default with WordPress (Masonry and jQuery are good examples).
+
+If you need to call multple style sheets, you can register and enqueue them in a simalar way:
 
 
 ```php
@@ -599,29 +590,24 @@ If you need to multple style sheets, you can register and enqueue them in a sima
 		}
 
     }
-	add_action('wp_enqueue_scripts', 'custom_styles', 10);	
+	add_action('wp_enqueue_scripts', 'custom_styles', 10);
 ```
 
 ___
 
 ### Loops
-#### Default Loop
-One of the foundations of WordPress is loops.
+Here are some basic best-practices when looping in PHP.
 
-When displaying a page with one loop, the default patten is preferred:
+#### Default Loop
+When displaying a page with one loop, the default Wordpress patten is preferred:
 
 ```php
 // Default loop. Good.
 <?php if (have_posts()) : ?>
 <?php while (have_posts()) : the_post(); ?>
 
-    <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>            
-    
-        <div class="entry">
-            <?php the_content(); ?>
-			<?php edit_post_link('+ Edit', '<p>', '</p>'); ?>
-        </div>
-        
+	<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+		Content in here
 	</div>
 
 <?php endwhile; ?>
@@ -629,7 +615,7 @@ When displaying a page with one loop, the default patten is preferred:
 ```
 
 #### Secondary Loops
-Often you'll need to do a secondary loop (eg. when displaying a grid of pages). You should never need to use `query_posts()`.  Using `get_posts()` as a foreach is the preferred way. The example below uses a `setup_postdata()`, which is often not needed, but shown to be equivalent to the above example.
+Often you'll need to do a secondary loop (eg. when displaying a grid of pages). You should *never* need to use `query_posts()`. Using `get_posts()` and a foreach is the preferred way. The example below uses a `setup_postdata()`, which is often not needed, but shown to be equivalent to the above example.
 
 ```php
 // get_posts loop. Good.
@@ -648,10 +634,9 @@ Often you'll need to do a secondary loop (eg. when displaying a grid of pages). 
 
     <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>            
     
-        <div class="entry">
-            <?php the_content(); ?>
-			<?php edit_post_link('+ Edit', '<p>', '</p>'); ?>
-        </div>
+		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+			Content in here
+		</div>
 
 	</div>    	
 
@@ -676,28 +661,21 @@ Sometimes you'll need to use WP_Query if you need pagination on a loop (with cus
 	$episodes_query = new WP_Query($args);
 ?>	
 <?php if( $episodes_query->have_posts() ) : ?>
-
 	<div id="content" class="episodes-grid">
-	
+
 		<?php while ( $episodes_query->have_posts() ) : $episodes_query->the_post(); ?>
 
-		    <div id="post-<?php the_ID(); ?>" <?php post_class('block episode-block'); ?>>            
-		    
-		        <div class="entry">
-		            <?php the_content(); ?>
-					<?php edit_post_link('+ Edit', '<p>', '</p>'); ?>
-		        </div>
-		        
-			</div>		
-	
+			<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+				Content in here
+			</div>
+
 		<?php endwhile; ?>
 	
 	</div>
-	
+
 	<?php build_pagination_links($episodes_query); ?>
 
 <?php endif; ?>
-
 ```
 
 Then in functions.php you'd define the `build_pagination_links` like this:
@@ -734,7 +712,6 @@ Then in functions.php you'd define the `build_pagination_links` like this:
 			</div>
 		<?
 	}
-
 ```
 
 #### Nested Loops
@@ -808,7 +785,7 @@ Using the method discribed in the "Template Routing" section above, you put the 
 </div>
 ```
 
-Then inside each template part, you'd display a video player with thumbnails perhaps, or the gallery section, etc. For xample, here is what `part-section-text.php` might look like:
+Then inside each template part, you'd display a video player with thumbnails perhaps, or the gallery section, etc. For example, here is what `part-section-text.php` might look like:
 
 ```php
 <div class="section text-section">
@@ -829,7 +806,6 @@ First you include an SVG as an IMG tag:
 
 ```html
 <img class="svg " src="<?php echo get_template_directory_uri(); ?>/images/logo.svg" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">            
-
 ```
 
 Then you'd place this code in your JS file. It's easy to modify this to work with a callback, once all SVG's are replaced.
@@ -981,7 +957,6 @@ Sometimes you'll see examples on the internet which save mutlple vlaues in one k
 	<br/>					
 
 </div>
-
 ```
 
 ___
