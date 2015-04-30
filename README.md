@@ -5,32 +5,43 @@ This is the Funkhaus programming style guide and WordPress template theme.
 The purpose of this style guide is to provide guidance on building WordPress sites in the style Funkhaus has developed over the years. The aim is to make code readable, easy for fresh eyes to understand, and to standardize the many ways things can be done in WordPress.
 
 ## Table of Contents
-1. [Theme Setup](#theme-setup)
-2. [JavaScript Setup](#javascript-setup)
-3. [CSS Setup](#css)
-4. [Plugins](#plugins)
-5. [Template Routing](#template-routing)
-6. [Whitespace](#whitespace)
-7. [Enqueue Scripts](#enqueue-scripts)
-8. [Loops](#loops)
-9. [SVGs](#svgs)
-10. [Menus](#menus)
-2. [Metaboxes](#metaboxes)
-12. [Vimeo](#vimeo)
-13. [Galleries](#galleries)
-14. [Image Sizes](#images-sizes)
-15. [Slideshows](#slideshows)
-16. [Z-Index](#z-index)
-17. [Contact Pages](#contact-pages)
-18. [Break Points](#break-points)
-19. [Open Graph Tags](#open-graph-tags)
-20. [Admin & Login Pages](#admin-login)
-21. [Mobile & Responsive](#mobile-responsive)
-22. [To Do List](#todo)
+1. **Setting Up**
+   - [Theme Setup](#theme-setup)
+   - [JavaScript Setup](#javascript-setup)
+   - [CSS Setup](#css-setup)
+   - [Markup Guidelines](#markup-guidelines)
+   - [Plugins](#plugins)
+   - [Template Routing](#template-routing)
+   - [Image Sizes](#images-sizes)
+   - [Open Graph Tags](#open-graph-tags)
+2. **Front-End Guidelines**
+   - [Whitespace](#whitespace)
+   - [Z-Index](#z-index)
+   - [SVGs](#svgs)
+   - [Mobile & Responsive](#mobile-responsive)
+   - [Break Points](#break-points)
+3. **Working with Wordpress**
+   - [Custom Functions](#custom-functions)
+   - [Enqueue Scripts](#enqueue-scripts)
+   - [Menus](#menus)
+   - [Metaboxes](#metaboxes)
+   - [Loops](#loops)
+   - [Admin & Login Pages](#admin-login)
+4. **Common Elements**
+   - [Vimeo](#vimeo)
+   - [Galleries](#galleries)
+   - [Slideshows](#slideshows)
+   - [Contact Pages](#contact-pages)
+5. [To Do List](#todo)
+
 
 ___
 
-## Theme Setup
+
+## Setting Up
+Below are some general guidelines to follow before you get started.
+
+### Theme Setup
 
 The theme directory name should be something short and indicative of the client's name, with the year the theme was built. For example, `bmw2015`, or `prettybird2015`. We do it this way so we can quickly tell how old a code base is, and easily build a new theme years later, and not worry about local caching of files.
 
@@ -53,73 +64,27 @@ clientname2015
 	footer.php
 ```
 
-Here is an example of the basic HTML structure that we use for all our themes. Obviously things will need to be changed on a case by case basis, but if you find yourself deviating from this basic structure significantly it might be worth thinking about simplifying things.
+#### File Naming
 
-```html
-<html>
-<head>
-	<!-- The HEAD would contain any of the useful things you need. For example, the stylesheet: -->
-    <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>?v1.0" />	
+Any componenets that will be used on multiple pages should be abstracted into a separate file prefixed with the word "part." Common examples might be:
+- `part-newsletter-signup.php`
+- `part-slideshow.php`
 
-	<!-- Or some meta tags -->    
-    <?php if( is_front_page() ) : ?>
-        <meta name="description" content="<?php bloginfo('description'); ?>">
-    <?php endif; ?>
-    
-    <!-- Often you'll need Typekit: -->
-	<script type="text/javascript" src="//use.typekit.net/xyl8ynd.js"></script>
-	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>    
-    
-    <?php wp_head();?>
-</head>
-<body <?php body_class(); ?>>
+All template files should be prefixed with the word `template-`. Common examples:
+- `template-director-grid.php`
+- `template-video-detail.php`
 
-	<div id="menu">
-		If using a Hamburger menu, this is where it would go generally. This allows you to translateX the position of #container if needed, or easily have the menu slide over the top of all content.
-	</div>
-
-	<div id="container">
-		<div id="header">
-			A top menu and logo would generally go in here. 
-		</div>
-	
-		<div id="content" class="work-grid">
-			The class of content will change, depending on the template being viewed. 
-			
-			The class should be a top level, short descriptive word for what that path is showing. Some common examples:
-			* work-grid
-			* work-detail
-			* contact
-			* about
-			* category
-			* single
-
-			<div id="post-<?php the_ID(); ?>" <?php post_class('block'); ?>>
-				Then put all content inside of a DIV like this. If you are inside of a .grid, you'll generally need a .block class added too, then loop this element (and then you'd normally change this <DIV> to an <A> tag and add a href="<?php the_permalink(); ?>".)
-				
-				<div class="entry">
-					Whenever you are displaying user generated content, try to put it inside .entry.
-					<?php the_content(); ?>
-					<?php edit_post_link('+ Edit', '<p>', '</p>'); ?>
-				</div>				
-				
-			</div>
-
-		</div>
-	
-		<div id="footer">
-			Sometimes the footer will need to be outside of #container, if a sticky footer is required. Otherwise put it inside #container.
-		</div>
-	</div>
-
-	<?php wp_footer();?>
-</body>
-</html>
-```
+Icons and image assets should be named describing what they are, not what they represent:
+* Good: 
+  - `icon-envelope.svg`
+  - `icon-arrow-left.svg`
+* Bad
+  - `icon-email.svg`
+  - `icon-previous.svg`
 
 ___
 
-## JavaScript Setup
+### JavaScript Setup
 
 We put all the main JavaScript file for the site in one file, named just like the theme: `bmw2015.js`, or `prettybrid2015.js`, etc.
 
@@ -178,7 +143,7 @@ Have a look through the [main JS file](template/js/site.js) in the template for 
 
 ___
 
-## CSS Setup
+### CSS Setup
 
 Class names should all be lower case, with hyphens as spaces. So use `work-grid`, not `WorkGrid` or `work_grid`.
 
@@ -199,7 +164,7 @@ When defining styles try to keep things as simple as possible. Overcomplicated c
 ```
 
 
-### CSS naming conventions
+#### CSS naming conventions
 
 We like to use a semantic approach to CSS up to a certain point. The idea is for you to be able to read the CSS and get some idea of what the HTML would look like. In most cases we avoid making extremely general classes, doing things like `.three-col`, `.blue_font`, or `.largeText` is bad. We'd rather things be intuitive and easy to read when going through the stylesheet.
 
@@ -252,11 +217,21 @@ We use variations of these to describe different parts of the site (i.e. `.direc
 .largeText {
 	
 }
-
 ```
 
+There are a few class names that should *always* be used in certain situations:
+1. `.entry`
+   - every time you use `the_content()` it should be wrapped in an element with this class.
+2. `.grid` or `.grid-X` where `X` is the type of grid being used.
+   - any time you are displaying a loop of posts or pages, wrap the loop in this class
+3. `.block`
+   - Use this for individual elements within a grid.
+4. `#content.template-name` where `template-name` describes what template is being used.
+   - Every template should have all the main content in a `#content` div
+   - Every `#content` div should have a class name like `.contact` or `.video-detail`, describing what page template is being used.
+   
 
-### Style Sheet Struture
+#### Style Sheet Struture
 
 Our preferred approach with CSS is to structure it similar to the sites' visual structure. So things that appear at the top of the browser window, should be higher in the CSS document. This makes it faster to find a section of code, based on the visual hierarchy of the site.
 
@@ -275,70 +250,90 @@ This also applies to individual elements too, so when defining things that might
 		Text in here.
 	</div>
 </div>
-
 ```
 
- 
+If possible, try to group transitions/animation definitions into one area at the bottom. These are common definitions and it helps to standardize their application on elements. It's quite common for a feedback note to be "make all hover states faster", so combing through code looking for all transitions is hard.
 
-If possible, try to group transitions/animation definitions into one area at the bottom. These are common definitions, and it helps to standardize their application on elements. It's quiet common for a feedback note to be "make all hover states faster", so combing through code looking for all transitions is hard. 
-
-Check out [the stylesheet in the template](template/style.css) folder to see how the stylesheet should be laid out.
+Check out [the stylesheet in the template](template/style.css) folder to see how the CSS should be laid out.
 
 ___
 
-## Plugins
+### Markup Guidelines
+All HTML should be concise, semantic, and use as few wrapping elements as possible. Here are a few strict guidelines we follow for specific tags:
+- `H1`: Should almost never be used, H1 is reserved for the site title only.
+- `H2`: This should be the page title for each page, i.e. "contact" or "Directors."
+- `H3`: Should work well as a secondary headline on any page with body copy. In the design phase an H3 style will be mocked up inside a blog post.
+- `div`: Should be the main building block of the site.
+- `address`: Any street address areas should be wrapped in this tag.
+- `HTML5 tags`: We don't use these very often, but feel free to use them in a way that makes sense.
 
-We take an extremely conservative approach to using Wordpress and js plugins. If you can build it yourself relatively easily, then you don't need a plugin for it. This helps keep our code reliable and prevents situations where the site might stop working altogether. It also minimizes the learning curve for any new developers looking at the code.
+The overall page structure should be fairly minimal. Use a `#container` div to wrap the page *or* a `#wrapper` div. There is no need to have both in most situations. Here is some simplified pseudo-HTML that would represent how any given page should be setup:
 
-The most common Wordpress plugin to avoid is Advanced Custom Fields. It's such a big plugin, and it quickly becomes a critical part of a site. If it breaks or stops being supported, the site breaks. We have never had a situation that can't be solved by a combination of page hierachy and custom metaboxes.
+```html
+<html>
+<head>
+	<script/meta/link tags go here>
+</head>
+<body>
+	<div id="container">
+		<div id="header">
+			A top menu and logo would usually go in here.
+		</div>
 
-Here's a list of common plugins that we do use:
+		<div id="content" class="template-name">
+
+			<div id="post-48">
+				<h2>Post title here</h2>
+				<div class="entry">
+					Post content in here
+				</div>				
+			</div>
+
+		</div>
+		<div id="footer">
+			Put this outside of container if sticky footer is needed.
+		</div>
+	</div>
+</body>
+</html>
+```
+
+___
+
+### Plugins
+
+We take an extremely conservative approach to using Wordpress and js plugins. Generally the rule is if you can build it yourself relatively easily, then you don't need a plugin for it. This helps keep the code reliable and prevents situations where the site might stop working altogether. It also minimizes the learning curve for any fresh eyes looking at the code.
+
+The most common Wordpress plugin to avoid is "Advanced Custom Fields." It's such a big plugin, and it quickly becomes a critical part of a site. If it breaks or stops being supported, the site breaks. We've never had a situation that can't be solved by a combination of page hierachy and custom metaboxes.
+
+Here's a list of common plugins that we *do* use:
 
 1. [Simple Page Ordering](https://wordpress.org/plugins/simple-page-ordering/)
-1. [Cycle2](http://jquery.malsup.com/cycle2/api/) (Don't use HTML data attributes, use it as jQuery('.slides').cycle() )
-1. [CaroFredSel](http://docs.dev7studios.com/caroufredsel-old/) (Although Cycle2 is better in most circumstances)
-1. [Vimeo jQuery API](https://github.com/jrue/Vimeo-jQuery-API)
-1. [FitVids](https://github.com/davatron5000/FitVids.js)
-1. [Velocity](http://julian.com/research/velocity/)
+2. [Cycle2](http://jquery.malsup.com/cycle2/api/) (Don't use HTML data attributes, use it as jQuery('.slides').cycle() )
+3. [CaroFredSel](http://docs.dev7studios.com/caroufredsel-old/) (Although Cycle2 is better in most circumstances)
+4. [Vimeo jQuery API](https://github.com/jrue/Vimeo-jQuery-API)
+5. [FitVids](https://github.com/davatron5000/FitVids.js)
+6. [Velocity](http://julian.com/research/velocity/)
 
 ___
 
-## Template Routing
+### Template Routing
 
 The way Funkhaus does template selection is a little different than most. Normally you'd rely on [custom page templates](https://codex.wordpress.org/Page_Templates#Custom_Page_Template), but that gets very repetitive for the user when building a page-heavy site.
 
-We use parent/child relationships to conditionally determine what template should be used, and we add all the logic into, or a few other novel ways to determine the correct template to use. Here are a few common ways to do that in page.php:
+We use parent/child relationships to conditionally determine what template should be used, and we add all the logic into `page.php`. Here is a simplified example of what that file might look like:
 
 ```php
 global $post;
 switch (true) {
     case is_page('work') :
-		// Redirect to first child page.
-		$pagekids = get_pages("child_of=".$post->ID."&sort_column=menu_order");
-        $firstchild = $pagekids[0];
-        if( $firstchild ) {
-            wp_redirect(get_permalink($firstchild->ID), 301);        
-            exit;
-        } else {
-	        get_template_part('index');
-        }
+        get_template_part('template-work');
         break;
 
-    case has_children($post->ID) : // has_children() is a custom function we use in functions.php. It tests if a given page has children.
-    	// If has child pages
+    case has_children($post->ID) :
+		// If has child pages
         get_template_part('template-work-grid');
         break;
-        
-    case is_tree(5) : // is_tree() is a custom function we use in functions.php. It tests if the current $post is in a given tree.
-    	// If a page id is explicitly set, be sure to comment what the slug should be. 
-    	// Is in the "About" tree.
-        get_template_part('template-work-grid');
-        break;
-        
-    case !empty($post->_custom_video_url) : 
-    	// Page has a video URL metabox value saved, so use the work detail template. 
-        get_template_part('template-work-detail');
-        break;	        
 
     default:
         get_template_part('index');
@@ -348,62 +343,18 @@ switch (true) {
 
 If you are building a theme that has several variations of single.php, or category.php, you should use a similar technique for them too.
 
-Here are the functions for `has_children()` and `is_tree`:
-
-```php
-/*
- * Custom conditional function. Used to get the parent and all it's child.
- */
-    function is_tree($post_id) {
-    	global $post;
-    	
-    	$ancestors = get_post_ancestors($post);
-    	
-    	if( is_page() && (is_page($post_id) || $post->post_parent == $post_id || in_array($post_id, $ancestors)) ) {
-    		return true;
-    	} else {
-    		return false;
-    	}
-    }
-
-
-
-/*
- * Custom conditional function. Used to test if current page has children.
- */
-    function has_children($post_id = false, $post_type = 'page') {
-    	// Defaults
-    	if( !$post_id ) {
-	    	global $post;
-	    	$post_id = $post->ID;
-    	}
-
-    	// Check if the post/page has a child (this should be wrapped in a transient cache function one day)
-        $args = array(
-        	'post_parent'		=> $post_id,
-        	'post_type'			=> $post_type,
-        	'posts_per_page'	=> 1
-        );
-        $children = get_posts($args);
-		
-        if( count( $children ) !== 0 ) { 
-			// Has Children
-	        return true; 
-	    } else { 
-		    // No children
-		    return false; 
-		}
-    }
-```
-
+@TODO document has_children and is_tree
 ___
 
-## Whitespace
+## Front-End Guidelines
+
+
+### Whitespace
 
 Whitespace in code is very important, but there is a wide variety of approaches people take. This is how we like it to look, in an effort to make code consistent and readable.
 
 
-### PHP
+#### PHP
 4 space tabs. Everything indented. New lines for anything opening or closing. New line for major code separations.
 
 ```
@@ -429,7 +380,7 @@ Whitespace in code is very important, but there is a wide variety of approaches 
 </div>
 ```
 
-### PHP
+#### PHP
 For when inside function.php for example. 4 space tabs. New lines for everything. Single quotes for parameters. New lines for opening and closing of PHP (if required). Use [output buffering](http://stackoverflow.com/a/4402045/503546) for anything major that needs to be returned, rather than concatenating a string (so never do `$output .= '<div class="example">Something</div>'`).
 
 ```php
@@ -523,7 +474,7 @@ And here is that same code, but in a way more readable format and debuggable for
 ```
 
 
-### CSS
+#### CSS
 4 space tabs. New lines for everything. Double lines between sections.
 
 ```css
@@ -549,7 +500,7 @@ And here is that same code, but in a way more readable format and debuggable for
 
 ```
 
-### JavaScript
+#### JavaScript
 4 space tabs. New line for everything. Liberal use of comments. Try to group similar functions in one comment.
 ```javascript
 
@@ -593,7 +544,7 @@ $svgs.each(function(){
 
 ___
 
-## Enqueue Scripts
+### Enqueue Scripts
 
 You should include style.css in your header.php file like so:
 
@@ -653,8 +604,8 @@ If you need to multple style sheets, you can register and enqueue them in a sima
 
 ___
 
-## Loops
-### Default Loop
+### Loops
+#### Default Loop
 One of the foundations of WordPress is loops.
 
 When displaying a page with one loop, the default patten is preferred:
@@ -677,7 +628,7 @@ When displaying a page with one loop, the default patten is preferred:
 <?php endif; ?>
 ```
 
-### Secondary Loops
+#### Secondary Loops
 Often you'll need to do a secondary loop (eg. when displaying a grid of pages). You should never need to use `query_posts()`.  Using `get_posts()` as a foreach is the preferred way. The example below uses a `setup_postdata()`, which is often not needed, but shown to be equivalent to the above example.
 
 ```php
@@ -707,7 +658,7 @@ Often you'll need to do a secondary loop (eg. when displaying a grid of pages). 
 <?php endforeach; ?>     	
 ```
 
-### Paginated Loops
+#### Paginated Loops
 Sometimes you'll need to use WP_Query if you need pagination on a loop (with custom post types, or a related episodes grid). This is the preferred way to do that:
 
 ```php
@@ -786,7 +737,7 @@ Then in functions.php you'd define the `build_pagination_links` like this:
 
 ```
 
-### Nested Loops
+#### Nested Loops
 
 Oftentimes you'll need to build out a case study type page, with a video player, and then various content sections down the page. Tradionally this will be done with a plugin like Advanced Custom Fields, but it's very easy to do that without need to use ACF or any plugins, which is what we prefer. So here is how we like to work with nested loops.
 
@@ -870,7 +821,7 @@ Then inside each template part, you'd display a video player with thumbnails per
 
 ___
 
-## SVGs
+### SVGs
 
 You should never need to use a sprite or PNG again! We simplay use SVG's as an image, and use a few lines of jQuery to load in the SVG XML, as documented here.
 
@@ -941,7 +892,7 @@ Be sure to see the section on JavaScript and Enqueue Scripts to see where `prett
 
 ___
 
-## Menus
+### Menus
 
 We try to use WordPress Menu's where possible. We only use generated menus based on page ordering when things like thumbnails are needed. So you'll generally use a `wp_nav_menu` in header.php of every site.
 
@@ -965,7 +916,7 @@ We try to use WordPress Menu's where possible. We only use generated menus based
 
 ___
 
-## Metaboxes
+### Metaboxes
 
 The most common thing you'll generally need is to save a vidoe URL (usually Vimeo) to a page. THe best way to do that is via a custom field metabox. THe below code shows how to build a basic one, and then save the value. 
 
@@ -1035,7 +986,10 @@ Sometimes you'll see examples on the internet which save mutlple vlaues in one k
 
 ___
 
-## Vimeo
+
+## Common Elements
+
+### Vimeo
 
 We use Vimeo Pro for most websites we build. Make sure cleint has locked down thier account to exclude videos from Vimeo, and domain locked them tot he websites they want.
 
@@ -1043,13 +997,13 @@ The [Vimeo jQuery API](https://github.com/jrue/Vimeo-jQuery-API) has made workin
 
 There is also an exmaple of using the manual [Froogaloop2 method here](http://labs.funkhausdesign.com/examples/vimeo/froogaloop2-api-basics.html).
 
-### Scaling Video
+#### Scaling Video
 
 There are many ways to scale Vimeo iframes. I've prepared [examples of many fo them here](http://labs.funkhausdesign.com/examples/video-sizes/index.html).
 
 ___
 
-## Galleries
+### Galleries
 
 Using galleries effectively in WordPress requires the following in your functions.php file:
 
@@ -1147,7 +1101,7 @@ And then in `part-gallery.php` you'd have code that looks something like this:
 
 ___
 
-## Image sizes
+### Image sizes
 
 When handerling images in WordPress, you'll generally need to define them in functions.php and then another set under Settings > Media.
 
@@ -1199,7 +1153,7 @@ And then be sure to set the `$content_width` global, so that WordPress knows how
 
 ___
 
-## Slideshows
+### Slideshows
 
 @TODO
 
@@ -1207,7 +1161,7 @@ When used on a home page, don't worry about lazy loading or infinite scroll. Lim
 
 ___
 
-## Z-Index
+### Z-Index
 
 When using `z-index` in CSS, we like to go in series of 10. So the first default z-index would be 0, then the next layer would be 10, and then 20 and so on.
 
@@ -1219,7 +1173,7 @@ If you find yourself setting z-index to 300 or above, then you should probably r
 
 ___
 
-## Contact Pages
+### Contact Pages
 
 Social links (to Facebook etc) can just be hardcoded. Clients won't change these ever, so don't worry about build custom options pages for these things.
 
@@ -1299,29 +1253,29 @@ When use the UL/LI approach, it's very important to disable the rich editor in W
 
 ____
 
-## Break Points
+### Break Points
 
 @TODO
 
 ___
 
-## Open Graph Tags
+### Open Graph Tags
 
 @TODO
 
 ___
 
-## Admin & Login Pages
+### Admin & Login Pages
 
 @TODO
 
 ___
 
-## Mobile
+### Mobile
 
 @TODO
 
-## To Do List
+### To Do List
 
 1. Replace all @TODO in this document with correct exmaples
 2. Advanced pagination (next_page() and how to build correct back buttons using sessions)
