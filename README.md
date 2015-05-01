@@ -76,18 +76,21 @@ All template files should be prefixed with the word `template-`. Common examples
 
 Icons and image assets should be named describing what they are, not what they represent:
 
-* **Good:**
-	- `icon-envelope.svg`
-	- `icon-arrow-left.svg`
-* **Bad:**
-	- `icon-email.svg`
-	- `icon-previous.svg`
+**Good:**
+
+* `icon-envelope.svg`
+* `icon-arrow-left.svg`
+
+**Bad:**
+
+* `icon-email.svg`
+* `icon-previous.svg`
 
 ___
 
 ### JavaScript Setup
 
-We put all the main JavaScript file for the site in one file, named just like the theme: `bmw2015.js`, or `prettybrid2015.js`, etc.
+We put all the main JavaScript for the site in one file, named just like the theme: `bmw2015.js`, or `prettybrid2015.js`, etc.
 
 To avoid any namespace issues and keep things simple, all the main logic of the site gets wrapped in one large object. The main js file on the site might look something like this in its most stripped down form:
 ```javascript
@@ -268,7 +271,7 @@ All HTML should be concise, semantic, and use as few wrapping elements as possib
 - `address`: Any street address areas should be wrapped in this tag.
 - `HTML5 tags`: We don't use these very often, but feel free to use them in a way that makes sense.
 
-The overall page structure should be fairly minimal. Use a `#container` div to wrap the page *or* a `#wrapper` div. There is no need to have both in most situations. Here is some simplified pseudo-HTML that would represent how any given page should be setup:
+The overall page structure should be fairly minimal. Use a `#container` div to wrap the page **or** a `#wrapper` div. There is no need to have both in most situations. Here is some simplified pseudo-HTML that would represent how any given page should be setup:
 
 ```html
 <html>
@@ -347,12 +350,77 @@ If you are building a theme that has several variations of single.php, or catego
 @TODO document has_children and is_tree
 ___
 
+### Image sizes
+
+When handeling images in WordPress, you'll generally need to define a set of sizes in functions.php and then another set under Settings > Media.
+
+In functions.php we will generally define sizes as "grid-thumb," "work-thumb," "video-thumb," etc.
+
+```
+add_theme_support( 'post-thumbnails' );
+set_post_thumbnail_size( 600, 400, true ); // Normal post thumbnails
+add_image_size( 'grid-thumb', 566, 250, true ); // Medium thumbnail size used on work girds
+add_image_size( 'fullscreen', 1920, 1080, true ); // Large image used on homepage slideshows etc.
+add_image_size( 'social-preview', 600, 315, true ); // Square thumbnail used for Facebook shares
+```
+
+As for the sizes in Settings > Media, we set the width for both "medium" and "large" to be the maximum content width for the site. The height of "medium" will be a [16:9 ratio](http://size43.com/jqueryVideoTool.html) of that width, and the height of "large" will be unlimited (so set it to 0). Thumbnails we generally set to something small and square, like 250px X 250px.
+
+Assuming that the max-width of .entry is 800px, you'd have the following media settings in the backend:
+
+```
+Thumbnail size
+Width: 250px | Height: 250px | Crop: True
+
+Medium size
+Max Width: 800px | Max Height: 450px
+
+Large size
+Max Width: 800px | Max Height: 0
+```
+
+And then be sure to set the `$content_width` global, so that WordPress knows how to size oEmbeds. You'd do that in functions.php like so:
+
+```
+function set_content_width() {
+	global $content_width;
+	if ( is_single() ) {
+		$content_width = 800;
+	} else {
+		$content_width = 1100;
+	}
+}
+add_action( 'template_redirect', 'set_content_width' );
+```
+
+___
+
+### Open Graph Tags
+
+@TODO
+
+___
+
 ## Front-End Guidelines
 Below are some general guidelines for formatting your code in a way that keeps it easily usable for our team. By far the most important thing when it comes to code etiquette is commenting. **Comment everything,** even if it seems obvious to you it needs to be commented. This is especially true for everything in both the main javascript file and the functions.php file.
 
 ### Whitespace
 
-Whitespace in code is very important, but there is a wide variety of approaches people take. This is how we like it to look, in an effort to make code consistent and readable.
+Whitespace in code is very important, but there are a wide variety of approaches people take. This is how we like it to look, in an effort to make code consistent and readable.
+
+___
+
+### Z-Index
+
+When using `z-index` in CSS, we like to go in series of 10. So the first default z-index would be 0, then the next layer would be 10, and then 20 and so on.
+
+If you have a floating header or footer, setting it to 100 or 110 is generally a good idea. Setting an overlay to 200 is accetable too.
+
+If you use Cycle2, you'll notice that it uses 0-100 for it's z-indexing of slides. You can set the base level containing elment to be a low z-index to counter this.
+
+If you find yourself setting z-index to 300 or above, then you should probably reconsider what you are doing. You shouldn't need to set that high of a z-index for a normal website.
+
+___
 
 #### CSS
 All CSS should have 4-space tabs and everything should be on new lines. Whenever making a list of selectors be sure to have a line-break between each one.
@@ -363,7 +431,7 @@ All CSS should have 4-space tabs and everything should be on new lines. Whenever
  */
 	.class-name {
 		font-size: 100%;
-	} 
+	}
 
 
 /*
@@ -1076,75 +1144,11 @@ And then in `part-gallery.php` you'd have code that looks something like this:
 
 ___
 
-### Image sizes
-
-When handerling images in WordPress, you'll generally need to define them in functions.php and then another set under Settings > Media.
-
-In functions.php, we will generally define things as, grid-thumb, or work-thumb, video-thumb, etc.
-
-```
-/*
- * Enable post thumbnail support
- */
-	add_theme_support( 'post-thumbnails' );
-	set_post_thumbnail_size( 600, 400, true ); // Normal post thumbnails
-	add_image_size( 'grid-thumb', 566, 250, true ); // Medium thumbnail size used on work girds
-	add_image_size( 'fullscreen', 1920, 1080, true ); // Large image used on homepage slideshows etc.
-    add_image_size( 'social-preview', 600, 315, true ); // Square thumbnail used for Facebook shares
-    
-```
-
-As for the sizes in Settings > Media, we like to set the width for "medium" and "large" to be the maximum content width for the site. And the height of "medium" to be a [16:9 ratio](http://size43.com/jqueryVideoTool.html) of that width, and the height of "large" to be unlimited (so set it to 0). Thumbnails we generally set to the somthing small and square, like 250px X 250px.
-
-So if the max-width of .entry is 800px, you'd have the following settings:
-
-```
-Thumbnail size
-Max-Width: 250px	Max-Height: 250px	Crop: True
-
-Medium size
-Max-Width: 800px	Max-Height: 450px
-
-Large size
-Max-Width: 800px	Max-Height: 0
-```
-
-And then be sure to set the `$content_width` global, so that WordPress knows how to size oEmbeds. You'd do that in functions.php like so:
-
-```
-/*
- * Set global content width
- */
-	function set_content_width() {
-		global $content_width;
-		if ( is_single() ) {
-			$content_width = 720;		
-		} else {
-			$content_width = 720;
-		}
-	}
-	add_action( 'template_redirect', 'set_content_width' );
-```
-
-___
-
 ### Slideshows
 
 @TODO
 
 When used on a home page, don't worry about lazy loading or infinite scroll. Limit query to display 10 slides at max.
-
-___
-
-### Z-Index
-
-When using `z-index` in CSS, we like to go in series of 10. So the first default z-index would be 0, then the next layer would be 10, and then 20 and so on.
-
-If you have a floating header or footer, setting it to 100 or 110 is generally a good idea. Setting an overlay to 200 is accetable too.
-
-If you use Cycle2, you'll notice that it uses 0-100 for it's z-indexing of slides. You can set the base level containing elment to be a low z-index to counter this.
-
-If you find yourself setting z-index to 300 or above, then you should probably reconsider what you are doing. You shouldn't need to set that high of a z-index for a normal website.
 
 ___
 
@@ -1229,12 +1233,6 @@ When use the UL/LI approach, it's very important to disable the rich editor in W
 ____
 
 ### Break Points
-
-@TODO
-
-___
-
-### Open Graph Tags
 
 @TODO
 
