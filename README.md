@@ -1030,7 +1030,19 @@ We use Vimeo Pro for most websites we build. Make sure cleint has locked down th
 
 The [Vimeo jQuery API](https://github.com/jrue/Vimeo-jQuery-API) has made working with Vimeo much easier now. Best practice is to use that plugin now. Note that it includes the Froogaloop2 script files for you, so no need to enqueue them too.
 
-There is also an exmaple of using the manual [Froogaloop2 method here](http://labs.funkhausdesign.com/examples/vimeo/froogaloop2-api-basics.html).
+There is also an example of using the manual [Froogaloop2 method here](http://labs.funkhausdesign.com/examples/vimeo/froogaloop2-api-basics.html).
+
+When attempting to display a Vimeo video, you'll generally be using a URL from a saved metabox. You should use the [wp_oembed_get](http://codex.wordpress.org/Function_Reference/wp_oembed_get) function to do this, like so:
+
+```
+	<?php 
+		// Show Vimeo video
+		$args = array(
+			'width' => 1280
+		);
+		echo wp_oembed_get($post->_custom_video_url, $args);
+	?>
+```
 
 #### Scaling Video
 
@@ -1243,4 +1255,6 @@ ___
 ### To Do List
 
 1. Replace all @TODO in this document with correct exmaples
-2. Advanced pagination (next_page() and how to build correct back buttons using sessions)
+1. Advanced pagination (next_page() and how to build correct back buttons using sessions)
+1. Add "no resets" in the CSS section
+1. Spelling and grammar check
