@@ -226,14 +226,14 @@ We use variations of these to describe different parts of the site (i.e. `.direc
 There are a few class names that should *always* be used in certain situations:
 
 * `.entry`
-	- every time you use `the_content()` it should be wrapped in an element with this class.
+  - every time you use `the_content()` it should be wrapped in an element with this class.
 * `.grid` or `.grid-X` where `X` is the type of grid being used.
-	- any time you are displaying a loop of posts or pages, wrap the loop in this class
+  - any time you are displaying a loop of posts or pages, wrap the loop in this class
 * `.block`
-	- Use this for individual elements within a grid.
+  - Use this for individual elements within a grid.
 * `#content.template-name` where `template-name` describes what template is being used.
-	- Every template should have all the main content in a `#content` div
-	- Every `#content` div should have a class name like `.contact` or `.video-detail`, describing what page template is being used.
+  - Every template should have all the main content in a `#content` div
+  - Every `#content` div should have a class name like `.contact` or `.video-detail`, describing what page template is being used.
 
 #### Style Sheet Struture
 
@@ -410,18 +410,6 @@ Whitespace in code is very important, but there are a wide variety of approaches
 
 ___
 
-### Z-Index
-
-When using `z-index` in CSS, we like to go in series of 10. So the first default z-index would be 0, then the next layer would be 10, and then 20 and so on.
-
-If you have a floating header or footer, setting it to 100 or 110 is generally a good idea. Setting an overlay to 200 is accetable too.
-
-If you use Cycle2, you'll notice that it uses 0-100 for it's z-indexing of slides. You can set the base level containing elment to be a low z-index to counter this.
-
-If you find yourself setting z-index to 300 or above, then you should probably reconsider what you are doing. You shouldn't need to set that high of a z-index for a normal website.
-
-___
-
 #### CSS
 All CSS should have 4-space tabs and everything should be on new lines. Whenever making a list of selectors be sure to have a line-break between each one.
 
@@ -449,8 +437,8 @@ All CSS should have 4-space tabs and everything should be on new lines. Whenever
 
 #### JavaScript
 All javascript should also have 4-space tabs. New line for everything. Extremely liberal use of comments. Try to group similar functions in one comment.
-```javascript
 
+```javascript
 // Cache image
 var $svgs = jQuery('img.svg');
 
@@ -604,67 +592,75 @@ And here is that same code, but in a way more readable format and debuggable for
 
 ___
 
+### Z-Index
+
+When using `z-index` in CSS, we like to increment values in series of 10. So the first default z-index would be 0, then the next layer would be 10, and then 20 and so on.
+
+If you have a floating header or footer, setting it to 100 or 110 is generally a good idea. Setting an overlay to 200 is accetable too.
+
+If you use Cycle2, you'll notice that it uses 0-100 for it's z-indexing of slides. You can set the base level containing elment to be a low z-index to counter this.
+
+If you find yourself setting z-index to 300 or above, then you should probably reconsider what you're doing.
+
+___
+
 ### Enqueue Scripts
 
-You should include style.css in your header.php file like so:
-
+The stylesheet should normally be added in header.php like so:
 ```html
 <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>?v1.0" />
 ```
 
-And then use `wp_enqueue_scripts` to load in each required JS file as need. For example, in functions.php you'd do something like this: 
+Each js script should be properly enqueued using `wp_enqueue_scripts`. For example, in functions.php you'd do something like this: 
 
 ```php
-/*
- * Enqueue Custom Scripts
- */
-    function custom_scripts() {
-        wp_register_script('prettybird2015', get_template_directory_uri() . '/js/site.js', 'jquery', '1.0');
-        wp_register_script('cycle2', get_template_directory_uri() . '/js/jquery.cycle2.min.js', 'jquery', '2.1.5');
-		wp_register_script('froogaloop2', 'http://a.vimeocdn.com/js/froogaloop2.min.js', 'jquery', '1.0');
-      
-        wp_enqueue_script('jquery');
-        wp_enqueue_script('cycle2');
-        wp_enqueue_script('froogaloop2');
-        wp_enqueue_script('prettybird2015');
+function custom_scripts() {
+	wp_register_script('prettybird2015', get_template_directory_uri() . '/js/site.js', 'jquery', '1.0');
+	wp_register_script('cycle2', get_template_directory_uri() . '/js/jquery.cycle2.min.js', 'jquery', '2.1.5');
+	wp_register_script('froogaloop2', 'http://a.vimeocdn.com/js/froogaloop2.min.js', 'jquery', '1.0');
 
-        // Setup JS variables in scripts. This can be used ot pass in data from PHP to JavaScript. It is not always needed.
-		wp_localize_script('prettybird2015', 'prettybird2015_vars', 
-			array(
-				'themeURL' => get_template_directory_uri(),
-				'homeURL'  => home_url()
-			)
-		);
-    }
-    add_action('wp_enqueue_scripts', 'custom_scripts', 10);
+	wp_enqueue_script('jquery');
+	wp_enqueue_script('cycle2');
+	wp_enqueue_script('froogaloop2');
+	wp_enqueue_script('prettybird2015');
+
+	// Setup JS variables in scripts. This can be used to pass in data from PHP to JavaScript. It is not always needed.
+	wp_localize_script('prettybird2015', 'prettybird2015_vars', 
+		array(
+			'themeURL' => get_template_directory_uri(),
+			'homeURL'  => home_url()
+		)
+	);
+}
+add_action('wp_enqueue_scripts', 'custom_scripts', 10);
 ```
 
-Be sure to set version numbers and dependencies. Each `wp_register_script` and `wp_enqueue_script` should be on a new line. We do this so it is easy to turn off scripts for debugging. Unless it is a major web project (like Vimeo or Goggle Maps) avoid using 3rd party CDNs.
+Some additional notes:
 
-Be sure to check what scripts ship by default with WordPress (Masonry and jQuery are good examples).
+* Be sure to set version numbers and dependencies. 
+* Each `wp_register_script` and `wp_enqueue_script` should be on a new line.
+* Avoid using any 3rd part CDNs unless it's a major web project (like Vimeo or Goggle Maps.)
+* Be sure to check what scripts ship with WordPress (Masonry and jQuery are good examples).
 
 If you need to call multple style sheets, you can register and enqueue them in a simalar way:
 
-
 ```php
-/*
- * Enqueue Custom Styles
- */    
-    function custom_styles() {
-	
-		if( wp_is_mobile() ) {
-			wp_register_style('prettybird2015-mobile', get_template_directory_uri() . '/css/mobile.css');			
-	    	wp_enqueue_style('prettybird2015-mobile');			
-		}
+function custom_styles() {
 
-    }
-	add_action('wp_enqueue_scripts', 'custom_styles', 10);
+	if( wp_is_mobile() ) {
+		wp_register_style('prettybird2015-mobile', get_template_directory_uri() . '/css/mobile.css');
+
+		wp_enqueue_style('prettybird2015-mobile');
+
+	}
+}
+add_action('wp_enqueue_scripts', 'custom_styles', 10);
 ```
 
 ___
 
 ### Loops
-Here are some basic best-practices when looping in PHP.
+Here are some basic best-practices for writing loops in PHP.
 
 #### Default Loop
 When displaying a page with one loop, the default Wordpress patten is preferred:
@@ -683,7 +679,7 @@ When displaying a page with one loop, the default Wordpress patten is preferred:
 ```
 
 #### Secondary Loops
-Often you'll need to do a secondary loop (eg. when displaying a grid of pages). You should *never* need to use `query_posts()`. Using `get_posts()` and a foreach is the preferred way. The example below uses a `setup_postdata()`, which is often not needed, but shown to be equivalent to the above example.
+Often you'll need to do a secondary loop (eg. when displaying a grid of pages). You should *never* need to use `query_posts()` to accomplish this, instead use `get_posts()` and a foreach. The example below uses a `setup_postdata()`, which is often not needed, but shown to be equivalent to the above example.
 
 ```php
 // get_posts loop. Good.
@@ -699,14 +695,10 @@ Often you'll need to do a secondary loop (eg. when displaying a grid of pages). 
     $posts = get_posts($args);
 ?>
 <?php foreach($posts as $post) : setup_postdata($post); ?>
-
-    <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>            
-    
-		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-			Content in here
-		</div>
-
-	</div>    	
+  
+	<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+		Content in here
+	</div>
 
 <?php endforeach; ?>     	
 ```
@@ -795,14 +787,14 @@ work
 			/video-1
 			/video-2
 		/gallery
-		/description	
+		/description
 
 	/case-study-2
 		/videos
 			/video-1
 			/video-2
 		/gallery
-		/description		
+		/description
 ```
 
 Using the method discribed in the "Template Routing" section above, you put the following code in your case study template (probably called `template-case-study.php`. This code then loops through all the child pages of the case study, and uses template parts for each section type.
@@ -810,7 +802,7 @@ Using the method discribed in the "Template Routing" section above, you put the 
 
 ```PHP
 <div id="content" class="case-study">
-	
+
 	<?php
         //Get all child pages of this page
         $args = array(
@@ -868,7 +860,7 @@ ___
 
 ### SVGs
 
-You should never need to use a sprite or PNG again! We simplay use SVG's as an image, and use a few lines of jQuery to load in the SVG XML, as documented here.
+You should never need to use a sprite or PNGs again! We simplay use SVG's as an image, and use a few lines of jQuery to load in the SVG XML, as documented here.
 
 First you include an SVG as an IMG tag:
 
