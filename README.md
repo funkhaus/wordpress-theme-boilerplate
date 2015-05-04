@@ -368,7 +368,6 @@ switch (true) {
 
 If you are building a theme that has several variations of single.php, or category.php, you should use a similar technique for them too.
 
-@TODO document has_children and is_tree
 ___
 
 ### Image sizes
@@ -712,7 +711,64 @@ In this section we'll focus on Wordpress-specific features and the way we approa
 
 ### Custom Functions
 
-@TODO
+There are a few custom utility functions that we add to every site to help make things easier:
+
+`is_tree($post_id)`: This function checks if global $post is within the ancestral tree of a specified page or post.
+
+* There is 1 required parameter of this function, the ID of the target post
+
+Example:
+```php
+$work = get_page_by_path('work');
+if ( is_tree($work->ID) ) {
+	echo 'This page is an ancestor of "Work"';
+}
+```
+
+`has_children($post_id, $post_type)`: This function checks if global $post is within the ancestral tree of a specified page or post.
+
+* The first parameter is the ID of the post to test, and is optional. If no ID is supplied the global $post will be used.
+* The second parameter is the post type, and is optional. This defaults to 'page' and should only be used for hierarchical custom post types when needed.
+* This function is often used in conjunction with **is_tree()** for template routing
+
+Example:
+```php
+$work = get_page_by_path('work');
+
+if ( is_tree($work->ID) && has_children() ) {
+	get_template_part('template-work-grid');
+} else {
+	get_template_part('template-work-detail');
+}
+```
+
+`get_split_title($post_id)`: This function splits a title into parts and wraps each in a `<span>` tag.
+
+* There is 1 required parameter of this function, the ID of the target post
+* By default the delimiter by which to split the title is ` - `
+
+Example:
+```php
+// assuming the post title is "Client name - Spot title"
+echo get_split_title($post->ID);
+
+// this will echo "<span class='line-1'>Client name</span><span class='line-2'>Spot title</span>"
+```
+
+`previous_project_link($html, $exclude)`: This function will return an html `<a>` tag that links to the previous page according to menu_order
+
+* The first parameter is required and is the html to put into the a tag. Most of the time this will just be 'Previous Project' or something similar.
+* The second parameter is optional and is an array of page IDs to exclude
+
+Example:
+```html
+<div class="prev-next">
+	<?php echo previous_project_link('Previous Project'); ?>
+	<?php echo next_project_link('Next Project'); ?>
+</div>
+```
+
+`next_project_link($html, $exclude)`: This function is exactly the same as **previous_project_link()**, but links to the next page rather than the previous.
 
 ___
 
