@@ -39,7 +39,7 @@ ___
 
 
 ## Setting Up
-Below are some general guidelines to follow before you get started.
+Below are some general guidelines to follow while you get started:
 
 ### Theme Setup
 
@@ -66,11 +66,11 @@ clientname2015
 
 #### File Naming
 
-Any componenets that will be used on multiple pages should be abstracted into a separate file prefixed with the word "part." Common examples might be:
+Any components that will be used on multiple pages should be abstracted into a separate file prefixed with the word "part." Common examples might be:
 - `part-newsletter-signup.php`
 - `part-slideshow.php`
 
-All template files should be prefixed with the word `template-`. Common examples:
+All page template files should be prefixed with the word `template-`. Common examples:
 - `template-director-grid.php`
 - `template-video-detail.php`
 
@@ -92,7 +92,7 @@ ___
 
 We put all the main JavaScript for the site in one file, named just like the theme: `bmw2015.js`, or `prettybrid2015.js`, etc.
 
-To avoid any namespace issues and keep things simple, all the main logic of the site gets wrapped in one large object. The main js file on the site might look something like this in its most stripped down form:
+To avoid any namespace issues and keep things simple, all the main logic of the site gets wrapped in one large object. The main js file on the site might look something like this in its most stripped-down form:
 ```javascript
 var client2015 = {
     init: function() {
@@ -226,12 +226,12 @@ We use variations of these to describe different parts of the site (i.e. `.direc
 There are a few class names that should *always* be used in certain situations:
 
 * `.entry`
-  - every time you use `the_content()` it should be wrapped in an element with this class.
-* `.grid` or `.grid-X` where `X` is the type of grid being used.
+  - every time you use **the_content()** it should be wrapped in an element with this class.
+* `.grid` or `.grid-X` where **X** is the type of grid being used.
   - any time you are displaying a loop of posts or pages, wrap the loop in this class
 * `.block`
   - Use this for individual elements within a grid.
-* `#content.template-name` where `template-name` describes what template is being used.
+* `#content.template-name` where **template-name** describes what template is being used.
   - Every template should have all the main content in a `#content` div
   - Every `#content` div should have a class name like `.contact` or `.video-detail`, describing what page template is being used.
 
@@ -239,9 +239,11 @@ There are a few class names that should *always* be used in certain situations:
 
 Our preferred approach with CSS is to structure it similar to the sites' visual structure. So things that appear at the top of the browser window, should be higher in the CSS document. This makes it faster to find a section of code, based on the visual hierarchy of the site.
 
-This also applies to individual elements too, so when defining things that might be inside a `.block` try to keep the visual hierarchy in mind. For example:
+This also applies to individual elements too, so when defining any elements try to keep the visual hierarchy in mind. For example:
 
-```
+**Example Markup**
+
+```html
 <div id="content" class="work-detail">
 	<div class="media-player">
 		<iframe>
@@ -256,9 +258,28 @@ This also applies to individual elements too, so when defining things that might
 </div>
 ```
 
-If possible, try to group transitions/animation definitions into one area at the bottom. These are common definitions and it helps to standardize their application on elements. It's quite common for a feedback note to be "make all hover states faster", so combing through code looking for all transitions is hard.
+**Example CSS**
 
-Check out [the stylesheet in the template](template/style.css) folder to see how the CSS should be laid out.
+```css
+#content.work-detail {
+	margin: auto;
+	max-width: 1100px;
+}
+.media-player {
+	height: 500px;
+}
+.meta {
+	margin: auto;
+	max-width: 800px;
+}
+.entry {
+	margin-top: 50px;
+}
+```
+
+If possible, try to group transitions/animation definitions into one area at the bottom. These are common definitions and it helps to standardize their application on elements. It's quite common for a feedback note to be "make all hover states faster", so having all the transitions in one place makes that a very simple change.
+
+Check out [the stylesheet in the template](template/style.css) folder to see a more in-depth example of how the stylesheet should be laid out.
 
 ___
 
@@ -397,7 +418,7 @@ ___
 
 ### Open Graph Tags
 
-@TODO
+@TODO: Drew, I'm not as familiar with this as you are
 
 ___
 
@@ -604,6 +625,97 @@ If you find yourself setting z-index to 300 or above, then you should probably r
 
 ___
 
+### SVGs
+
+You should never need to use a sprite or PNGs again! We simplay use SVG's as an image, and use a few lines of jQuery to load in the SVG XML, as documented here.
+
+First you include an SVG as an IMG tag:
+
+```html
+<img class="svg " src="<?php echo get_template_directory_uri(); ?>/images/logo.svg" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">            
+```
+
+Then you'd place this code in your JS file. It's easy to modify this to work with a callback, once all SVG's are replaced.
+
+```javascript
+// Set total and counter 
+var $svgs = jQuery('img.svg');
+
+// Convert linked SVG to embedded SVG's
+$svgs.each(function(){
+    var $img = jQuery(this);
+    var imgID = $img.attr('id');
+    var imgClass = $img.attr('class');
+    var imgURL = $img.attr('src');
+
+    jQuery.get(imgURL, function(data) {
+			        
+        // Get the SVG tag, ignore the rest
+        var $svg = jQuery(data).find('svg');
+
+        // Add replaced image's ID to the new SVG
+        if(typeof imgID !== 'undefined') {
+            $svg = $svg.attr('id', imgID);
+        }
+        // Add replaced image's classes to the new SVG
+        if(typeof imgClass !== 'undefined') {
+            $svg = $svg.attr('class', imgClass+' replaced-svg');
+        }
+
+        // Remove any invalid XML tags as per http://validator.w3.org
+        $svg = $svg.removeAttr('xmlns:a');
+
+        // Replace image with new SVG
+        $img.replaceWith($svg);
+    });
+
+});
+
+```
+
+Sometimes you'll want to add SVG to content that has been enetered in the by the user. A common example is for an email icon next to an person's name, or a map pin icon next to a link to an address. This can be done like below 
+
+```javascript
+if( jQuery('#content').hasClass('contact') ) {
+    
+    // Load email icons
+    jQuery('a.email').each(function(){
+        jQuery(this).prepend('<img class="svg" src="'+prettybird2015.themeURL+'/images/icon-email.svg" /> ');
+    });
+
+    // Load map icons
+    jQuery('a.map').each(function(){
+        jQuery(this).prepend('<img class="svg" src="'+prettybird2015.themeURL+'/images/icon-map.svg" /> ');
+    });
+
+}
+```
+
+Be sure to see the section on JavaScript and Enqueue Scripts to see where `prettybird2015.themeURL` comes from.
+
+___
+
+### Mobile & Responsive
+
+@TODO
+
+___
+
+### Break Points
+
+@TODO
+
+___
+
+## Working with Wordpress
+In this section we'll focus on Wordpress-specific features and the way we approach them:
+
+### Custom Functions
+
+@TODO
+
+___
+
 ### Enqueue Scripts
 
 The stylesheet should normally be added in header.php like so:
@@ -655,6 +767,98 @@ function custom_styles() {
 	}
 }
 add_action('wp_enqueue_scripts', 'custom_styles', 10);
+```
+___
+
+### Menus
+
+We try to use WordPress Menu's where possible. We only use generated menus based on page ordering when things like thumbnails are needed. So you'll generally use a `wp_nav_menu` in header.php of every site.
+
+```php
+    // Turn on menus in functions.php
+    register_nav_menus(
+    	array(
+    	  'main_menu' => 'Main Menu',
+    	)
+	);
+	
+	// Then display them like so (in header.php generally):
+	$args = array(
+	    'container'         => 'false',
+	    'menu'              => 'Main Menu',
+	    'menu_id'           => 'main-menu', // You can change this depending on the context
+	    'menu_class'        => 'main-menu menu' // Change the first class, but generally keep 'menu' always.
+	);
+	wp_nav_menu($args);
+```
+
+___
+
+### Metaboxes
+
+The most common thing you'll generally need is to save a video URL (usually Vimeo) to a page. THe best way to do that is via a custom field metabox. THe below code shows how to build a basic one, and then save the value. 
+
+```php
+/*
+ * Add custom metabox to the new/edit page
+ *
+ * By using an underscore before the 'key' (eg: _customkey), WordPress will hide that custom field from the user in the default Custom Field metaboxe UI.
+ *
+ */
+    function custom2015_add_metaboxes(){
+        add_meta_box("custom_media_meta", "Media Meta", "custom_media_meta", "page", "normal", "low");     
+    }
+	add_action("add_meta_boxes", "custom2015_add_metaboxes");    
+	
+    // Build media metabox
+    function custom_media_meta() {
+        global $post;
+
+        ?>
+        	<div class="custom-meta">
+				<label for="video-url">Enter the video URL for this page:</label>            
+				<input id="video-url" class="short" title="This is needed for all video pages" name="_custom_video_url" type="text" value="<?php echo $post->_custom_video_url; ?>">
+				<br/>				
+
+        	</div>
+
+        <?php
+    }
+    
+
+/*
+ * Save the metabox vaule
+ */
+    function custom2015_save_metabox($post_id){
+
+        // check autosave
+        if( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+            return $post_id;
+        }
+
+        if( isset($_POST["_custom_video_url"]) ) {
+	        update_post_meta($post_id, "_custom_video_url", $_POST["_custom_video_url"]);
+        }
+
+    }
+    add_action('save_post', 'custom2015_save_metabox');
+    
+```
+
+Sometimes you'll see examples on the internet which save mutlple vlaues in one key. This should eb avoided, as it becomes very hard to query for that parameter. For example:
+
+```
+// This is bad. Don't save mutlple values to one metakey.
+<div class="custom-meta">
+	<label for="video-url">Enter the video URL for this page:</label>            
+	<input id="video-url" class="short" title="This is needed for all video pages" name="_custom_video[url]" type="text" value="<?php echo $post->_custom_video['url']; ?>">
+	<br/>			
+	
+	<label for="video-credit">Enter credit information for this page:</label>            
+	<input id="video-credit" class="short" title="This is needed for all video pages" name="_custom_video[credit]" type="text" value="<?php echo $post->_custom_video['credit']; ?>">
+	<br/>					
+
+</div>
 ```
 
 ___
@@ -858,171 +1062,14 @@ Then inside each template part, you'd display a video player with thumbnails per
 
 ___
 
-### SVGs
+### Admin & Login Pages
 
-You should never need to use a sprite or PNGs again! We simplay use SVG's as an image, and use a few lines of jQuery to load in the SVG XML, as documented here.
-
-First you include an SVG as an IMG tag:
-
-```html
-<img class="svg " src="<?php echo get_template_directory_uri(); ?>/images/logo.svg" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">            
-```
-
-Then you'd place this code in your JS file. It's easy to modify this to work with a callback, once all SVG's are replaced.
-
-```javascript
-// Set total and counter 
-var $svgs = jQuery('img.svg');
-
-// Convert linked SVG to embedded SVG's
-$svgs.each(function(){
-    var $img = jQuery(this);
-    var imgID = $img.attr('id');
-    var imgClass = $img.attr('class');
-    var imgURL = $img.attr('src');
-
-    jQuery.get(imgURL, function(data) {
-			        
-        // Get the SVG tag, ignore the rest
-        var $svg = jQuery(data).find('svg');
-
-        // Add replaced image's ID to the new SVG
-        if(typeof imgID !== 'undefined') {
-            $svg = $svg.attr('id', imgID);
-        }
-        // Add replaced image's classes to the new SVG
-        if(typeof imgClass !== 'undefined') {
-            $svg = $svg.attr('class', imgClass+' replaced-svg');
-        }
-
-        // Remove any invalid XML tags as per http://validator.w3.org
-        $svg = $svg.removeAttr('xmlns:a');
-
-        // Replace image with new SVG
-        $img.replaceWith($svg);
-    });
-
-});
-
-```
-
-Sometimes you'll want to add SVG to content that has been enetered in the by the user. A common example is for an email icon next to an person's name, or a map pin icon next to a link to an address. This can be done like below 
-
-```javascript
-if( jQuery('#content').hasClass('contact') ) {
-    
-    // Load email icons
-    jQuery('a.email').each(function(){
-        jQuery(this).prepend('<img class="svg" src="'+prettybird2015.themeURL+'/images/icon-email.svg" /> ');
-    });
-
-    // Load map icons
-    jQuery('a.map').each(function(){
-        jQuery(this).prepend('<img class="svg" src="'+prettybird2015.themeURL+'/images/icon-map.svg" /> ');
-    });
-
-}
-```
-
-Be sure to see the section on JavaScript and Enqueue Scripts to see where `prettybird2015.themeURL` comes from.
+@TODO
 
 ___
-
-### Menus
-
-We try to use WordPress Menu's where possible. We only use generated menus based on page ordering when things like thumbnails are needed. So you'll generally use a `wp_nav_menu` in header.php of every site.
-
-```php
-    // Turn on menus in functions.php
-    register_nav_menus(
-    	array(
-    	  'main_menu' => 'Main Menu',
-    	)
-	);
-	
-	// Then display them like so (in header.php generally):
-	$args = array(
-	    'container'         => 'false',
-	    'menu'              => 'Main Menu',
-	    'menu_id'           => 'main-menu', // You can change this depending on the context
-	    'menu_class'        => 'main-menu menu' // Change the first class, but generally keep 'menu' always.
-	);
-	wp_nav_menu($args);
-```
-
-___
-
-### Metaboxes
-
-The most common thing you'll generally need is to save a vidoe URL (usually Vimeo) to a page. THe best way to do that is via a custom field metabox. THe below code shows how to build a basic one, and then save the value. 
-
-```php
-/*
- * Add custom metabox to the new/edit page
- *
- * By using an underscore before the 'key' (eg: _customkey), WordPress will hide that custom field from the user in the default Custom Field metaboxe UI.
- *
- */
-    function custom2015_add_metaboxes(){
-        add_meta_box("custom_media_meta", "Media Meta", "custom_media_meta", "page", "normal", "low");     
-    }
-	add_action("add_meta_boxes", "custom2015_add_metaboxes");    
-	
-    // Build media metabox
-    function custom_media_meta() {
-        global $post;
-
-        ?>
-        	<div class="custom-meta">
-				<label for="video-url">Enter the video URL for this page:</label>            
-				<input id="video-url" class="short" title="This is needed for all video pages" name="_custom_video_url" type="text" value="<?php echo $post->_custom_video_url; ?>">
-				<br/>				
-
-        	</div>
-
-        <?php
-    }
-    
-
-/*
- * Save the metabox vaule
- */
-    function custom2015_save_metabox($post_id){
-
-        // check autosave
-        if( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
-            return $post_id;
-        }
-
-        if( isset($_POST["_custom_video_url"]) ) {
-	        update_post_meta($post_id, "_custom_video_url", $_POST["_custom_video_url"]);
-        }
-
-    }
-    add_action('save_post', 'custom2015_save_metabox');
-    
-```
-
-Sometimes you'll see examples on the internet which save mutlple vlaues in one key. This should eb avoided, as it becomes very hard to query for that parameter. For example:
-
-```
-// This is bad. Don't save mutlple values to one metakey.
-<div class="custom-meta">
-	<label for="video-url">Enter the video URL for this page:</label>            
-	<input id="video-url" class="short" title="This is needed for all video pages" name="_custom_video[url]" type="text" value="<?php echo $post->_custom_video['url']; ?>">
-	<br/>			
-	
-	<label for="video-credit">Enter credit information for this page:</label>            
-	<input id="video-credit" class="short" title="This is needed for all video pages" name="_custom_video[credit]" type="text" value="<?php echo $post->_custom_video['credit']; ?>">
-	<br/>					
-
-</div>
-```
-
-___
-
 
 ## Common Elements
+In this section we'll focus on a few elements that go into almost every site we build and the ways we approach them.
 
 ### Vimeo
 
@@ -1234,23 +1281,8 @@ When use the UL/LI approach, it's very important to disable the rich editor in W
     add_filter('user_can_richedit', 'disabled_rich_editor');
 ```
 
-____
-
-### Break Points
-
-@TODO
-
 ___
 
-### Admin & Login Pages
-
-@TODO
-
-___
-
-### Mobile
-
-@TODO
 
 ### To Do List
 
