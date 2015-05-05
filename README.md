@@ -18,7 +18,7 @@ The purpose of this style guide is to provide guidance on building WordPress sit
    - [Whitespace](#whitespace)
    - [Z-Index](#z-index)
    - [SVGs](#svgs)
-   - [Mobile & Responsive](#mobile-responsive)
+   - [Mobile & Responsive](#mobile--responsive)
 3. **Working with Wordpress**
    - [Custom Functions](#custom-functions)
    - [Enqueue Scripts](#enqueue-scripts)
@@ -560,19 +560,7 @@ if($foo)
 	return true;
 ```
 
-For reasons of portability and consistency, we always use the default opening and closing tags in PHP:
-
-```php
-// This is good:
-<?php ?>
-
-// This is bad
-<?= ?>
-<? ?>
-<% %>
-```
-
-Extending this example further, here is an exmaple of what **not** to do:
+Extending this further, here is an example of what **not** to do:
 
 ```php
 <?php
@@ -621,6 +609,17 @@ And here is that same code, but in a way more readable format and debuggable for
 ?>
 ```
 
+For reasons of portability and consistency, we always use the default opening and closing tags in PHP:
+
+```
+// This is good:
+<?php ?>
+
+// This is bad
+<?= ?>
+<? ?>
+<% %>
+```
 ___
 
 ### Z-Index
@@ -709,7 +708,7 @@ ___
 
 For mobile styling we use a combination of user-agent detects and CSS media-query breakpoints.
 
-#### Mobile detects
+#### Mobile Detects
 By default in the [functions file](template/functions.php) there is a mobile test using [wp_is_mobile()](https://codex.wordpress.org/Function_Reference/wp_is_mobile) that adds a class to the body accordingly. If the user is viewing on mobile then the class **.is-mobile** will be added to the body and if not then the class **.not-mobile** will be added. This class is particularly useful in javascript to avoid running heavy animations on mobile. Here is a basic example:
 
 ```javascript
@@ -750,7 +749,7 @@ All mobile-related CSS should be included in the [mobile.css](template/css/mobil
 
 Using this as a framework, you can then set the min-width of the site to be 550px and set your viewport width like this in the [head](template/header.php):
 ```html
-<meta name="viewport" content="width=640" />
+<meta name="viewport" content="width=550" />
 ```
 
 ___
