@@ -19,7 +19,6 @@ The purpose of this style guide is to provide guidance on building WordPress sit
    - [Z-Index](#z-index)
    - [SVGs](#svgs)
    - [Mobile & Responsive](#mobile-responsive)
-   - [Break Points](#break-points)
 3. **Working with Wordpress**
    - [Custom Functions](#custom-functions)
    - [Enqueue Scripts](#enqueue-scripts)
@@ -561,6 +560,18 @@ if($foo)
 	return true;
 ```
 
+For reasons of portability and consistency, we always use the default opening and closing tags in PHP:
+
+```php
+// This is good:
+<?php ?>
+
+// This is bad
+<?= ?>
+<? ?>
+<% %>
+```
+
 Extending this example further, here is an exmaple of what **not** to do:
 
 ```php
@@ -626,7 +637,7 @@ ___
 
 ### SVGs
 
-You should never need to use a sprite or PNGs again! We simplay use SVG's as an image, and use a few lines of jQuery to load in the SVG XML, as documented here.
+You should never need to use a sprite or PNGs again! We simply use SVG's as an image, and use a few lines of jQuery to load in the SVG XML, as documented here.
 
 First you include an SVG as an IMG tag:
 
@@ -696,13 +707,51 @@ ___
 
 ### Mobile & Responsive
 
-@TODO
+For mobile styling we use a combination of user-agent detects and CSS media-query breakpoints.
 
-___
+#### Mobile detects
+By default in the [functions file](template/functions.php) there is a mobile test using [wp_is_mobile()](https://codex.wordpress.org/Function_Reference/wp_is_mobile) that adds a class to the body accordingly. If the user is viewing on mobile then the class **.is-mobile** will be added to the body and if not then the class **.not-mobile** will be added. This class is particularly useful in javascript to avoid running heavy animations on mobile. Here is a basic example:
 
-### Break Points
+```javascript
+initParallax: function(){
 
-@TODO
+	if ( jQuery('body').hasClass('not-mobile') ) {
+		// run code to initialize parallax effect
+	}
+
+}
+```
+
+#### Break Points
+All mobile-related CSS should be included in the [mobile.css](template/css/mobile.css) stylesheet within the template. The breakpoints will be somewhat specific to each site and design, but in general here is a good starting point:
+
+```css
+	/* Smaller than Desktop HD */
+	@media (max-width: 1200px) {
+
+	}
+	/* Smaller than desktop */
+	@media (max-width: 1000px) {
+
+	}
+	/* Smaller than tablet */
+	@media (max-width: 750px) {
+
+	}
+	/* Mobile and smaller */
+	@media (max-width: 550px) {
+
+	}
+	/* Cinema Display and larger */
+	@media (min-width: 1800px) {
+
+	}
+```
+
+Using this as a framework, you can then set the min-width of the site to be 550px and set your viewport width like this in the [head](template/header.php):
+```html
+<meta name="viewport" content="width=640" />
+```
 
 ___
 
@@ -713,7 +762,7 @@ In this section we'll focus on Wordpress-specific features and the way we approa
 
 There are a few custom utility functions that we add to every site to help make things easier:
 
-`is_tree($post_id)`: This function checks if global $post is within the ancestral tree of a specified page or post.
+`is_tree($post_id)`: This function checks if global **$post** is within the ancestral tree of a specified page or post.
 
 * There is 1 required parameter of this function, the ID of the target post
 
@@ -725,7 +774,8 @@ if ( is_tree($work->ID) ) {
 }
 ```
 
-`has_children($post_id, $post_type)`: This function checks if global $post is within the ancestral tree of a specified page or post.
+
+`has_children($post_id, $post_type)`: This function checks if the specified post has any child pages beneath it
 
 * The first parameter is the ID of the post to test, and is optional. If no ID is supplied the global $post will be used.
 * The second parameter is the post type, and is optional. This defaults to 'page' and should only be used for hierarchical custom post types when needed.
@@ -742,6 +792,7 @@ if ( is_tree($work->ID) && has_children() ) {
 }
 ```
 
+
 `get_split_title($post_id)`: This function splits a title into parts and wraps each in a `<span>` tag.
 
 * There is 1 required parameter of this function, the ID of the target post
@@ -752,8 +803,9 @@ Example:
 // assuming the post title is "Client name - Spot title"
 echo get_split_title($post->ID);
 
-// this will echo "<span class='line-1'>Client name</span><span class='line-2'>Spot title</span>"
+// this will echo "<span class="line-1">Client name</span><span class="line-2">Spot title</span>"
 ```
+
 
 `previous_project_link($html, $exclude)`: This function will return an html `<a>` tag that links to the previous page according to menu_order
 
@@ -761,7 +813,7 @@ echo get_split_title($post->ID);
 * The second parameter is optional and is an array of page IDs to exclude
 
 Example:
-```html
+```php
 <div class="prev-next">
 	<?php echo previous_project_link('Previous Project'); ?>
 	<?php echo next_project_link('Next Project'); ?>
@@ -769,6 +821,8 @@ Example:
 ```
 
 `next_project_link($html, $exclude)`: This function is exactly the same as **previous_project_link()**, but links to the next page rather than the previous.
+
+Check out the [functions file in the template](template/functions.php) to get a better understanding of how each of these functions work.
 
 ___
 
