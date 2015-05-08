@@ -725,24 +725,18 @@ initParallax: function(){
 All mobile-related CSS should be included in the [mobile.css](template/css/mobile.css) stylesheet within the template. The breakpoints will be somewhat specific to each site and design, but in general here is a good starting point:
 
 ```css
+	/* Cinema Display and larger */
+	@media (min-width: 1800px) {
+
+	}
+	
 	/* Smaller than Desktop HD */
 	@media (max-width: 1200px) {
 
 	}
-	/* Smaller than desktop */
-	@media (max-width: 1000px) {
-
-	}
+	
 	/* Smaller than tablet */
 	@media (max-width: 750px) {
-
-	}
-	/* Mobile and smaller */
-	@media (max-width: 550px) {
-
-	}
-	/* Cinema Display and larger */
-	@media (min-width: 1800px) {
 
 	}
 ```
