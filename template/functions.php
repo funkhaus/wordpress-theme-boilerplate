@@ -1,44 +1,54 @@
 <?php
 /*
- * Enable post thumbnail support
+ * Setup WordPress
  */
-	add_theme_support( 'post-thumbnails' );
+	function custom_wordpress_setup() {
 
-	//set_post_thumbnail_size( 600, 400, true ); // Normal post thumbnails
-	//add_image_size( 'banner-thumb', 566, 250, true ); // Small thumbnail size
-    add_image_size( 'social-preview', 600, 315, true ); // Square thumbnail used by sharethis and facebook	
+		// Enable tags for Pages (@see: https://wordpress.org/support/topic/enable-tags-screen-for-pages#post-29500520
+		//register_taxonomy_for_object_type('post_tag', 'page');	
+		
+	    // Enable excerpts for pages
+	    add_post_type_support('page', 'excerpt');			
+
+	}
+	add_action('init', 'custom_wordpress_setup');
+
+/*
+ * Setup theme
+ */
+	function custom_theme_setup() {
+
+		// Enable post thumbnail support
+		add_theme_support( 'post-thumbnails' );	
+		//set_post_thumbnail_size( 600, 400, true ); // Normal post thumbnails
+		//add_image_size( 'banner-thumb', 566, 250, true ); // Small thumbnail size
+	    add_image_size( 'social-preview', 600, 315, true ); // Square thumbnail used by sharethis and facebook
+
+	    // Turn on menus
+		add_theme_support('menus');
+
+	    // Set content width global
+	    global $content_width;
+		if ( ! isset( $content_width ) ) {
+			$content_width = 800;
+		}
+			    
+	}
+	add_action( 'after_setup_theme', 'custom_theme_setup' );
 
 
 /*
- * Enable Wordpress features
+ * Handle content width edge cases
  */
- 	
- 	// Enable styling of Admin
-	//add_editor_style('css/editor-style.css');	
-	 
-    // Turn on menus
-    register_nav_menus(
-    	array(
-    	  'main_menu' => 'Main Menu',
-    	)
-	);
-
-    // Set WordPress theme varibles
-	if ( ! isset( $content_width ) ) {
-		$content_width = 720;
-	}
 	function set_content_width() {
 		global $content_width;
 		if ( is_single() ) {
-			$content_width = 720;		
+			$content_width = 800;		
 		} else {
-			$content_width = 720;
+			$content_width = 800;
 		}
 	}
 	add_action( 'template_redirect', 'set_content_width' );
-    
-    // Excerpts for pages
-    add_post_type_support( 'page', 'excerpt' );    	
 
 
 
@@ -109,19 +119,25 @@
     // Add specific CSS class by filter
     function custom_class_names($classes) {
 
+		// Add classes
+		switch (true) {
+		    case is_page('contact') :
+				$classes[] = 'contact';
+				break;
+		}
+
 		// Mobile Detects
 		if( wp_is_mobile() ) {
 			$classes[] = 'is-mobile';
 		} else {
 			$classes[] = 'not-mobile';
 		}
-		
-		// Always
-		$classes[] = 'site-by-funkhaus';
 
     	return $classes;
     }
     add_filter('body_class','custom_class_names');    
+
+
 
 /*
  * Style login page and dashboard
@@ -252,7 +268,7 @@
 
         foreach( $lines as $line ) {
             $count++;
-            $output .= '<span class="line-'.$count.'">'.$line.'</span> ';
+            $output .= '<span class="line line-'.$count.'">'.$line.'</span> ';
         }
 
         return $output;
@@ -261,16 +277,13 @@
 
 /*
  * Add custom metabox to the new/edit page
- *
- * By using an underscore before the 'key' (eg: _customkey), WordPress will hide that custom field from the user in the default Custom Field meta boxes.
- *
  */
-    //add_action("add_meta_boxes", "custom2015_add_metaboxes");
     function custom2015_add_metaboxes(){
-        add_meta_box("custom_media_meta", "Media Meta", "custom_media_meta", "page", "normal", "low");     
+        add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');     
     }
+    //add_action('add_meta_boxes', 'custom2015_add_metaboxes');    
 
-    // Media meta box
+    // Build media meta box
     function custom_media_meta() {
         global $post;
 
@@ -310,7 +323,8 @@
  */
     function next_project_link($html, $exclude = null) {
         global $post;
-
+		
+		// Set vars
         $current_project_id = $post->ID;
         $cache_key = 'all_pages_parent_'.$current_project_id;
 
@@ -327,6 +341,8 @@
 				'post__not_in' 		=> $exclude
             );
             $pages = get_posts($args);   
+            
+            // Save cache            
             set_transient($cache_key, $pages, 30 );
         }       
 
@@ -346,6 +362,7 @@
     function previous_project_link($html, $exclude = null) {
         global $post;
 
+		// Set vars
         $current_project_id = $post->ID;
         $cache_key = 'all_pages_parent_'.$current_project_id;        
 
@@ -361,7 +378,9 @@
                 'posts_per_page'    => -1,
 				'post__not_in' 		=> $exclude
             );
-            $pages = get_posts($args);   
+            $pages = get_posts($args);
+            
+            // Save cache
             set_transient($cache_key, $pages, 30 );
         }       
 
@@ -373,15 +392,6 @@
         }
 
     }
-    
-/*
- * Remove <p> tags from around images
- */
-	function filter_ptags_on_images($content){
-	   return preg_replace('/<p>\s*(<a .*>)?\s*(<img .* \/>)\s*(<\/a>)?\s*<\/p>/iU', '\1\2\3', $content);
-	}
-	//add_filter('the_content', 'filter_ptags_on_images');
-	
 
 
 /*
@@ -411,5 +421,6 @@
 	    return $allow_rich_editor;
     }	
     //add_filter( 'user_can_richedit', 'disabled_rich_editor');
+
 
 ?>

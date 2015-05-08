@@ -3,9 +3,7 @@
     <div id="content" class="home">
 
         <?php
-            /*
-             * Get all child pages of this page
-             */
+            // Get all child pages of this page
             $args = array(
                 'post_type'        => 'page',
             	'orderby'          => 'menu_order',
@@ -13,12 +11,10 @@
             	'post_parent'      => $post->ID,
             	'order'            => 'ASC'
             );
-            query_posts( $args );
+            $slides = get_posts($args);
         ?>
-        
         <div class="slideshow">
-	        <?php if (have_posts()) : ?>
-	        <?php while (have_posts()) : the_post(); ?>
+			<?php foreach($slides as $post) : setup_postdata($post); ?>
 	
 			    <?php 
 			        // Get image background form featured thumb
@@ -35,8 +31,7 @@
 	                
 	        	</div>
 	        
-	        <?php endwhile; ?>
-	        <?php endif; ?>
+			<?php endforeach; ?>
 		</div>
 				
     </div>

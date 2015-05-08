@@ -1,5 +1,5 @@
 /*
- * Mobile styles
+ * Mobile styles & Breakpoints
  * By Funkhaus - 2014
  * www.funkhaus.us
  *
@@ -9,22 +9,8 @@
 /* 
  * Globals
  */
-
- 
-/* 
- * Page Structure 
- */
-	#container {
-
-	}
-	#header {
-
-	}
-	#content {
-
-	}
-	#footer {
-
+	.is-mobile #content {
+	 	
 	}
 
 
@@ -33,49 +19,21 @@
  */ 
 
 
-/* 
- * Menus
- */ 
-
- 
-/* 
- * Header
- */ 
-
-
 
 /* 
- * Home
+ * Breakpoints 
  */
+    /* Cinema Display and larger */
+    @media (min-width: 1800px) {
 
+    }
 
+    /* Smaller than Desktop HD */
+    @media (max-width: 1200px) {
 
-/* 
- * Work Grid
- */
+    }
 
+    /* Smaller than tablet */
+    @media (max-width: 750px) {
 
- 
- 
-/* 
- * Work Detail
- */ 
-
- 
- 
-
-/* 
- * Category
- */ 
-
-
-
-/* 
- * Single (Blog detail)
- */ 
-
-
- 
-/* 
- * Footer
- */ 
+    }

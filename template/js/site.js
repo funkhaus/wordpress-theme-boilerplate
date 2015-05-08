@@ -2,9 +2,15 @@ var site = {
 	//homeURL: site_vars.homeURL,
 	//themeURL: site_vars.themeURL,
     init: function() {
+	    
+	    // SVG things
         //site.replaceSVGs();
         //site.initSVG();        
-        //site.initInfiniteScroll();
+        
+        // Size things
+        
+        // Init things
+
     },
     
     onResize: function(){
@@ -73,29 +79,8 @@ var site = {
                 jQuery(this).prepend('<img class="svg" src="'+site.themeURL+'/images/icon-map.svg" /> ');
             });            
         }
-    
-    },
-    
-    initInfiniteScroll: function(){
-    	
-    	// Start Infinite Scroll
-		jQuery('#content.category').infinitescroll({	
-			loading: {
-			    finished: undefined,
-			    finishedMsg: "",
-			    img: "",
-			    msg: null,
-			    msgText: "",
-			    selector: null,
-			    speed: 'fast',
-			    start: undefined
-			},
-			navSelector  : "#more-posts",
-			nextSelector : "#more-posts a",
-			itemSelector : "#content .post"
-		});
-		
-    }    
+
+    }
     
 };
 jQuery(document).ready(function($){

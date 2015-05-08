@@ -3,9 +3,7 @@
     <div id="content" class="work-grid">
     
         <?php
-            /*
-             * Get all children of this page
-             */
+            // Get all children of this page
             $args = array(
                 'post_type'        => 'page',
             	'orderby'          => 'menu_order',
@@ -13,10 +11,9 @@
             	'post_parent'      => $post->ID,
             	'order'            => 'ASC'
             );
-            query_posts( $args );
+            $page = get_pages($args);
         ?>     	
-        <?php if (have_posts()) : ?>
-        <?php while (have_posts()) : the_post(); ?>
+		<?php foreach($posts as $post) : setup_postdata($post); ?>
 
             <div id="post-<?php the_ID(); ?>" <?php post_class('work-block'); ?>>            
             
@@ -29,8 +26,8 @@
                 
         	</div>
         
-        <?php endwhile; ?>
-        <?php endif; ?>
+        <?php endforeach; ?>
+
     </div>
         
 <?php get_footer(); ?>

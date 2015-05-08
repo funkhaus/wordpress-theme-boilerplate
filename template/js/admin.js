@@ -29,16 +29,17 @@ var funkhausAdmin = {
 
 	saveDraft: function(){
 		var $count = 0;
-
+		
+		// Save Draft post after 500ms
 		function loopCount(){
-		    	if ( !jQuery('#save-action input[type="submit"]').is(':disabled') ) {
-					jQuery('#save-action input[type="submit"]').trigger('click');
-		    	} else if ($count < 10) {
-				    setTimeout(function() {
-				    	$count++;
-			    		loopCount();
-				    }, 500);
-		    	}
+	    	if ( !jQuery('#save-action input[type="submit"]').is(':disabled') ) {
+				jQuery('#save-action input[type="submit"]').trigger('click');
+	    	} else if ($count < 10) {
+			    setTimeout(function() {
+			    	$count++;
+		    		loopCount();
+			    }, 500);
+	    	}
 		}
 		loopCount();
 	}

@@ -32,12 +32,12 @@
         if( is_single() || is_page() ) {
             // If page has no children or is single, set the summary to the excerpt.
             $summary = get_the_excerpt();
-            if(empty($summary)) {
+            if( empty($summary) ) {
                 $summary = wp_trim_excerpt( strip_shortcodes($post->post_content) );
             }
             
             // Fallback
-            if(empty($summary)) {
+            if( empty($summary) ) {
                 $summary = get_bloginfo('description');
             }
         } else {
