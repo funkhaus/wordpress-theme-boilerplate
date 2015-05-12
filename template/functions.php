@@ -93,22 +93,18 @@
  * Enqueue Custom Styles
  */    
     function custom_styles() {
-	
-		if( wp_is_mobile() ) {
-			//wp_register_style('site-mobile', get_template_directory_uri() . '/css/mobile.css');			
-	    	//wp_enqueue_style('site-mobile');			
-		}
-
+		//wp_register_style('site-mobile', get_template_directory_uri() . '/css/mobile.css');
+		//wp_enqueue_style('site-mobile');
     }
-	add_action('wp_enqueue_scripts', 'custom_styles', 10);	
+	add_action('wp_enqueue_scripts', 'custom_styles', 10);
 
 
 /*
  * Enqueue Custom Admin Scripts
  */
 	function custom_admin_scripts() {
-		//wp_register_script('site.admin', get_template_directory_uri() . '/js/admin.js', 'jquery', '1.0');
-		//wp_enqueue_script('site.admin');
+		//wp_register_script('site-admin', get_template_directory_uri() . '/js/admin.js', 'jquery', '1.0');
+		//wp_enqueue_script('site-admin');
 	}
 	add_action( 'admin_enqueue_scripts', 'custom_admin_scripts' ); 
 
