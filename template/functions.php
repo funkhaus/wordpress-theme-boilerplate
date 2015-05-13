@@ -419,4 +419,14 @@
     //add_filter( 'user_can_richedit', 'disabled_rich_editor');
 
 
+/*
+ * Enqueue Custom Gallery
+ */
+   function custom_gallery($atts) {
+		if ( !is_admin() ) {
+			include('part-gallery.php');
+		}
+		return $output;
+   }
+   //add_shortcode('gallery', 'custom_gallery');	
 ?>

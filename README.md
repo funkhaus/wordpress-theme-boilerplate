@@ -1279,8 +1279,16 @@ And then in `part-gallery.php` you'd have code that looks something like this:
 
 		<?php foreach ($attachments as $attachment) : ?>
 
-			<div class="gallery-item gallery-image cover" style="background-image: url('<?php echo wp_get_attachment_image( $attachment->ID, 'gallery-stage'); ?>');">
+		    <?php 
+		        // Get image background URL
+		        $attachmentData = wp_get_attachment_image_src( $attachment->ID, 'gallery-stage');
+		        $imageURL = $attachmentData[0];
+		    ?>
+			
+            <div class="gallery-item gallery-image cover" style="background-image: url('<?php echo $imageURL; ?>');">
+            
 				<?php echo wp_get_attachment_image( $attachment->ID, 'gallery-stage'); ?>
+				
 				<div class="caption">
 					<?php echo $attachment->post_excerpt; ?>
 				</div>
