@@ -428,5 +428,6 @@
 		}
 		return $output;
    }
-   //add_shortcode('gallery', 'custom_gallery');	
+   //add_shortcode('gallery', 'custom_gallery');
+
 ?>
