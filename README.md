@@ -1401,3 +1401,4 @@ ___
 1. Advanced pagination (next_page() and how to build correct back buttons using sessions)
 1. Add "no resets" in the CSS section
 1. Spelling and grammar check
+1. Add sticky footer example to "Markup Guidelines" section. Include CCS for it.
