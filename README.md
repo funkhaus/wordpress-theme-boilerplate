@@ -31,7 +31,8 @@ The purpose of this style guide is to provide guidance on building WordPress sit
    - [Galleries](#galleries)
    - [Slideshows](#slideshows)
    - [Contact Pages](#contact-pages)
-5. [To Do List](#todo)
+   - [Advanced Pagination](#advanced-pagination)
+5. [To Do List](#to-do-list)
 
 
 ___
@@ -1391,6 +1392,12 @@ When use the UL/LI approach, it's very important to disable the rich editor in W
     }	
     add_filter('user_can_richedit', 'disabled_rich_editor');
 ```
+
+___
+
+### Advanced Pagination
+
+Occasionally a site will require some advanced navigation abilities. The most common example is a video detail page needing to have links to the previous and next 
 
 ___
 

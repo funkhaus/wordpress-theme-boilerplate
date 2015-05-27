@@ -317,46 +317,61 @@
 /*
  * Next Project Link
  */
-    function next_project_link($html, $exclude = null) {
-        global $post;
-		
+	function get_next_page($exclude = null, $loop = true) {
+		global $post;
+
+		// set current post type
+		$post_type = get_post_type( $post );
+
 		// Set vars
-        $current_project_id = $post->ID;
-        $cache_key = 'all_pages_parent_'.$current_project_id;
+		$current_project_id = $post->ID;
+		$cache_key = 'all_pages_parent_'.$current_project_id;
 
-        // Check for cached $pages
-        $pages = get_transient( $cache_key );
-        if ( empty( $pages ) ){
-            $args = array(
-                'post_type'         => 'page',
-                'order'             => 'ASC',
-                'orderby'           => 'menu_order',
-                'post_parent'       => $post->post_parent,
-                'fields'            => 'ids',
-                'posts_per_page'    => -1,
+		// Check for cached $pages
+		$pages = get_transient( $cache_key );
+		if ( empty( $pages ) ){
+			$args = array(
+				'post_type'         => $post_type,
+				'order'             => 'ASC',
+				'orderby'           => 'menu_order',
+				'post_parent'       => $post->post_parent,
+				'fields'            => 'ids',
+				'posts_per_page'    => -1,
 				'post__not_in' 		=> $exclude
-            );
-            $pages = get_posts($args);   
-            
-            // Save cache            
-            set_transient($cache_key, $pages, 30 );
-        }       
+			);
+			$pages = get_posts($args);
 
-        $current_key = array_search($current_project_id, $pages);
-
-        if( isset($pages[$current_key+1]) ) {
-            // Next page exists
-            return '<a class="next-project" href="'.get_permalink($pages[$current_key+1]).'">'.$html.'</a>';
+			// Save cache
+			set_transient($cache_key, $pages, 30 );
         }
 
-    } 
+		$current_key = array_search($current_project_id, $pages);
+
+		$output = false;
+		if( isset($pages[$current_key+1]) ) {
+
+			// Next page exists
+			$output = $pages[$current_key+1];
+
+		// No next page, should we loop to first?
+		} elseif ( $loop ) {
+
+			// Get first page
+			$output = $pages[0];
+		}
+
+		return $output;
+	}
 
 
 /*
  * Previous Project Link
  */
-    function previous_project_link($html, $exclude = null) {
-        global $post;
+    function previous_project_link($exclude = null, $loop = true) {
+		global $post;
+
+		// set current post type
+		$post_type = get_post_type( $post );
 
 		// Set vars
         $current_project_id = $post->ID;
@@ -365,28 +380,36 @@
         // Check for cached $pages
         $pages = get_transient( $cache_key );
         if ( empty( $pages ) ){
-            $args = array(
-                'post_type'         => 'page',
-                'order'             => 'ASC',
-                'orderby'           => 'menu_order',
-                'post_parent'       => $post->post_parent,
-                'fields'            => 'ids',
-                'posts_per_page'    => -1,
+			$args = array(
+				'post_type'         => $post_type,
+				'order'             => 'ASC',
+				'orderby'           => 'menu_order',
+				'post_parent'       => $post->post_parent,
+				'fields'            => 'ids',
+				'posts_per_page'    => -1,
 				'post__not_in' 		=> $exclude
-            );
-            $pages = get_posts($args);
-            
-            // Save cache
-            set_transient($cache_key, $pages, 30 );
+			);
+			$pages = get_posts($args);
+
+			// Save cache
+			set_transient($cache_key, $pages, 30 );
         }       
 
         $current_key = array_search($current_project_id, $pages);
+		$output = false;
 
         if( isset($pages[$current_key-1]) ) {
             // Previous page exists
-            return '<a class="previous-project" href="'.get_permalink($pages[$current_key-1]).'">'.$html.'</a>';
+            $output = $pages[$current_key-1];
+
+		// No previous page, should we loop to last?
+        } elseif ( $loop ) {
+
+			// Get last page
+			$output = $pages[count($pages)-1];
         }
 
+		return $output;
     }
 
 
