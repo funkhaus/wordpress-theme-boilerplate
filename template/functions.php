@@ -315,7 +315,7 @@
 
 
 /*
- * Next Project Link
+ * Next Project
  */
 	function get_next_page($exclude = null, $loop = true) {
 		global $post;
@@ -365,9 +365,9 @@
 
 
 /*
- * Previous Project Link
+ * Previous Project
  */
-    function previous_project_link($exclude = null, $loop = true) {
+    function get_previous_page($exclude = null, $loop = true) {
 		global $post;
 
 		// set current post type

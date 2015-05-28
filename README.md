@@ -14,25 +14,26 @@ The purpose of this style guide is to provide guidance on building WordPress sit
    - [Template Routing](#template-routing)
    - [Image Sizes](#image-sizes)
    - [Open Graph Tags](#open-graph-tags)
-2. **Front-End Guidelines**
+1. **Front-End Guidelines**
    - [Whitespace](#whitespace)
    - [Z-Index](#z-index)
    - [SVGs](#svgs)
    - [Mobile & Responsive](#mobile--responsive)
-3. **Working with Wordpress**
+1. **Working with Wordpress**
    - [Custom Functions](#custom-functions)
    - [Enqueue Scripts](#enqueue-scripts)
    - [Menus](#menus)
    - [Metaboxes](#metaboxes)
    - [Loops](#loops)
    - [Admin & Login Pages](#admin-login)
-4. **Common Elements**
+1. **Common Elements**
    - [Vimeo](#vimeo)
    - [Galleries](#galleries)
    - [Slideshows](#slideshows)
    - [Contact Pages](#contact-pages)
    - [Advanced Pagination](#advanced-pagination)
-5. [To Do List](#to-do-list)
+   - [GeoIP Detect](#geoip-detect)
+1. [To Do List](#to-do-list)
 
 
 ___
@@ -167,6 +168,10 @@ When defining styles try to keep things as simple as possible. Overcomplicated c
 }
 ```
 
+#### Preprocessors and Resets
+When it comes to CSS, our current philosophy is to avoid using any frameworks, preprocessors, or resets of any kind. We have a very minimal amount of boilerplate code to start with in our [stylesheet](/template/style.css) and it allows us to keep our CSS files very slim.
+
+In general when a site is finished the stylesheet should be between 800 and 1500 lines. It's acceptable to be a little outside of this range depending on the size of the site, but if you find your stylesheet is well above this range then you are most likely doing something wrong.
 
 #### CSS naming conventions
 
@@ -323,6 +328,35 @@ The overall page structure should be fairly minimal. Use a `#container` div to w
 </html>
 ```
 
+#### Sticky Footers
+
+It's very common for our sites to require a sticky footer (a footer that remains attached to the bottom of the document regardless of the content length.) Here is a basic template for achieving that, we do not include it in the template by default.
+
+__Markup:__
+```html
+<html>
+<body>
+	<div id="container"></div>
+	<div id="footer"></div>
+</body>
+</html>
+```
+
+__CSS:__
+```css
+html, body {
+	height: 100%;
+}
+.wrapper {
+	min-height: 100%;
+	padding-bottom: 100px; /* height of footer */
+}
+.footer {
+	margin-top: -100px;
+	height: 100px;
+}
+```
+
 ___
 
 ### Plugins
@@ -334,11 +368,11 @@ The most common Wordpress plugin to avoid is "Advanced Custom Fields." It's such
 Here's a list of common plugins that we *do* use:
 
 1. [Simple Page Ordering](https://wordpress.org/plugins/simple-page-ordering/)
-2. [Cycle2](http://jquery.malsup.com/cycle2/api/) (Don't use HTML data attributes, use it as jQuery('.slides').cycle() )
-3. [CaroFredSel](http://docs.dev7studios.com/caroufredsel-old/) (Although Cycle2 is better in most circumstances)
-4. [Vimeo jQuery API](https://github.com/jrue/Vimeo-jQuery-API)
-5. [FitVids](https://github.com/davatron5000/FitVids.js)
-6. [Velocity](http://julian.com/research/velocity/)
+1. [Cycle2](http://jquery.malsup.com/cycle2/api/) (Don't use HTML data attributes, use it as jQuery('.slides').cycle() )
+1. [CaroFredSel](http://docs.dev7studios.com/caroufredsel-old/) (Although Cycle2 is better in most circumstances)
+1. [Vimeo jQuery API](https://github.com/jrue/Vimeo-jQuery-API)
+1. [FitVids](https://github.com/davatron5000/FitVids.js)
+1. [Velocity](http://julian.com/research/velocity/)
 
 ___
 
@@ -417,7 +451,7 @@ ___
 
 ### Open Graph Tags
 
-@TODO: Drew, I'm not as familiar with this as you are
+@TODO: 
 
 ___
 
@@ -1168,7 +1202,27 @@ ___
 
 ### Admin & Login Pages
 
-@TODO
+For every site we build, the Wordpress login page gets styled to match the front-end. This is a very simple process, and is partially built into the template. Once the template theme is installed you'll notice that the login page changes to a blank white page with no Wordpress logo and a greenish login button. 
+
+To customize this, just open the [login.css](/template/css/login.css) file within the /css folder in the template. This is where all of the login page styling is done. Near the top of the file you'll see this style being applied:
+
+```css
+/*
+ * Login Banner Image
+ */
+    #login h1 a { 
+    	background: url(../images/backend/login-banner.png) no-repeat 9px 0;
+    	margin: 0; 
+    	background-size: auto;
+    	width: auto;
+    }
+```
+
+Upload a .png image of the company logo into the theme folder under /images/backend and name it "login-banner", it should now show up on the login page above the form.
+
+* _Note that this image is usually included in the production kit._
+
+After that, change the colors of the background, the input labels, and the submit button to match the primary colors of the site. All of these elements can be found pre-defined in the login.css stylesheet. Feel free to add more styling to the file as you see fit, anything defined in login.css will only be called on the login page.
 
 ___
 
@@ -1309,7 +1363,13 @@ ___
 
 ### Slideshows
 
-@TODO
+In general there are two main types of slideshows that we commonly have to build:
+
+1. __Single Slide (fullscreen slideshows, galleries):__ To build these we use [Cycle2 for jQuery](http://jquery.malsup.com/cycle2/api/)
+1. __Multiple Slide (Thumbnail trays):__ To build these we use [carouFredSel](https://github.com/gilbitron/carouFredSel)
+
+#### Single Slide:
+Single slideshows are those that scroll only one element at a time. The most common occurrences of these are fullscreen slideshows for home pages, and image slideshows for post galleries. We use [Cycle2 for jQuery](http://jquery.malsup.com/cycle2/api/) to build all single slides...
 
 When used on a home page, don't worry about lazy loading or infinite scroll. Limit query to display 10 slides at max.
 
@@ -1321,7 +1381,7 @@ Social links (to Facebook etc) can just be hardcoded. Clients won't change these
 
 Contact pages are generally the most time consuming parts to build. We haven't come up with a great solution, but the one we have works and should be considered the standard unless you can pitch us something better.
 
-Often a contact page will consist of a nested loop of pages (see the section above on loops). So the page strucutre in WordPress might look like this:
+Often a contact page will consist of a nested loop of pages (see the section above on loops). So the page structure in WordPress might look like this:
 
 ```
 contact
@@ -1397,16 +1457,104 @@ ___
 
 ### Advanced Pagination
 
-Occasionally a site will require some advanced navigation abilities. The most common example is a video detail page needing to have links to the previous and next 
+Occasionally a site will require some advanced navigation abilities. The most common example is a video detail page needing to have links to the previous and next detail pages. There is no built-in way to easily achieve this in Wordpress, so we've built our own (included in [functions.php](/template/functions.php#L320).)
+
+To put these functions to use, just call `get_previous_page()` or `get_next_page()`, you can use them like this:
+```php
+<?php
+$nextID = get_next_page(null, false);
+
+if ( $nextID ) : ?>
+
+	<h3><?php echo get_title($nextID); ?></h3>
+	<?php wp_get_attachment_image( $nextID ); ?>
+
+<?php endif: ?>
+
+```
+
+Each function has two option parameters:
+
+1. __exclude:__ _(array)_ An array of post IDs to exclude. default: null
+1. __loop:__ _(boolean)_ Specifies whether or not the query should loop. If set to true and you are currently viewing the last page, using `get_next_page()` will loop and return the first page.
 
 ___
 
+### GeoIP Detect
+
+Many of our clients have offices in several countries and require basic geolocation detection to serve up their website accordingly. There are a myriad of ways to achieve this, but our approach is to reference a database of IP addresses to estimate the user's location and then set a cookie to keep track.
+
+The service we use for this purpose can be found [here](https://www.maxmind.com/en/geoip2-services-and-databases). There are two main PHP APIs provided by Max Mind, we choose to use the [legacy API](https://github.com/maxmind/geoip-api-php) because we're more familiar with it, but you may decide the [GeoIP2 API](http://maxmind.github.io/GeoIP2-php/) suits you better.
+
+Here are some general steps to get you started, these examples are done using the legacy API:
+
+1. Setup a general function to get any user's region based on IP:
+```php
+function get_geoip_region() {
+
+	// This is the IP database, get country by IP
+	include("GeoIP/geoip.inc");	
+	$ip = $_SERVER['REMOTE_ADDR'];	
+
+	$db = geoip_open( get_template_directory() . "/GeoIP/GeoIP-VERSION.dat", GEOIP_STANDARD );
+	$country_code = strtolower( geoip_country_code_by_addr($db, $ip) );
+	geoip_close($db);
+
+	// Include country arrays
+	include("functions/country-codes.php");
+	
+	// Uppercase code
+	$country_code = strtoupper($country_code);
+
+	if( in_array( $country_code, $europe) || in_array( $country_code, $africa) ) {
+		// User is in Europe
+		$region = 'uk';
+
+	} elseif( in_array( $country_code, $asia) ) {
+		// User is in Asia
+		$region = 'asia';
+		
+	} else {
+		// User is anywhere else, assume USA
+		$region = 'usa';
+	}
+
+	return $region;
+}
+```
+1. Next you might have a function to attempt to retrieve a user's region from a cookie, and fallback to the auto GeoIP method:
+```php
+function get_user_region(){
+	// Get cookie's value
+	if( isset($_COOKIE['region']) ) {
+		return $_COOKIE['region'];
+
+	// no cookie? detect automatically
+	} else {
+		// Save region cookie
+		$region = get_geoip_region();
+		setcookie('region', $region, time() + (86400 * 365)); // expires in 1 year
+		return $region;
+	}
+}
+```
+1. Now you can use these two functions to direct a user as needed. You may for example have a function hooked to the "init" action that redirects a user based on their region:
+```php
+function redirect_by_region(){
+	if( is_front_page() ){
+		$region = get_user_region();
+
+		wp_redirect( get_region_url($region) );
+		exit();
+    }
+}
+add_action( 'init', 'redirect_by_region' );
+```
+
+In this example `get_region_url()` would be a custom function that returns an internal permalink URL based on the region provided (i.e. 'usa', 'uk', or 'asia').
+
+___
 
 ### To Do List
 
-1. Replace all @TODO in this document with correct exmaples
-1. Advanced pagination (next_page() and how to build correct back buttons using sessions)
-1. Add "no resets" in the CSS section
 1. Spelling and grammar check
-1. Add sticky footer example to "Markup Guidelines" section. Include CCS for it.
-1. Add GeoIP example
