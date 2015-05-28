@@ -40,6 +40,7 @@ ___
 
 
 ## Setting Up
+
 Below are some general guidelines to follow while you get started:
 
 ### Theme Setup
@@ -1365,13 +1366,123 @@ ___
 
 In general there are two main types of slideshows that we commonly have to build:
 
-1. __Single Slide (fullscreen slideshows, galleries):__ To build these we use [Cycle2 for jQuery](http://jquery.malsup.com/cycle2/api/)
-1. __Multiple Slide (Thumbnail trays):__ To build these we use [carouFredSel](https://github.com/gilbitron/carouFredSel)
+1. #### Single Slide:
+Single slideshows are those that scroll only one element at a time. The most common occurrences of these are fullscreen slideshows for home pages, and image slideshows for post galleries. We use [Cycle2 for jQuery](http://jquery.malsup.com/cycle2/api/) to build all single slides. Here is an example of how a fullscreen slideshow might be built using cycle:
 
-#### Single Slide:
-Single slideshows are those that scroll only one element at a time. The most common occurrences of these are fullscreen slideshows for home pages, and image slideshows for post galleries. We use [Cycle2 for jQuery](http://jquery.malsup.com/cycle2/api/) to build all single slides...
+	__Markup:__
+	```html
+	<div class="slideshow">
+		<div class="slide"></div>
+		<div class="slide"></div>
+		<div class="slide"></div>
+	</div>
+	```
+	
+	__CSS:__
+	```css
+		.slideshow {
+			position: relative;
+			overflow: hidden;
+		}
+		.slide {
+			float: left;
+		}
+	```
+	
+	__Javascript:__
+	```javascript
+	jQuery('.slideshow').cycle({
+		fx: 'scrollHorz',
+		slides: '> .slide',
+		speed: 1000
+	});
+	```
+	
+	To make the slideshow fullscreen, you would need to manually size the height within your resize handler:
+	```javascript
+	jQuery(window).resize(function(){
+	
+		jQuery('.slideshow').height( jQuery(window).height() );
+	
+	});
+	```
 
-When used on a home page, don't worry about lazy loading or infinite scroll. Limit query to display 10 slides at max.
+	Occasionally you will need to make slideshows with transitions that are outside the scope of the normal cycle2 api. To do this you'll need to write a custom cycle transition plugin, using the [transition API](http://jquery.malsup.com/cycle2/api/advanced.php#transition).
+
+2. #### Multiple Slide:
+Multiple slideshows are those that scroll several elements at a time. The most common occurrences of these are thumbnail trays below video detail pages. To make multi-slide slideshows we use [carouFredSel](https://github.com/gilbitron/carouFredSel), here's a very basic example of what a thumbnail tray might look like:
+
+	__Markup:__
+	```html
+	<div class="video-thumb-tray">
+	
+		<div class="slider">
+			<a class="video-thumb" href="#linkToSpot">
+				<img src="#thumbnail" class="thumbnail" />
+			</a>
+			<a class="video-thumb active" href="#linkToSpot">
+				<img src="#thumbnail" class="thumbnail" />
+			</a>
+			<a class="video-thumb" href="#linkToSpot">
+				<img src="#thumbnail" class="thumbnail" />
+			</a>
+		</div>
+	
+	</div>
+	```
+	
+	__CSS:__
+	```css
+		.video-thumb-tray {
+			position: absolute;
+			overflow: hidden;
+			margin: 0 60px;
+			bottom: 0;
+			right: 0;
+			left: 0;
+		}
+		.video-thumb {
+			display: inline-block;
+			float: left;
+		}
+	```
+	
+	__Javascript:__
+	```javascript
+	if ( jQuery('.video-thumb-tray').length ) {
+	
+		jQuery('.slider').carouFredSel({
+			circular: false,
+			infinite: false,
+			width: '100%',
+			align: 'center',
+			height: 100,
+			items: {
+				height: 100,
+				width: 200,
+				start: jQuery('.slider .active')
+			},
+			scroll: {
+				duration: 400,
+				items: 5
+			},
+			auto: false,
+			prev: {
+				key: 'left'
+			},
+			next: {
+				key: 'right'
+			},
+			swipe: {
+				onTouch: true,
+				items: 1
+			}
+		});
+	
+	}
+	```
+	
+	You can check out the full documentation for carouFredSel [here](http://docs.dev7studios.com/jquery-plugins/caroufredsel).
 
 ___
 
@@ -1477,6 +1588,58 @@ Each function has two option parameters:
 
 1. __exclude:__ _(array)_ An array of post IDs to exclude. default: null
 1. __loop:__ _(boolean)_ Specifies whether or not the query should loop. If set to true and you are currently viewing the last page, using `get_next_page()` will loop and return the first page.
+
+#### Advanced Back Functionality
+Sometimes there will be a need to provide users with a link on a single post to go back to the index that they came from. The difficult part of this is knowing where the user came from when there are multiple categories within the blog. Consider a blog with posts laid out like this:
+
+__Main Blog:__
+
+* Post #1
+* Post #2
+* Post #3
+
+__Category A:__
+
+* Post #1
+* Post #3
+
+__Category B:__
+
+* Post #1
+* Post #2
+
+If a user clicks into post #1 and then clicks a link to go back to the main index, that may need to be a link to Category A, Category B, or the main blog page. The only way to know which page to link back to is by keeping track of which page the user came from. Here is a basic example of some code that might allow you to do that:
+
+```php
+	// start session if necessary
+	add_action('init', 'start_session', 1);
+	function start_session() {
+		if(!session_id()) {
+			session_start();       
+		}
+	}
+
+	// Update Cookie trail whenever viewing archive page
+	function update_cookie_trail() {
+		if ( is_archive() ) {
+			$_SESSION['ref_category'] = get_query_var('cat');
+		}
+	}
+	add_action('wp', 'update_cookie_trail');
+
+	// Generate 'back' permalink based on cookie
+	function get_index_permalink() {
+		$ref_cat = $_SESSION['ref_category'];
+
+		// fallback to the default blog category
+		if ( ! $ref_cat ) $ref_cat = get_option('default_category');
+
+		// return permalink for category
+		return get_category_link($ref_url);
+	}
+```
+
+If you place this code in the [theme functions file](/template/functions.php) it will set a cookie to track where the user came from each time a user views an archive page. Then you can safely use `get_index_permalink()` on a single post to get the URL where a back link should lead to.
 
 ___
 
