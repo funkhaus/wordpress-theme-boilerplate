@@ -1721,3 +1721,4 @@ ___
 ### To Do List
 
 1. Spelling and grammar check
+1. Document common bugs. Like thumb trays overlapping with video, videos not resizing, page order not respected, footers not sticky, floating headers etc
