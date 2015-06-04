@@ -6,6 +6,8 @@ This is document serves as a checklist of bugs and coding issues we commonly see
 1. **Front End**
    - [Video Thumbtrays Overlapping Content](#video-thumbtrays-overlapping-content)
    - [Video Minimum Height](#video-minimum-height)
+   - [Hotspots](#hotspots)   
    - [Menu Order Not Respected](#menu-order-not-respected)
    - [Footers Not Sticky](#footers-not-sticky)
+
 ___
