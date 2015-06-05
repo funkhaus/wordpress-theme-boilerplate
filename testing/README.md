@@ -4,6 +4,7 @@ This is document serves as a checklist of bugs and coding issues we commonly see
 
 ## Table of Contents
 1. **Basics**
+   - [Devices & Browsers](#devices-browsers)
    - [HTML](#html)
    - [CSS](#css)
    - [PHP](#php)
