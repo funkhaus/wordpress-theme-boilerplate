@@ -765,21 +765,26 @@ All mobile-related CSS should be included in the [mobile.css](template/css/mobil
 	@media (min-width: 1800px) {
 
 	}
-	
-	/* Smaller than Desktop HD */
+
+	/* Smaller than Desktop HD (basicaly this is a MacBook Air) */
 	@media (max-width: 1200px) {
 
 	}
-	
-	/* Smaller than tablet */
-	@media (max-width: 750px) {
+
+	/* Up to a tablet (includes iPads in landscape) */
+	@media (max-width: 1024px) {
+
+	}
+
+	/* Smaller than an iPad portrait (so all phones) */
+	@media (max-width: 767px) {
 
 	}
 ```
 
 Using this as a framework, you can then set the min-width of the site to be 550px and set your viewport width like this in the [head](template/header.php):
 ```html
-<meta name="viewport" content="width=550" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 ```
 
 ___
