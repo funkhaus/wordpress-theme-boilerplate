@@ -466,7 +466,7 @@ Whitespace in code is very important, but there are a wide variety of approaches
 ___
 
 #### CSS
-All CSS should have 4-space tabs and everything should be on new lines. Whenever making a list of selectors be sure to have a line-break between each one.
+All CSS should have 4-space tabs and everything should be on new lines. Whenever making a list of selectors be sure to have a line-break between each one. Selectors should be spaced with hyphens, like `.video-detail` or `.video-grid`.
 
 ```css
 /*
@@ -491,7 +491,7 @@ All CSS should have 4-space tabs and everything should be on new lines. Whenever
 ```
 
 #### JavaScript
-All javascript should also have 4-space tabs. New line for everything. Extremely liberal use of comments. Try to group similar functions in one comment.
+All javascript should also have 4-space tabs. New line for everything. Extremely liberal use of comments. Try to group similar functions in one comment. Variables should be camel cased like `initMenu` or `initVideoDetail`.
 
 ```javascript
 // Cache image
@@ -531,7 +531,7 @@ $svgs.each(function(){
 ```
 
 #### PHP
-4-space tabs. Everything indented. New lines for anything opening or closing. New line for major code separations.
+4-space tabs. Everything indented. New lines for anything opening or closing. New line for major code separations. Variables should use underscores like `$attachment_id`.
 
 ```html
 <div>
@@ -581,7 +581,7 @@ For when inside function.php for example. 4 space tabs. New lines for everything
     }
 ```
 
-In PHP, we try to use long form where possible, to aid in reability.
+In PHP, we try to use long form where possible, to aid in readability.
 
 ```php
 // This is good
@@ -673,6 +673,8 @@ ___
 ### SVGs
 
 You should never need to use a sprite or PNGs again! We simply use SVG's as an image, and use a few lines of jQuery to load in the SVG XML, as documented here.
+
+If you use Adobe Illustrator to save out the SVG, be sure to not include the PDF preview in the SVG. It will increase the file size of the SVG by 10x or more.
 
 First you include an SVG as an IMG tag:
 
