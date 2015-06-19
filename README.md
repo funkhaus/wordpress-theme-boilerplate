@@ -1730,16 +1730,22 @@ ___
 
 ## Testing
 
+Please be sure to pass all checklists before work is presented to Funkhaus. If a site can pass all these tests, then it is ready. Our desire is to push testing down to the vendors where possible, so that they may learn how we like things. We stole this concept from [Kelly Johnson](http://www.lockheedmartin.com/us/aeronautics/skunkworks/14rules.html), and last we checked he was good at building things.
+
+All vendors are **required to QA and test their own code before presenting it to Funkhaus**.
+
+The below checklists include examples(along with solutions), taken from real life sites submitted to us.
+
 ### Basic Checklist
 
-The basic checklist is designed so that a non-tech person could do them. At Funkhaus, we just have our Project Manager run through it. Its the basic level of QA testing, and should be completed before anything is sent to us, or a client.
+The basic checklist is designed so that a non-tech person could do them. At Funkhaus, we just have our Project Manager run through these on our own projects. It is the basic level of QA testing, and should be completed before anything is sent to us for review.
 
 1. Does it pass validation?
 1. Are `overflow` scroll bars visible, or show up on resize when they shouldn't?
 1. Does the site layout break at min-height or min-width on resize?
 1. If there is a video thumb tray, does it break if you rapidly move your mouse on and off it?
 1. Do the videos scale, and maintain aspect ratio, and don’t scale above 1280px wide?
-1. Are any footers sticky?
+1. Are the footers sticky? Should they be?
 1. Does the category/news pages have pagination or infinite scroll built out?
 1. If the design calls for a floating header on scroll, does it float correctly?
 1. Does it look consistent in Chrome, Safari and Firefox?
@@ -1770,9 +1776,32 @@ The code checklist is what the Funkhaus tech team will be checking against. We w
 1. Make sure database I/O techniques avoid things like `$wpdb`, and that use the correct WordPress functions.
 1. Are HTML wrapping elements kept to a minimum, and HTML structure is clean as possible?
 
+#### Is the CSS too specific, or using `!important`?
+
+We see CSS code like this a lot:
+
+```
+Bad:
+
+body.UK_colours .contact-page .contact-bottom input {
+   background-color: #12142D;    
+}
+
+
+Good:
+
+.uk-colours .contact-bottom input {
+   background-color: #12142D;    
+}
+
+```
+
+And never use `!important` in CSS. If you need it, you've cut corners.
+
+
 #### Make sure no clear fixes are used
 
-A common issue we see is developers not understanding when to use a clearfix, and when not too. In almost all cases, setting the containing DIV to `overflow:hidden` means you don't need to use a clearfix, and thus makes your code way cleaner.
+A common issue we see is developers not understanding when to use a float and a clearfix, and when not too. In almost all cases, setting the containing DIV to `overflow:hidden` means you don't need to use a clearfix, and thus makes your code way cleaner. A lot of the time (but not always), using a `display:inline-block` is a better move that using a `float` too.
 
 ___
 
