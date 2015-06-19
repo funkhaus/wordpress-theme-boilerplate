@@ -34,8 +34,9 @@ The purpose of this style guide is to provide guidance on building WordPress sit
    - [Advanced Pagination](#advanced-pagination)
    - [GeoIP Detect](#geoip-detect)
 1. **Testing**
-   - [Basic Checklist](#basic-checklist)   
-1. [To Do List](#to-do-list)
+   - [Basic Checklist](#basic-checklist)
+   - [Code Checklist](#code-checklist)
+1. **[To Do List](#to-do-list)**
 
 
 ___
@@ -1729,12 +1730,12 @@ ___
 
 ## Testing
 
-### Basics
+### Basic Checklist
 
 The basic checklist is designed so that a non-tech person could do them. At Funkhaus, we just have our Project Manager run through it. Its the basic level of QA testing, and should be completed before anything is sent to us, or a client.
 
 1. Does it pass validation?
-1. Are `overflow` scroll bars visible, or show up up on resize when they shouldn't?
+1. Are `overflow` scroll bars visible, or show up on resize when they shouldn't?
 1. Does the site layout break at min-height or min-width on resize?
 1. If there is a video thumb tray, does it break if you rapidly move your mouse on and off it?
 1. Do the videos scale, and maintain aspect ratio, and don’t scale above 1280px wide?
@@ -1743,22 +1744,21 @@ The basic checklist is designed so that a non-tech person could do them. At Funk
 1. If the design calls for a floating header on scroll, does it float correctly?
 1. Does it look consistent in Chrome, Safari and Firefox?
 
-
-1. #### Does it pass validation?
+#### Does it pass validation?
 
 Run the major parts of the site through the validator at https://validator.w3.org/nu/. 
 
 It's fine to get non-critical errors/warnings like `An img element must have an alt attribute, except under certain conditions.` or the ones thrown by old attributes on the default Vimeo iframe embeds, like `The frameborder attribute on the iframe element is obsolete`. Another common one is it complaining about `&` symbols in Google Map URLs, those are fine to ignore. But anything else should be fixed, especially `Stray end tag` errors.
 
-2. #### Are `overflow` scroll bars visible, or do they show up on resize when they shouldn't?
+#### Are `overflow` scroll bars visible, or do they show up on resize when they shouldn't?
 
 A common mistake we see is setting a fixed height on a `DIV`, and then on another browser scroll bars will be visible on that `DIV` due to variations in font sizing or line heights. This is most common with footers.
 
 Make sure that as you resize the browser, scroll bars only appear on the right hand side of the screen on `body`.
 
-### Specifics 
+### Code Checklist
 
-The specific checklist is what the Funkhaus tech team will be checking against. We will be looking at code, and judging it against the conventions laid out in this style guide.
+The code checklist is what the Funkhaus tech team will be checking against. We will be looking at code, and judging it against the conventions laid out in this style guide.
 
 1. Is the CSS too specific, or using `!important`?
 1. Are you being consistent with CamelCase (for JS) vs Hyphen (for CSS) vs underscores (for PHP) [as detailed above](#whitespace)?
@@ -1770,7 +1770,7 @@ The specific checklist is what the Funkhaus tech team will be checking against. 
 1. Make sure database I/O techniques avoid things like `$wpdb`, and that use the correct WordPress functions.
 1. Are HTML wrapping elements kept to a minimum, and HTML structure is clean as possible?
 
-1. #### Make sure no clear fixes are used
+#### Make sure no clear fixes are used
 
 A common issue we see is developers not understanding when to use a clearfix, and when not too. In almost all cases, setting the containing DIV to `overflow:hidden` means you don't need to use a clearfix, and thus makes your code way cleaner.
 
