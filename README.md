@@ -1748,7 +1748,7 @@ The basic checklist is designed so that a non-tech person could do them. At Funk
 1. Are the footers sticky? Should they be?
 1. Does the category/news pages have pagination or infinite scroll built out?
 1. If the design calls for a floating header on scroll, does it float correctly?
-1. Does it look consistent in Chrome, Safari and Firefox?
+1. Does it look consistent in Chrome, Safari and Firefox? What about iOS on iPhones and iPads?  Android?
 
 #### Does it pass validation?
 
