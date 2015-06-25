@@ -42,6 +42,14 @@
 		display: inline-block;
 		vertical-align: baseline;
 	}	
+	/* Image Uploader */
+	.custom-meta .custom-image-container img {
+    	width: 100%;
+    	height: auto;
+	}
+	.custom-meta.custom-image-uploader p:last-child {
+        margin-bottom: 1px;	
+	}	
 	
 
 

@@ -275,7 +275,10 @@
  * Add custom metabox to the new/edit page
  */
     function custom2015_add_metaboxes(){
+        
         add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');     
+
+        //add_meta_box("custom_second_featured_image", "Second Featured Image", "custom_second_featured_image", "page", "side", "low");        
     }
     //add_action('add_meta_boxes', 'custom2015_add_metaboxes');    
 
@@ -294,6 +297,55 @@
         <?php
     }
     
+    // Second featured image uploader (requires changes to admin.js too).
+    // @see: https://codex.wordpress.org/Javascript_Reference/wp.media
+    function custom_second_featured_image(){
+        global $post;
+        
+        // Meta key (need to update the save_metabox function below to reflect this too!)
+        $meta_key = '_second_post_thumbnail';
+        
+        // Get WordPress' media upload URL
+        $upload_link = esc_url( get_upload_iframe_src( 'image', $post->ID ) );
+        
+        // See if there's a media id already saved as post meta
+        $image_id = get_post_meta( $post->ID, $meta_key, true );
+        
+        // Get the image src
+        $image_src = wp_get_attachment_image_src( $image_id, 'post-thumbnail' );
+        
+        // For convenience, see if the array is valid
+        $has_image = is_array( $image_src );
+        
+        ?>
+        
+        <div class="custom-meta custom-image-uploader">
+
+            <!-- A hidden input to set and post the chosen image id -->
+            <input class="custom-image-id" name="<?php echo $meta_key; ?>" type="hidden" value="<?php echo $image_id; ?>" />        
+        
+            <!-- Image container, which is manipulated with js -->
+            <div class="custom-image-container">
+                <?php if ( $has_image ) : ?>
+                    <img src="<?php echo $image_src[0] ?>"/>
+                <?php endif; ?>
+            </div>
+            
+            <!-- Add & remove image links -->
+            <p class="hide-if-no-js">
+                <a class="upload-custom-image <?php if ( $has_image  ) { echo 'hidden'; } ?>" href="<?php echo $upload_link ?>">
+                    <?php _e('Set banner ad') ?>
+                </a>
+                <a class="delete-custom-image <?php if ( ! $has_image  ) { echo 'hidden'; } ?>" href="#">
+                    <?php _e('Remove banner ad') ?>
+                </a>
+            </p>
+
+        </div>
+
+        <?php        
+    }    
+    
 
 /*
  * Save the metabox vaule
@@ -308,6 +360,9 @@
         if( isset($_POST["_custom_video_url"]) ) {
 	        update_post_meta($post_id, "_custom_video_url", $_POST["_custom_video_url"]);
         }
+        if( isset($_POST["_second_post_thumbnail"]) ) {
+	        update_post_meta($post_id, "_second_post_thumbnail", $_POST["_second_post_thumbnail"]);
+        }        
 
     }
     //add_action('save_post', 'custom2015_save_metabox');
