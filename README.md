@@ -58,7 +58,7 @@ clientname2015
 	/images
 		logo.svg
 	/css
-		mobile.css
+		breakpoints.css
 		admin.css
 		login.css
 	/js
@@ -340,7 +340,9 @@ __Markup:__
 ```html
 <html>
 <body>
-	<div id="container"></div>
+	<div id="container">
+    	<div id="content"></div>
+	</div>
 	<div id="footer"></div>
 </body>
 </html>
@@ -350,13 +352,17 @@ __CSS:__
 ```css
 html, body {
 	height: 100%;
+	padding: 0;
+	margin: 0;
 }
-.wrapper {
+#container {
 	min-height: 100%;
-	padding-bottom: 100px; /* height of footer */
 }
-.footer {
-	margin-top: -100px;
+#content {
+	padding-bottom: 100px; /* height of footer */    
+}
+#footer {
+	margin-top: -100px; /* negative value of footer height */
 	height: 100px;
 }
 ```
@@ -763,31 +769,37 @@ initParallax: function(){
 ```
 
 #### Break Points
-All mobile-related CSS should be included in the [mobile.css](template/css/mobile.css) stylesheet within the template. The breakpoints will be somewhat specific to each site and design, but in general here is a good starting point:
+All mobile-related CSS should be included in the [mobile.css](template/css/mobile.css) stylesheet within the template. The breakpoints will be somewhat specific to each site and design, but in general here is a good starting point. [We have prepared a working example for you here](http://labs.funkhausdesign.com/examples/responsive/index.html).
 
 ```css
-	/* Cinema Display and larger */
-	@media (min-width: 1800px) {
+ /* Smaller than an iPad portrait (so all phones) */
+@media (max-width: 767px) {
+    
+}
 
-	}
+/* Up to a tablet (includes iPads in landscape) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    
+}
 
-	/* Smaller than Desktop HD (basicaly this is a MacBook Air) */
-	@media (max-width: 1200px) {
+/* Larger than a tablet, but smaller than a big screen (basicaly this is a MacBook Air) */
+@media (min-width: 1025px) and (max-width: 1199px) {
 
-	}
+}            
 
-	/* Up to a tablet (includes iPads in landscape) */
-	@media (max-width: 1024px) {
+/* This is basically a decent laptop, up to an average external display */
+@media (min-width: 1200px) and (max-width: 1799px) {
 
-	}
+}               
 
-	/* Smaller than an iPad portrait (so all phones) */
-	@media (max-width: 767px) {
+/* Large external display and larger */
+@media (min-width: 1800px) {
 
-	}
+}            
+
 ```
 
-Using this as a framework, you can then set the min-width of the site to be 550px and set your viewport width like this in the [head](template/header.php):
+Using this as a framework, you can then set the min-width of the site to be 350px and set your viewport width like this in the [head](template/header.php):
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 ```
@@ -1801,11 +1813,11 @@ And never use `!important` in CSS. If you need it, you've cut corners.
 
 #### Make sure no clear fixes are used
 
-A common issue we see is developers not understanding when to use a float and a clearfix, and when not too. In almost all cases, setting the containing DIV to `overflow:hidden` means you don't need to use a clearfix, and thus makes your code way cleaner. A lot of the time (but not always), using a `display:inline-block` is a better move that using a `float` too.
+A common issue we see is developers not understanding when to use a float and a clearfix, and when not too. In almost all cases, setting the containing DIV to `overflow:hidden` means you don't need to use a clearfix, and thus makes your code way cleaner, with less markup. A lot of the time (but not always), using a `display:inline-block` is a better move that using a `float` too.
 
 ___
 
 ### To Do List
 
 1. Spelling and grammar check
-1. Document common bugs. Like thumb trays overlapping with video, videos not resizing, page order not respected, footers not sticky, floating headers etc
+1. Add more documentation of common bugs and testing procedures.
