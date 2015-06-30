@@ -27,12 +27,6 @@
 	    // Turn on menus
 		add_theme_support('menus');
 
-	    // Set content width global
-	    global $content_width;
-		if ( ! isset( $content_width ) ) {
-			$content_width = 800;
-		}
-			    
 	}
 	add_action( 'after_setup_theme', 'custom_theme_setup' );
 
@@ -43,9 +37,9 @@
 	function set_content_width() {
 		global $content_width;
 		if ( is_single() ) {
-			$content_width = 800;		
+			$content_width = 960;		
 		} else {
-			$content_width = 800;
+			$content_width = 960;
 		}
 	}
 	add_action( 'template_redirect', 'set_content_width' );
@@ -361,7 +355,7 @@
 	        update_post_meta($post_id, "_custom_video_url", $_POST["_custom_video_url"]);
         }
         if( isset($_POST["_second_post_thumbnail"]) ) {
-	        update_post_meta($post_id, "_second_post_thumbnail", $_POST["_second_post_thumbnail"]);
+	        //update_post_meta($post_id, "_second_post_thumbnail", $_POST["_second_post_thumbnail"]);
         }        
 
     }
