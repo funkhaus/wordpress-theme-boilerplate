@@ -286,7 +286,35 @@ This also applies to individual elements too, so when defining any elements try 
 }
 ```
 
+**Animations**
+
 If possible, try to group transitions/animation definitions into one area at the bottom. These are common definitions and it helps to standardize their application on elements. It's quite common for a feedback note to be "make all hover states faster", so having all the transitions in one place makes that a very simple change.
+
+Don't do this:
+```css
+.page .grid-block img {
+    width: 100%;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.grid-block a {
+	display: inline-block;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+```
+
+Do this:
+```css
+/*
+ * Animations
+ */
+	.page .grid-block img,
+	.grid-block a {
+	    -webkit-transition: all 0.3s ease;
+	    transition: all 0.3s ease;
+	}
+```
 
 Check out [the stylesheet in the template](template/style.css) folder to see a more in-depth example of how the stylesheet should be laid out.
 
