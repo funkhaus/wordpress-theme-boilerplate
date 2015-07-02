@@ -11,9 +11,9 @@
             	'post_parent'      => $post->ID,
             	'order'            => 'ASC'
             );
-            $page = get_pages($args);
+            $pages = get_pages($args);
         ?>     	
-		<?php foreach($posts as $post) : setup_postdata($post); ?>
+		<?php foreach($pages as $post) : setup_postdata($post); ?>
 
             <div id="post-<?php the_ID(); ?>" <?php post_class('work-block'); ?>>            
             
