@@ -11,7 +11,7 @@
             	'post_parent'      => $post->ID,
             	'order'            => 'ASC'
             );
-            $pages = get_pages($args);
+            $pages = get_posts($args);
         ?>     	
 		<?php foreach($pages as $post) : setup_postdata($post); ?>
 
