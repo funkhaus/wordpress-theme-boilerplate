@@ -1662,12 +1662,12 @@ If a user clicks into post #1 and then clicks a link to go back to the main inde
 
 ```php
 	// start session if necessary
-	add_action('init', 'start_session', 1);
 	function start_session() {
 		if(!session_id()) {
 			session_start();       
 		}
 	}
+	add_action('init', 'start_session', 1);	
 
 	// Update Cookie trail whenever viewing archive page
 	function update_cookie_trail() {
