@@ -201,3 +201,35 @@ Colors:
 	    padding: 4px; 
 	    font-style: italic;
 	}
+
+
+
+/*
+ * Temporary Styles
+ * 	  Using these to help build out the woocommerce template. remove them before finalizing
+ */
+	.main-menu {
+		float: right;
+	}
+	.main-menu li {
+		display: inline-block;
+		margin: 0 10px;
+	}
+	#content {
+		margin: auto;
+		margin-top: 75px;
+		max-width: 1200px;
+	}
+	#header {
+		margin: auto;
+		max-width: 1200px;
+	}
+
+	#sidecart {
+		position: fixed;
+		width: 300px;
+		bottom: 0;
+		right: 0;
+		top: 0;
+	}
+

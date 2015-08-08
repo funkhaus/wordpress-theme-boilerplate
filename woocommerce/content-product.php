@@ -67,6 +67,7 @@ if ( 0 == $woocommerce_loop['loop'] % $woocommerce_loop['columns'] ) {
 			 * @hooked woocommerce_template_loop_rating - 5
 			 * @hooked woocommerce_template_loop_price - 10
 			 */
+			remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_rating', 5 );
 			do_action( 'woocommerce_after_shop_loop_item_title' );
 		?>
 

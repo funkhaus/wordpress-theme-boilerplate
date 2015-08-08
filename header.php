@@ -25,24 +25,26 @@
 <body <?php body_class(); ?>>
 
 	<div id="container">
-	
-	    <div id="header">
-	    	<?php if ( is_front_page() ) : ?>
-	        <div id="tagline"><p><?php bloginfo('description'); ?></p></div>
-	        <?php endif;?>
-	        
-			<?php 
+
+		<div id="header">
+			<?php if ( is_front_page() ) : ?>
+				<div id="tagline"><p><?php bloginfo('description'); ?></p></div>
+			<?php endif;?>
+
+			<?php
 				$menuArgs = array(
-				    'container'         => 'false',
-				    'menu'              => 'Main Menu',
-				    'menu_id'           => 'main-menu',
-				    'menu_class'        => 'main-menu menu'
+					'container'         => 'false',
+					'menu'              => 'Main Menu',
+					'menu_id'           => 'main-menu',
+					'menu_class'        => 'main-menu menu'
 				);
 				wp_nav_menu($menuArgs); 
-	        ?>
-	
-	        <a id="logo" href="<?php bloginfo('url'); ?>">
-	            <img class="svg " src="<?php echo get_template_directory_uri(); ?>/images/logo.svg" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">            
-	        </a>
-	        
-	    </div>
+			?>
+
+			<a id="logo" href="<?php bloginfo('url'); ?>">
+			        LOGO
+<!-- 				<img class="svg " src="<?php echo get_template_directory_uri(); ?>/images/logo.svg" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">             -->
+			</a>
+
+			<?php woocommerce_mini_cart(); ?>
+		</div>

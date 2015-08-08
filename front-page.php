@@ -22,6 +22,7 @@
 			        $imageURL = $attachmentData[0];
 			    ?>
 				    
+<!--
 				<div id="post-<?php the_ID(); ?>" <?php post_class('slide fullbleed'); ?> style="background-image: url(<?php echo $imageURL; ?>);">   
 
 	                <div class="entry">
@@ -30,6 +31,7 @@
 	                </div>
 	                
 	        	</div>
+-->
 	        
 			<?php endforeach; ?>
 		</div>

@@ -5,10 +5,10 @@
 	function custom_wordpress_setup() {
 
 		// Enable tags for Pages (@see: https://wordpress.org/support/topic/enable-tags-screen-for-pages#post-29500520
-		//register_taxonomy_for_object_type('post_tag', 'page');	
-		
+		//register_taxonomy_for_object_type('post_tag', 'page');
+
 	    // Enable excerpts for pages
-	    add_post_type_support('page', 'excerpt');			
+	    add_post_type_support('page', 'excerpt');
 
 	}
 	add_action('init', 'custom_wordpress_setup');
@@ -185,15 +185,14 @@
             	foreach ($attachments as $attachment) {
                     $firstImage = wp_get_attachment_image_src($attachment->ID, array(400,225));
                     $content = '<p><a href='.get_permalink($post->ID).'><img src="'.$firstImage[0].'"/></a></p>'.$content;
-            	}
-            }            
-            
-        }
-        
-        return $content;
-    }
-    add_filter('the_excerpt_rss', 'rss_post_thumbnail');  
+				}
+			}
 
+		}
+
+		return $content;
+	}
+	add_filter('the_excerpt_rss', 'rss_post_thumbnail');
 
 /*
  * Custom conditional function. Used to get the parent and all it's child.
@@ -480,16 +479,23 @@
 /*
  * Disable Rich Editor on certain pages
  */
-    function disabled_rich_editor($allow_rich_editor) {
-	    global $post;
+	function disabled_rich_editor($allow_rich_editor) {
+		global $post;
 
-	    if($post->post_name == 'contact') {
-		    return false;		    
-	    }
-	    return $allow_rich_editor;
-    }	
-    //add_filter( 'user_can_richedit', 'disabled_rich_editor');
+		if($post->post_name == 'contact') {
+			return false;		    
+		}
+		return $allow_rich_editor;
+	}
+	//add_filter( 'user_can_richedit', 'disabled_rich_editor');
 
+/*
+ * Declare WooCommerce Support
+ */
+	add_action( 'after_setup_theme', 'woocommerce_support' );
+	function woocommerce_support() {
+	    add_theme_support( 'woocommerce' );
+	}
 
 /*
  * Enqueue Custom Gallery

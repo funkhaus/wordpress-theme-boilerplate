@@ -19,11 +19,13 @@
 	        get_template_part('template-work-grid');
 	        break;
 	
+/*
 	    case is_tree(5) :
 	        // Is in the "About" tree.
 	        get_template_part('template-work-grid');
 	        break;
-	
+*/
+
 	    case !empty($post->_custom_video_url) : 
 	        // Page has a video URL metabox value saved, so use the work detail template. 
 	        get_template_part('template-work-detail');

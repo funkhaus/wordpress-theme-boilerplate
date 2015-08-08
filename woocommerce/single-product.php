@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-get_header( 'shop' ); ?>
+// get_header( 'shop' ); ?>
 
 	<?php
 		/**
@@ -22,6 +22,7 @@ get_header( 'shop' ); ?>
 		 * @hooked woocommerce_output_content_wrapper - 10 (outputs opening divs for the content)
 		 * @hooked woocommerce_breadcrumb - 20
 		 */
+		remove_action('woocommerce_before_main_content', 'woocommerce_breadcrumb', 20);
 		do_action( 'woocommerce_before_main_content' );
 	?>
 
@@ -49,4 +50,4 @@ get_header( 'shop' ); ?>
 		do_action( 'woocommerce_sidebar' );
 	?>
 
-<?php get_footer( 'shop' ); ?>
+<?php // get_footer( 'shop' ); ?>

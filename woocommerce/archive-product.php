@@ -42,6 +42,9 @@ get_header( 'shop' ); ?>
 				 * @hooked woocommerce_result_count - 20
 				 * @hooked woocommerce_catalog_ordering - 30
 				 */
+				remove_action('woocommerce_before_shop_loop', 'woocommerce_result_count', 20);
+				remove_action('woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30);
+
 				do_action( 'woocommerce_before_shop_loop' );
 			?>
 
@@ -87,6 +90,7 @@ get_header( 'shop' ); ?>
 		 *
 		 * @hooked woocommerce_get_sidebar - 10
 		 */
+		remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar' );
 		do_action( 'woocommerce_sidebar' );
 	?>
 
