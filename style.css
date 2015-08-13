@@ -232,4 +232,6 @@ Colors:
 		right: 0;
 		top: 0;
 	}
-
+	.shop-block {
+		display: inline-block;
+	}

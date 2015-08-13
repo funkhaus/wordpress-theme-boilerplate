@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	
 			<div class="cart-product">
 	
-				<?php echo get_the_post_thumbnail($product_id); ?>
+				<?php echo get_the_post_thumbnail($product_id, 'thumbnail'); ?>
 	
 				<h4>
 					<?php echo get_the_title($product_id); ?>

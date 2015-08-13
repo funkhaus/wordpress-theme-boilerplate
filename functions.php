@@ -30,6 +30,10 @@
 	}
 	add_action( 'after_setup_theme', 'custom_theme_setup' );
 
+/*
+ * Disable Woo CSS
+ */
+	add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
 
 /*
  * Handle content width edge cases
@@ -268,28 +272,29 @@
  * Add custom metabox to the new/edit page
  */
     function custom2015_add_metaboxes(){
-        
-        add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');     
 
-        //add_meta_box("custom_second_featured_image", "Second Featured Image", "custom_second_featured_image", "page", "side", "low");        
+		// add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');
+		add_meta_box('product_story_meta', 'Product Story', 'product_story_meta', 'product', 'normal', 'core');
+
+		// add_meta_box("custom_second_featured_image", "Second Featured Image", "custom_second_featured_image", "page", "side", "low");        
     }
-    //add_action('add_meta_boxes', 'custom2015_add_metaboxes');    
+	add_action('add_meta_boxes', 'custom2015_add_metaboxes');
 
-    // Build media meta box
-    function custom_media_meta() {
-        global $post;
+	// Build media meta box
+	function custom_media_meta() {
+		global $post;
 
-        ?>
+		?>
         	<div class="custom-meta">
-				<label for="video-url">Enter the video URL for this page:</label>            
+				<label for="video-url">Enter the video URL for this page:</label>
 				<input id="video-url" class="short" title="This is needed for all video pages" name="_custom_video_url" type="text" value="<?php echo $post->_custom_video_url; ?>">
-				<br/>				
+				<br/>
 
         	</div>
 
-        <?php
-    }
-    
+		<?php
+	}
+
     // Second featured image uploader (requires changes to admin.js too).
     // @see: https://codex.wordpress.org/Javascript_Reference/wp.media
     function custom_second_featured_image(){
@@ -338,7 +343,12 @@
 
         <?php        
     }    
-    
+
+	function product_story_meta(){
+        global $post;
+		$story = get_post_meta($post->ID, '_product_story', true);
+		wp_editor( $story, '_product_story', array ('textarea_rows' => 5,'media_buttons'=>false));
+	}
 
 /*
  * Save the metabox vaule
@@ -353,13 +363,15 @@
         if( isset($_POST["_custom_video_url"]) ) {
 	        update_post_meta($post_id, "_custom_video_url", $_POST["_custom_video_url"]);
         }
+		if( isset($_POST["_product_story"]) ) {
+			update_post_meta($post_id, "_product_story", $_POST["_product_story"]);
+		}
         if( isset($_POST["_second_post_thumbnail"]) ) {
 	        //update_post_meta($post_id, "_second_post_thumbnail", $_POST["_second_post_thumbnail"]);
         }        
 
     }
-    //add_action('save_post', 'custom2015_save_metabox');
-    
+    add_action('save_post', 'custom2015_save_metabox');
 
 
 /*
