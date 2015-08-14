@@ -53,27 +53,39 @@ global $product;
 
 		<div class="excerpt"><?php the_excerpt(); ?></div>
 
-		<?php if ( $variations = $product->get_variation_attributes() ) : ?>
-
-			<div class="variations">
-
-				<?php woocommerce_variable_add_to_cart(); ?>
-
-			</div>
-
-		<?php endif; ?>
-
-		<?php
-			/*
-			 * - categories/brands?
-			 */
-		?>
-
 	</div><!-- .summary -->
+
+	<?php if ( $product->product_type == 'variable' ) : ?>
+
+		<div class="variations">
+
+			<?php woocommerce_variable_add_to_cart(); ?>
+
+		</div>
+
+	<?php else : ?>
+
+		<button class="add-to-cart" data-url="<?php echo $product->add_to_cart_url(); ?>">
+			Add To Cart
+		</button>
+
+	<?php endif; ?>
 
 	<div class="description">
 		<?php the_content(); ?>
 	</div>
+
+	<?php $story = get_post_meta($product->id, '_product_story', true); ?>
+
+	<?php if ( ! empty($story) ): ?>
+
+		<div class="story">
+
+			<?php echo apply_filters('the_content', $story); ?>
+
+		</div>
+
+	<?php endif; ?>
 
 	<meta itemprop="url" content="<?php the_permalink(); ?>" />
 

@@ -4,40 +4,47 @@
 
 		<div class="title">Filter +</div>
 
-		<div class="clothing-filter">
+		<ul class="clothing-filter product-cat-filter">
 
-			<div class="label">Clothing</div>
+			<?php
 
-			<ul>
-				<?php $clothing_cat = get_category(9);
-	
-					$args = array(
-						'type'                     => 'product',
-						'parent'                   => 9,
-						'orderby'                  => 'name',
-						'taxonomy'                 => 'product_cat'
-					);
-	
-					$cats = get_categories( $args );
-	
-					foreach ( $cats as $cat ) :
-				?>
+				$args = array(
+					'show_option_all'    => '',
+					'orderby'            => 'name',
+					'style'              => 'list',
+					'hide_empty'         => 0,
+					'use_desc_for_title' => 1,
+					'child_of'           => 9,
+					'title_li'           => __( 'Clothing' ),
+					'echo'               => 1,
+					'taxonomy'           => 'product_cat'
+				);
+				wp_list_categories( $args );
 
-					<li><?php echo $cat->name; ?></li>
+			?>
 
-				<?php endforeach; ?>
+		</ul>
 
-			</ul>
+		<ul class="brand-filter product-cat-filter">
+		
+			<?php
 
-		</div>
+				$args = array(
+					'show_option_all'    => '',
+					'orderby'            => 'name',
+					'style'              => 'list',
+					'hide_empty'         => 0,
+					'use_desc_for_title' => 1,
+					'child_of'           => 16,
+					'title_li'           => __( 'Brands' ),
+					'echo'               => 1,
+					'taxonomy'           => 'product_cat'
+				);
+				wp_list_categories( $args );
 
-		<div class="brand-filter">
+			?>
 
-			<div class="label">Brands</div>
-
-			<?php $brand_cat = get_category(16); ?>
-
-		</div>
+		</ul>
 
 	</div>
 

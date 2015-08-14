@@ -12,9 +12,13 @@ global $product;
 
 	<a href="<?php the_permalink(); ?>">
 
-		<div class="image-wrap"><?php echo $product->get_image('medium'); ?></div>
+		<div class="image-wrap">
+			<?php the_post_thumbnail('medium'); ?>
+		</div>
 
-		<h3><?php the_title(); ?></h3>
+		<h3>
+			<?php the_title(); ?>
+		</h3>
 
 		<div class="price">
 			<?php if ( $product->is_on_sale() ) : ?>
@@ -24,6 +28,16 @@ global $product;
 			<?php endif; ?>
 
 			<span><?php echo $product->get_price(); ?></span>
+		</div>
+
+		<div class="sizes">
+			<?php 
+				// Maybe something like this: show_vartions_in_stock('size');
+				if( $product->product_type == 'variable' ) {
+					$variations = $product->get_available_variations();
+					var_dump($variations);
+				}
+			?>									
 		</div>
 
 	</a>
