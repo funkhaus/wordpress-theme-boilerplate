@@ -43,7 +43,7 @@
 
 			<a id="logo" href="<?php bloginfo('url'); ?>">
 			        LOGO
-					<!-- <img class="svg " src="<?php echo get_template_directory_uri(); ?>/images/logo.svg" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">             -->
+					<!-- <img class="svg " src="<?php echo get_template_directory_uri(); ?>/images/logo.svg" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>"> -->
 			</a>
 
 			<?php woocommerce_mini_cart(); ?>

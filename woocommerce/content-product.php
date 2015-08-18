@@ -31,13 +31,7 @@ global $product;
 		</div>
 
 		<div class="sizes">
-			<?php 
-				// Maybe something like this: show_vartions_in_stock('size');
-				if( $product->product_type == 'variable' ) {
-					$variations = $product->get_available_variations();
-					var_dump($variations);
-				}
-			?>									
+			<?php echo show_variations_in_stock($product, 'color'); ?>
 		</div>
 
 	</a>

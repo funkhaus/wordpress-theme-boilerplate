@@ -4,6 +4,7 @@
 
 		<div class="title">Filter +</div>
 
+<!--
 		<ul class="clothing-filter product-cat-filter">
 
 			<?php
@@ -45,6 +46,17 @@
 			?>
 
 		</ul>
+-->
+
+		<?php
+			$menuArgs = array(
+				'container'         => 'false',
+				'menu'              => 'Filter Menu',
+				'menu_id'           => 'filter-menu',
+				'menu_class'        => 'filter-menu menu'
+			);
+			wp_nav_menu($menuArgs); 
+		?>
 
 	</div>
 

@@ -28,7 +28,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 	
 			<div class="cart-product">
-	
+
+				<button class="remove-from-cart" data-url="<?php // echo $_product->get_remove_url($cart_item_key); ?>">
+					X
+				</button>
+
 				<?php echo get_the_post_thumbnail($product_id, 'thumbnail'); ?>
 	
 				<h4>

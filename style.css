@@ -234,4 +234,12 @@ Colors:
 	}
 	.shop-block {
 		display: inline-block;
+		vertical-align: top;
 	}
+	.current-menu-item > a {
+		font-weight: bold;
+	}
+	.loading {
+		opacity: 0.3;
+	}
+

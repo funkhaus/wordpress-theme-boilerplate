@@ -274,9 +274,8 @@
     function custom2015_add_metaboxes(){
 
 		// add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');
-		add_meta_box('product_story_meta', 'Product Story', 'product_story_meta', 'product', 'normal', 'core');
+		// add_meta_box("custom_second_featured_image", "Second Featured Image", "custom_second_featured_image", "page", "side", "low");
 
-		// add_meta_box("custom_second_featured_image", "Second Featured Image", "custom_second_featured_image", "page", "side", "low");        
     }
 	add_action('add_meta_boxes', 'custom2015_add_metaboxes');
 
@@ -344,12 +343,6 @@
         <?php        
     }    
 
-	function product_story_meta(){
-        global $post;
-		$story = get_post_meta($post->ID, '_product_story', true);
-		wp_editor( $story, '_product_story', array ('textarea_rows' => 5,'media_buttons'=>false));
-	}
-
 /*
  * Save the metabox vaule
  */
@@ -363,12 +356,9 @@
         if( isset($_POST["_custom_video_url"]) ) {
 	        update_post_meta($post_id, "_custom_video_url", $_POST["_custom_video_url"]);
         }
-		if( isset($_POST["_product_story"]) ) {
-			update_post_meta($post_id, "_product_story", $_POST["_product_story"]);
-		}
         if( isset($_POST["_second_post_thumbnail"]) ) {
 	        //update_post_meta($post_id, "_second_post_thumbnail", $_POST["_second_post_thumbnail"]);
-        }        
+        }
 
     }
     add_action('save_post', 'custom2015_save_metabox');
@@ -512,12 +502,16 @@
 /*
  * Enqueue Custom Gallery
  */
-   function custom_gallery($atts) {
+	function custom_gallery($atts) {
 		if ( !is_admin() ) {
 			include('part-gallery.php');
 		}
 		return $output;
-   }
-   //add_shortcode('gallery', 'custom_gallery');
+	}
+	//add_shortcode('gallery', 'custom_gallery');
+
+	if ( $store_funcs = locate_template('functions-store.php') ) {
+		include( $store_funcs );
+	}
 
 ?>
