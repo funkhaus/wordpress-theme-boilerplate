@@ -12,6 +12,12 @@ var store = {
 		
 	},
 
+/*
+ * 	This function reformats the filter menu
+ * 	so that active elements are represented
+ * 	and replaces each menu link href so it
+ * 	filters properly when clicked
+ */
 	formatFilterMenu: function(){
 
 		// explode URL, clean
@@ -24,8 +30,11 @@ var store = {
 			// get the current filter
 			var currentFilter = currentURL[(currentURL.length - 1)];
 
+			// split filter by term
 			currentFilter.split('+').forEach(function(term){
 
+				// add active classes to each term within the URL
+				// ( By default only the first term will receive an active class )
 				jQuery('.filter-menu .sub-menu a[href$="' + term + '/"]').closest('li').addClass('current-menu-item');
 
 			});
@@ -37,24 +46,26 @@ var store = {
 				var href = jQuery(this).attr('href');
 				href = href.split('/').filter(function(el){ return el.length; });
 
+				// Append the current filter onto this href 
 				var newFilter = href[(href.length - 1)] + '+' + currentFilter;
 
-				// skip if this is a current item
+				// if this menu item is a 'current' item...
 				if ( jQuery(this).closest('li').hasClass('current-menu-item') ){
 
-					// split newly built filter
+					// split newly built filter into terms
 					var pieces = newFilter.split('+');
 
-					// remove this element from filter
+					// remove this term
 					pieces = pieces.filter(function(piece){
 						return piece !== href[(href.length - 1)];
 					});
 
-					// put filter back together
+					// put filter back together,
+					// now clicking active links will 'unfilter' that term
 					newFilter = pieces.join('+');
 				}
 
-				// set term as last array element
+				// set term as last element in URL array
 				href[(href.length - 1)] = newFilter;
 
 				// remove protocol from array
@@ -65,68 +76,89 @@ var store = {
 				// rebuild URL
 				var newHref = 'http://' + href.join('/');
 
-				// add new URL to link
+				// replace this href with new URL
 				jQuery(this).attr('href', newHref);
 
 			});
 
 		}
 
-		//console.log(currentURL);
-
 	},
 
+/*
+ *	Call this whenever you want to rebuild the cart
+ */
 	refreshCart: function(){
 
+		// add loading class to cart
 		jQuery('#sidecart').addClass('loading');
 
+		// run ajax to get mini-cart html
 		jQuery.get(store.ajaxURL, { action:  'get_minicart'})
 			.success(function(body){
 
+				// switch out mini-cart
 				jQuery('#sidecart').replaceWith( jQuery(body) );
 
 			})
 			.always(function(){
 
+				// remove loading class
 				jQuery('#sidecart').removeClass('loading');
-				
+
 			});
 
 	},
 
 	addToCart: function(){
 
+		// click any add to cart button, unless loading
 		jQuery(document).on('click', 'button.add-to-cart:not(.loading button)', function(e){
 			e.preventDefault();
 
+			// cache elements, get url
 			var $el = jQuery(this);
 			var $product = $el.closest('.product');
 			var url = $el.data('url');
 
+			// add loading class
 			$product.addClass('loading');
-			
+
+			// run ajax to add product
 			jQuery.get(url)
 				.success(function(body){
+
+					// rebuild cart
 					store.refreshCart();
+
 				})
 				.always(function(){
+
+					// remove loading
 					$product.removeClass('loading');
+
 				});
-			
+
 		});
 
 	},
 
 	removeFromCart: function(){
 
+		// click a remove from cart button, unless loading...
 		jQuery(document).on('click', 'button.remove-from-cart:not(.loading button)', function(e){
 			e.preventDefault();
 
+			// get removal URL
 			var url = jQuery(this).data('url');
-			
+
+			// make request
 			jQuery.get(url)
 				.success(function(body){
+
+					// rebuild cart
 					store.refreshCart();
+
 				});
 
 		});

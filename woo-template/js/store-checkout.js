@@ -1,5 +1,4 @@
 var storeCheckout = {
-	ajaxURL: site_vars.ajaxURL,
 	init: function() {
 
 		storeCheckout.controlViews();
@@ -13,6 +12,7 @@ var storeCheckout = {
 
 	controlViews: function(){
 
+		// click one of the view controls
 		jQuery(document).on('click', '.checkout-controls .switch', function(e){
 			e.preventDefault();
 
@@ -33,22 +33,29 @@ var storeCheckout = {
 
 		});
 
+		// on ready, click first control
 		jQuery('.checkout-controls .switch').first().click();
 
 	},
 
 	controlBillFields: function(){
 
+		// function to set state of billing fields based on checkbox
 		var toggleFields = function(){
 
+			// determine if box is currently checked
 			var checked = jQuery('#bill-to-different-address-checkbox').get(0).checked;
 
+			// if so...
 			if ( checked ){
 
+				// slide open the form
 				jQuery('.bill-fields').slideDown();
 
+			// not checked...
 			} else {
 
+				// close the form
 				jQuery('.bill-fields').slideUp();
 
 			}
@@ -58,9 +65,12 @@ var storeCheckout = {
 		// listen for checkbox toggle
 		jQuery('#bill-to-different-address-checkbox').change(function(){
 
+			// run controller
 			toggleFields();
 
 		});
+
+		// kick it
 		toggleFields();
 
 	}

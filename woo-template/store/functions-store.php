@@ -28,6 +28,15 @@
 	add_action( 'admin_enqueue_scripts', 'store_admin_scripts' );
 
 /*
+ * Store custom styles
+ */
+    function custom_store_styles() {
+		wp_register_style('store-styles', get_template_directory_uri() . '/css/store.css');
+		wp_enqueue_style('store-styles');
+    }
+	add_action('wp_enqueue_scripts', 'custom_store_styles', 10);
+
+/*
  * Add any store-related meta-boxes
  */
 	function store_add_metaboxes(){
@@ -115,28 +124,40 @@
  */
 	function show_variations_in_stock($product, $param){
 
+		// init
 		$output = '';
+		$product = wc_get_product($product);
+
+		// only do something for variable type products
 		if( $product->product_type == 'variable' ) {
+
+			// load variations
 			$variations = $product->get_available_variations();
 
+			// init blank array, loop
 			$filtered = array();
 			foreach ( $variations as $variation ){
 
+				// if any variants have $param variations, add them to output array
 				if ( array_key_exists('attribute_pa_' . $param, $variation["attributes"]) ){
 					$filtered[$variation["attributes"]['attribute_pa_' . $param]] = $variation;
 				}
 
 			}
 
+			// if any variants came back...
 			if ( !empty($filtered) ){
 
 				$output .= '<ul>';
 
+					// loop variants
 					foreach ( $filtered as $filtered_key => $filtered_var ){
 
+						// set availability class
 						$class = '';
 						if ( ! $filtered_var['is_purchasable'] ) $class = 'unavailable';
 
+						// build html
 						$output .= '<li class="' . $class . '">';
 
 							$output .= $filtered_key;
@@ -154,23 +175,12 @@
 		return $output;
 	}
 
-
 /*
- * AJAX Endpoint Functions
- */
-	function ajax_get_mini_cart() {
-		woocommerce_mini_cart();
-		exit;
-	}
-
-	add_action( 'wp_ajax_get_minicart', 'ajax_get_mini_cart' );
-	add_action( 'wp_ajax_nopriv_get_minicart', 'ajax_get_mini_cart' );
-
-/*
- * Change required status of certain
+ * Change required status of certain fileds
  */
 	function fh_change_required_fields( $fields ) {
 
+		// phone number should not be required
 		$fields['phone']['required'] = false;
 		return $fields;
 
@@ -184,12 +194,15 @@
 
 		function is_store_guest(){
 
+			// init
 			$out = false;
 
+			// check request
 			if ( isset($_REQUEST['guest']) ){
 				$out = $_REQUEST['guest'];
 			}
 
+			// check cookies
 			if(isset($_COOKIE['fh_guest_checkout'])){
 				$out = $_COOKIE['fh_guest_checkout'];
 			}
@@ -204,6 +217,7 @@
  */
 	function store_set_guest_cookie(){
 
+		// check for parameter
 		if ( isset($_REQUEST['guest']) && $_REQUEST['guest'] ){
 
 			// set for 10 days
@@ -214,5 +228,19 @@
 	}
 	add_action('init', 'store_set_guest_cookie');
 
-	// remove sidebar from site
+/*
+ * Remove sidebar from site
+ */
 	remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
+
+
+/*
+ * AJAX Endpoint Functions
+ */
+	function ajax_get_mini_cart() {
+		woocommerce_mini_cart();
+		exit;
+	}
+
+	add_action( 'wp_ajax_get_minicart', 'ajax_get_mini_cart' );
+	add_action( 'wp_ajax_nopriv_get_minicart', 'ajax_get_mini_cart' );
