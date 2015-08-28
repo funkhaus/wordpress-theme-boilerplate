@@ -41,6 +41,8 @@ $order = wc_get_order( $order_id );
 									echo apply_filters( 'woocommerce_order_item_name', sprintf( '<a href="%s">%s</a>', get_permalink( $item['product_id'] ), $item['name'] ), $item );
 								}
 
+								echo get_the_post_thumbnail($_product->id, 'thumbnail');
+
 								echo apply_filters( 'woocommerce_order_item_quantity_html', ' <strong class="product-quantity">' . sprintf( '&times; %s', $item['qty'] ) . '</strong>', $item );
 
 								// Allow other plugins to add additional product information here
@@ -226,5 +228,3 @@ $order = wc_get_order( $order_id );
 </div><!-- /.col2-set -->
 
 <?php endif; ?>
-
-<div class="clear"></div>

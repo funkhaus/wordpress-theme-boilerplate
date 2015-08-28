@@ -12,7 +12,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-
+global $woocommerce;
 ?>
 
 <?php do_action( 'woocommerce_before_mini_cart' ); ?>
@@ -29,11 +29,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 	
 			<div class="cart-product">
 
-				<button class="remove-from-cart" data-url="<?php // echo $_product->get_remove_url($cart_item_key); ?>">
+				<button class="remove-from-cart" data-url="<?php echo $woocommerce->cart->get_remove_url($cart_item_key); ?>">
 					X
 				</button>
 
-				<?php echo get_the_post_thumbnail($product_id, 'thumbnail'); ?>
+				<?php if ( $_product->product_type == 'variation' ) : ?>
+
+					<?php $atts = $_product->get_attributes(); ?>
+					<?php foreach ( $atts as $label => $att ): ?>
+
+						<?php var_dump($_product->get_attribute($att['name'])); ?>
+
+					<?php endforeach; ?>
+
+				<?php endif; ?>
+
+				<a href="<?php echo get_permalink($product_id); ?>">
+					<?php echo get_the_post_thumbnail($product_id, 'thumbnail'); ?>
+				</a>
 	
 				<h4>
 					<?php echo get_the_title($product_id); ?>
@@ -66,11 +79,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php $tax_array = WC()->cart->get_taxes(); ?>
 				<strong><?php _e( 'Tax', 'woocommerce' ); ?>:</strong> <?php echo number_format(array_sum($tax_array), 2); ?>
 			</p>
-			
-			<p class="shipping">
-				<strong><?php _e( 'Shipping', 'woocommerce' ); ?>:</strong> <?php wc_cart_totals_shipping_html(); ?>
-			</p>
-	
+
+			<?php if ( $shipping = WC()->cart->calculate_shipping() ): ?>
+				<p class="shipping">
+					<strong><?php _e( 'Shipping', 'woocommerce' ); ?>:</strong> 
+					<?php // wc_cart_totals_shipping_html(); ?>
+					<?php echo $shipping; ?>
+				</p>
+			<?php else: ?>
+				<p class="shipping blank">
+					Shipping calculated at checkout.
+				</p>
+			<?php endif; ?>
+
 			<p class="buttons">
 				<button class="button close">
 					X Close

@@ -14,25 +14,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** @global WC_Checkout $checkout */
 ?>
 <div class="woocommerce-billing-fields">
-	<?php if ( WC()->cart->ship_to_billing_address_only() && WC()->cart->needs_shipping() ) : ?>
-
-		<h3><?php _e( 'Billing &amp; Shipping', 'woocommerce' ); ?></h3>
-
-	<?php else : ?>
-
-		<h3><?php _e( 'Billing Details', 'woocommerce' ); ?></h3>
-
-	<?php endif; ?>
 
 	<?php do_action( 'woocommerce_before_checkout_billing_form', $checkout ); ?>
 
-	<?php foreach ( $checkout->checkout_fields['billing'] as $key => $field ) : ?>
+	<?php $bill_fields = $checkout->checkout_fields['billing']; ?>
 
-		<?php woocommerce_form_field( $key, $field, $checkout->get_value( $key ) ); ?>
+	<div class="billing-info">
 
-	<?php endforeach; ?>
+		<?php woocommerce_form_field( 'billing_email', $bill_fields['billing_email'], $checkout->get_value( 'billing_email' ) ); ?>
+		<?php woocommerce_form_field( 'billing_first_name', $bill_fields['billing_first_name'], $checkout->get_value( 'billing_first_name' ) ); ?>
+		<?php woocommerce_form_field( 'billing_last_name', $bill_fields['billing_last_name'], $checkout->get_value( 'billing_last_name' ) ); ?>
+		<?php woocommerce_form_field( 'billing_country', $bill_fields['billing_country'], $checkout->get_value( 'billing_country' ) ); ?>
+		<?php woocommerce_form_field( 'billing_address_1', $bill_fields['billing_address_1'], $checkout->get_value( 'billing_address_1' ) ); ?>
+		<?php woocommerce_form_field( 'billing_address_2', $bill_fields['billing_address_2'], $checkout->get_value( 'billing_address_2' ) ); ?>
+		<?php woocommerce_form_field( 'billing_city', $bill_fields['billing_city'], $checkout->get_value( 'billing_city' ) ); ?>
+		<?php woocommerce_form_field( 'billing_state', $bill_fields['billing_state'], $checkout->get_value( 'billing_state' ) ); ?>
+		<?php woocommerce_form_field( 'billing_postcode', $bill_fields['billing_postcode'], $checkout->get_value( 'billing_postcode' ) ); ?>
 
-	<?php do_action('woocommerce_after_checkout_billing_form', $checkout ); ?>
+		<?php do_action('woocommerce_after_checkout_billing_form', $checkout ); ?>
+
+	</div>
 
 	<?php if ( ! is_user_logged_in() && $checkout->enable_signup ) : ?>
 

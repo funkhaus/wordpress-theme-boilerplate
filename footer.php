@@ -1,5 +1,5 @@
 	</div><!-- End of #container -->
-    <div id="footer">
+	<div id="footer">
 
 	</div>
 <?php wp_footer();?>

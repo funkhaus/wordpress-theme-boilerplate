@@ -104,7 +104,7 @@
 		//wp_register_script('site-admin', get_template_directory_uri() . '/js/admin.js', 'jquery', '1.0');
 		//wp_enqueue_script('site-admin');
 	}
-	add_action( 'admin_enqueue_scripts', 'custom_admin_scripts' ); 
+	add_action( 'admin_enqueue_scripts', 'custom_admin_scripts' );
 
 
 /*
@@ -341,7 +341,7 @@
         </div>
 
         <?php        
-    }    
+    }
 
 /*
  * Save the metabox vaule
@@ -510,8 +510,11 @@
 	}
 	//add_shortcode('gallery', 'custom_gallery');
 
-	if ( $store_funcs = locate_template('functions-store.php') ) {
+	if ( $store_funcs = locate_template('store/functions-store.php') ) {
 		include( $store_funcs );
+	}
+	if ( $stripe_template = locate_template('store/stripe-template-class.php') ){
+		include( $stripe_template );
 	}
 
 ?>

@@ -25,14 +25,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php endif; ?>
 
-		<h2><?php _e( 'Login', 'woocommerce' ); ?></h2>
+		<h2>Already have an account?</h2>
+		<p>Sign in to check out</p>
 
 		<form method="post" class="login">
 
 			<?php do_action( 'woocommerce_login_form_start' ); ?>
 
 			<p class="form-row form-row-wide">
-				<label for="username"><?php _e( 'Username or email address', 'woocommerce' ); ?> <span class="required">*</span></label>
+				<label for="username"><?php _e( 'Email address', 'woocommerce' ); ?> <span class="required">*</span></label>
 				<input type="text" class="input-text" name="username" id="username" value="<?php if ( ! empty( $_POST['username'] ) ) echo esc_attr( $_POST['username'] ); ?>" />
 			</p>
 			<p class="form-row form-row-wide">
@@ -50,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</label>
 			</p>
 			<p class="lost_password">
-				<a href="<?php echo esc_url( wc_lostpassword_url() ); ?>"><?php _e( 'Lost your password?', 'woocommerce' ); ?></a>
+				<a href="<?php echo esc_url( wc_lostpassword_url() ); ?>"><?php _e( 'Forgot your password?', 'woocommerce' ); ?></a>
 			</p>
 
 			<?php do_action( 'woocommerce_login_form_end' ); ?>
@@ -63,7 +64,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="col-2">
 
-		<h2><?php _e( 'Register', 'woocommerce' ); ?></h2>
+		<h2>Don’t have an account?</h2>
+		<p>Sign up for order tracking and fast check out</p>
 
 		<form method="post" class="register">
 
@@ -98,10 +100,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php do_action( 'woocommerce_register_form' ); ?>
 			<?php do_action( 'register_form' ); ?>
 
-			<p class="form-row">
+			<div class="form-row">
 				<?php wp_nonce_field( 'woocommerce-register' ); ?>
-				<input type="submit" class="button" name="register" value="<?php _e( 'Register', 'woocommerce' ); ?>" />
-			</p>
+				<input type="submit" class="button" name="register" value="Create Account" />
+				<p>Or</p>
+				<a href="<?php echo get_permalink(wc_get_page_id( 'checkout' )) . '?guest=1'; ?>" class="continue-guest">Continue as Guest</a>
+			</div>
 
 			<?php do_action( 'woocommerce_register_form_end' ); ?>
 

@@ -3,6 +3,8 @@ var store = {
     init: function() {
 
 		store.formatFilterMenu();
+		store.addToCart();
+		store.removeFromCart();
 
 	},
 
@@ -31,17 +33,29 @@ var store = {
 			// loop through filter menu
 			jQuery('.filter-menu .sub-menu a').each(function(){
 
-				// skip if this is a current item
-				if ( jQuery(this).closest('li').hasClass('current-menu-item') ){
-					return;
-				}
-
 				// explode and clean this href
 				var href = jQuery(this).attr('href');
 				href = href.split('/').filter(function(el){ return el.length; });
 
+				var newFilter = href[(href.length - 1)] + '+' + currentFilter;
+
+				// skip if this is a current item
+				if ( jQuery(this).closest('li').hasClass('current-menu-item') ){
+
+					// split newly built filter
+					var pieces = newFilter.split('+');
+
+					// remove this element from filter
+					pieces = pieces.filter(function(piece){
+						return piece !== href[(href.length - 1)];
+					});
+
+					// put filter back together
+					newFilter = pieces.join('+');
+				}
+
 				// set term as last array element
-				href[(href.length - 1)] = href[(href.length - 1)] + '+' + currentFilter;
+				href[(href.length - 1)] = newFilter;
 
 				// remove protocol from array
 				href = href.filter(function(el){
@@ -71,7 +85,51 @@ var store = {
 
 				jQuery('#sidecart').replaceWith( jQuery(body) );
 
+			})
+			.always(function(){
+
+				jQuery('#sidecart').removeClass('loading');
+				
 			});
+
+	},
+
+	addToCart: function(){
+
+		jQuery(document).on('click', 'button.add-to-cart:not(.loading button)', function(e){
+			e.preventDefault();
+
+			var $el = jQuery(this);
+			var $product = $el.closest('.product');
+			var url = $el.data('url');
+
+			$product.addClass('loading');
+			
+			jQuery.get(url)
+				.success(function(body){
+					store.refreshCart();
+				})
+				.always(function(){
+					$product.removeClass('loading');
+				});
+			
+		});
+
+	},
+
+	removeFromCart: function(){
+
+		jQuery(document).on('click', 'button.remove-from-cart:not(.loading button)', function(e){
+			e.preventDefault();
+
+			var url = jQuery(this).data('url');
+			
+			jQuery.get(url)
+				.success(function(body){
+					store.refreshCart();
+				});
+
+		});
 
 	}
 

@@ -36,8 +36,10 @@ global $product;
 
 	</a>
 
+<!--
 	<button class="add-to-cart" data-url="<?php echo $product->add_to_cart_url(); ?>">
 		Add To Cart
 	</button>
+-->
 
 </div>

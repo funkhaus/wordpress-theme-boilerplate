@@ -38,7 +38,7 @@
 					'menu_id'           => 'main-menu',
 					'menu_class'        => 'main-menu menu'
 				);
-				wp_nav_menu($menuArgs); 
+				wp_nav_menu($menuArgs);
 			?>
 
 			<a id="logo" href="<?php bloginfo('url'); ?>">
@@ -46,7 +46,12 @@
 					<!-- <img class="svg " src="<?php echo get_template_directory_uri(); ?>/images/logo.svg" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>"> -->
 			</a>
 
-			<?php woocommerce_mini_cart(); ?>
+			<?php if ( is_woocommerce() && ! is_checkout() ): ?>
+
+				<?php woocommerce_mini_cart(); ?>
+
+			<?php endif; ?>
+
 		</div>
 
 		<?php get_template_part('part-product-filters'); ?>

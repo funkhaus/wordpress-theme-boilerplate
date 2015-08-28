@@ -25,30 +25,21 @@ global $product;
 	 */
 	 do_action( 'woocommerce_before_single_product' );
 
-	 if ( post_password_required() ) {
-	 	echo get_the_password_form();
-	 	return;
-	 }
+	if ( post_password_required() ) {
+		echo get_the_password_form();
+		return;
+	}
 ?>
 
 <div itemscope itemtype="<?php echo woocommerce_get_product_schema(); ?>" id="product-<?php the_ID(); ?>" <?php post_class(); ?>>
 
-	<div class="featured-image">
-		<?php the_post_thumbnail('large'); ?>
-	</div>
-
-	<div class="gallery">
-		<?php $gallery_ids = $product->get_gallery_attachment_ids(); ?>
-		<?php foreach ($gallery_ids as $gallery_id): ?>
-
-			<?php echo wp_get_attachment_image($gallery_id, 'thumbnail'); ?>
-
-		<?php endforeach; ?>
-	</div>
+	<?php get_template_part('store/part-store-gallery'); ?>
 
 	<div class="summary entry-summary">
 
-		<h2><?php the_title(); ?></h2>
+		<h2>
+			<?php the_title(); ?>
+		</h2>
 
 		<div class="price">
 			<?php if ( $product->is_on_sale() ) : ?>
@@ -57,12 +48,12 @@ global $product;
 				</span>
 			<?php endif; ?>
 
-			<span><?php echo $product->get_price(); ?></span>
+			<span>
+				<?php echo $product->get_price(); ?>
+			</span>
 		</div>
 
-		<div class="excerpt"><?php the_excerpt(); ?></div>
-
-	</div><!-- .summary -->
+	</div>
 
 	<?php if ( $product->product_type == 'variable' ) : ?>
 
@@ -85,17 +76,14 @@ global $product;
 	</div>
 
 	<?php $story = get_post_meta($product->id, '_product_story', true); ?>
-
 	<?php if ( ! empty($story) ): ?>
 
 		<div class="story">
-
 			<?php echo apply_filters('the_content', $story); ?>
-
 		</div>
 
 	<?php endif; ?>
 
 	<meta itemprop="url" content="<?php the_permalink(); ?>" />
 
-</div><!-- #product-<?php the_ID(); ?> -->
+</div>
