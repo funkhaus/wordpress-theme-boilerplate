@@ -1,0 +1,107 @@
+/*
+ * Store styles go in here
+ */
+
+ /*-------------------------------------------------------------- */
+
+/* 
+ * Page Structure 
+ */
+	#content {
+		margin: auto;
+		margin-top: 75px;
+		max-width: 1200px;
+	}
+	#header {
+		margin: auto;
+		max-width: 1200px;
+	}
+
+	#sidecart {
+		position: fixed;
+		width: 300px;
+		bottom: 0;
+		right: 0;
+		top: 0;
+	}
+
+/* 
+ * Utils
+ */
+	.loading {
+		opacity: 0.3;
+	}
+
+/* 
+ * Menus
+ */
+	.main-menu {
+		float: right;
+	}
+	.main-menu li {
+		display: inline-block;
+		margin: 0 10px;
+	}
+	.current-menu-item > a {
+		font-weight: bold;
+	}
+
+/* 
+ * Product Grid
+ */
+	.shop-block {
+		display: inline-block;
+		vertical-align: top;
+	}
+
+/*
+ * Checkout
+ */
+	.checkout-controls {
+		overflow: hidden;
+	}
+	.checkout-controls .switch:hover,
+	.checkout-controls .switch.active {
+		background: #cbcbcb;
+	}
+	.checkout-controls .switch {
+		text-align: center;
+		cursor: pointer;
+		float: left;
+		background: #f1f1f1;
+		width: 33.33%;
+		height: 150px;
+	}
+
+	.checkout label {
+		display: block;
+	}
+	.checkout .view {
+		position: relative;
+		float: left;
+		width: 66.66%;
+	}
+	.checkout .subtotals {
+		float: right;
+	}
+	.checkout input {
+		width: 100%;
+
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	.select2-container  a.select2-choice {
+		padding: 3px;
+	}
+
+	ul.payment_methods {
+		padding: 0;
+		list-style-type: none;
+	}
+	ul.payment_methods > li:only-child > input[type="radio"] {
+		display: none;
+	}
+	fieldset {
+		border: none;
+		padding: 0;
+	}
