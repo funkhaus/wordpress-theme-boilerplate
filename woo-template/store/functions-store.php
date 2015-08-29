@@ -1,6 +1,14 @@
 <?php
 
 /*
+ * Declare WooCommerce Support
+ */
+	add_action( 'after_setup_theme', 'woocommerce_support' );
+	function woocommerce_support() {
+	    add_theme_support( 'woocommerce' );
+	}
+
+/*
  * Enqueue Store-Related scripts
  */
 	function custom_store_scripts() {
@@ -18,6 +26,7 @@
 	}
 	add_action('wp_enqueue_scripts', 'custom_store_scripts', 10);
 
+
 /*
  * Enqueue store Admin Script
  */
@@ -27,6 +36,7 @@
 	}
 	add_action( 'admin_enqueue_scripts', 'store_admin_scripts' );
 
+
 /*
  * Store custom styles
  */
@@ -35,6 +45,7 @@
 		wp_enqueue_style('store-styles');
     }
 	add_action('wp_enqueue_scripts', 'custom_store_styles', 10);
+
 
 /*
  * Add any store-related meta-boxes
@@ -100,6 +111,7 @@
 		<?php
 	}
 
+
 /*
  * Save metabox values
  */
@@ -118,6 +130,7 @@
 
 	}
 	add_action('save_post', 'store_save_metaboxes');
+
 
 /*
  * Easy wrapper function for listing available variations
@@ -175,6 +188,7 @@
 		return $output;
 	}
 
+
 /*
  * Change required status of certain fileds
  */
@@ -186,6 +200,7 @@
 
 	}
 	add_filter( 'woocommerce_default_address_fields', 'fh_change_required_fields' );
+
 
 /*
  * Function to check if user has elected to be a guest
@@ -212,6 +227,7 @@
 
 	}
 
+
 /*
  * If guest parameter is set, add a cookie
  */
@@ -233,6 +249,12 @@
  */
 	remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
 
+/*
+ * Check for stripe templating file and if it exists include it
+ */
+	if ( $stripe_template = locate_template('store/stripe-template-class.php') ){
+		include( $stripe_template );
+	}
 
 /*
  * AJAX Endpoint Functions

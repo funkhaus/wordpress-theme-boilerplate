@@ -5,10 +5,10 @@
 	function custom_wordpress_setup() {
 
 		// Enable tags for Pages (@see: https://wordpress.org/support/topic/enable-tags-screen-for-pages#post-29500520
-		//register_taxonomy_for_object_type('post_tag', 'page');	
-		
+		//register_taxonomy_for_object_type('post_tag', 'page');
+
 	    // Enable excerpts for pages
-	    add_post_type_support('page', 'excerpt');			
+	    add_post_type_support('page', 'excerpt');
 
 	}
 	add_action('init', 'custom_wordpress_setup');
@@ -30,6 +30,10 @@
 	}
 	add_action( 'after_setup_theme', 'custom_theme_setup' );
 
+/*
+ * Disable Woo CSS
+ */
+	add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
 
 /*
  * Handle content width edge cases
@@ -100,7 +104,7 @@
 		//wp_register_script('site-admin', get_template_directory_uri() . '/js/admin.js', 'jquery', '1.0');
 		//wp_enqueue_script('site-admin');
 	}
-	add_action( 'admin_enqueue_scripts', 'custom_admin_scripts' ); 
+	add_action( 'admin_enqueue_scripts', 'custom_admin_scripts' );
 
 
 /*
@@ -185,15 +189,14 @@
             	foreach ($attachments as $attachment) {
                     $firstImage = wp_get_attachment_image_src($attachment->ID, array(400,225));
                     $content = '<p><a href='.get_permalink($post->ID).'><img src="'.$firstImage[0].'"/></a></p>'.$content;
-            	}
-            }            
-            
-        }
-        
-        return $content;
-    }
-    add_filter('the_excerpt_rss', 'rss_post_thumbnail');  
+				}
+			}
 
+		}
+
+		return $content;
+	}
+	add_filter('the_excerpt_rss', 'rss_post_thumbnail');
 
 /*
  * Custom conditional function. Used to get the parent and all it's child.
@@ -269,28 +272,28 @@
  * Add custom metabox to the new/edit page
  */
     function custom2015_add_metaboxes(){
-        
-        add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');     
 
-        //add_meta_box("custom_second_featured_image", "Second Featured Image", "custom_second_featured_image", "page", "side", "low");        
+		// add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');
+		// add_meta_box("custom_second_featured_image", "Second Featured Image", "custom_second_featured_image", "page", "side", "low");
+
     }
-    //add_action('add_meta_boxes', 'custom2015_add_metaboxes');    
+	add_action('add_meta_boxes', 'custom2015_add_metaboxes');
 
-    // Build media meta box
-    function custom_media_meta() {
-        global $post;
+	// Build media meta box
+	function custom_media_meta() {
+		global $post;
 
-        ?>
+		?>
         	<div class="custom-meta">
-				<label for="video-url">Enter the video URL for this page:</label>            
+				<label for="video-url">Enter the video URL for this page:</label>
 				<input id="video-url" class="short" title="This is needed for all video pages" name="_custom_video_url" type="text" value="<?php echo $post->_custom_video_url; ?>">
-				<br/>				
+				<br/>
 
         	</div>
 
-        <?php
-    }
-    
+		<?php
+	}
+
     // Second featured image uploader (requires changes to admin.js too).
     // @see: https://codex.wordpress.org/Javascript_Reference/wp.media
     function custom_second_featured_image(){
@@ -338,8 +341,7 @@
         </div>
 
         <?php        
-    }    
-    
+    }
 
 /*
  * Save the metabox vaule
@@ -356,11 +358,10 @@
         }
         if( isset($_POST["_second_post_thumbnail"]) ) {
 	        //update_post_meta($post_id, "_second_post_thumbnail", $_POST["_second_post_thumbnail"]);
-        }        
+        }
 
     }
-    //add_action('save_post', 'custom2015_save_metabox');
-    
+    add_action('save_post', 'custom2015_save_metabox');
 
 
 /*
@@ -480,26 +481,32 @@
 /*
  * Disable Rich Editor on certain pages
  */
-    function disabled_rich_editor($allow_rich_editor) {
-	    global $post;
+	function disabled_rich_editor($allow_rich_editor) {
+		global $post;
 
-	    if($post->post_name == 'contact') {
-		    return false;		    
-	    }
-	    return $allow_rich_editor;
-    }	
-    //add_filter( 'user_can_richedit', 'disabled_rich_editor');
-
+		if($post->post_name == 'contact') {
+			return false;		    
+		}
+		return $allow_rich_editor;
+	}
+	//add_filter( 'user_can_richedit', 'disabled_rich_editor');
 
 /*
  * Enqueue Custom Gallery
  */
-   function custom_gallery($atts) {
+	function custom_gallery($atts) {
 		if ( !is_admin() ) {
 			include('part-gallery.php');
 		}
 		return $output;
-   }
-   //add_shortcode('gallery', 'custom_gallery');
+	}
+	//add_shortcode('gallery', 'custom_gallery');
+
+/*
+ * Check if functions-store file exists, if so include it
+ */
+	if ( $store_funcs = locate_template('store/functions-store.php') ) {
+		include( $store_funcs );
+	}
 
 ?>

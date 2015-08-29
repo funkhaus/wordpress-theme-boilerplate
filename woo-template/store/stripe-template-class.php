@@ -9,7 +9,6 @@
 		include_once ABSPATH . 'wp-content/plugins/woocommerce-gateway-stripe/includes/class-wc-gateway-stripe.php';
 
 		if ( ! class_exists( 'WC_Gateway_Stripe' ) ){
-			echo 'wah'; exit;
 			return;
 		}
 
