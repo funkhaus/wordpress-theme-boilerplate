@@ -46,3 +46,5 @@
 	        </a>
 	        
 	    </div>
+
+		<?php do_action('fh_after_header'); ?>
