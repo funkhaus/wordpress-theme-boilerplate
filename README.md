@@ -93,6 +93,26 @@ Icons and image assets should be named describing what they are, not what they r
 
 ___
 
+### Store Considerations
+
+By default, the template contains extra boilerplate structure to account for Woocommerce pages and functionality. Every time a new site is started, make sure you determine whether or not the store/Woocommerce components will be needed. If you won't be needing them (most sites), follow these steps:
+
+1. Edit [functions.php](/template/functions.php) and remove these lines:
+```php
+/*
+ * Check if functions-store file exists, if so include it
+ */
+	if ( $store_funcs = locate_template('store/functions-store.php') ) {
+		include( $store_funcs );
+	}
+```
+2. Completely remove these two directories out of the template:
+
+	- [/store](/template/store)
+	- [/woocommerce](/template/woocommerce)
+
+___
+
 ### JavaScript Setup
 
 We put all the main JavaScript for the site in one file, named just like the theme: `bmw2015.js`, or `prettybrid2015.js`, etc.
