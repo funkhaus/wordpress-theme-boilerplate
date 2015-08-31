@@ -38,40 +38,42 @@ var storeCheckout = {
 
 	},
 
-	controlBillFields: function(){
+	toggleBillingFields: function(){
 
-		// function to set state of billing fields based on checkbox
-		var toggleFields = function(){
+		// abort if no checkbox
+		if ( !jQuery('#bill-to-different-address-checkbox').length ) return;
 
-			// determine if box is currently checked
-			var checked = jQuery('#bill-to-different-address-checkbox').get(0).checked;
+		// determine if box is currently checked
+		var checked = jQuery('#bill-to-different-address-checkbox').get(0).checked;
 
-			// if so...
-			if ( checked ){
+		// if so...
+		if ( checked ){
 
-				// slide open the form
-				jQuery('.bill-fields').slideDown();
+			// slide open the form
+			jQuery('.bill-fields').slideDown();
 
-			// not checked...
-			} else {
+		// not checked...
+		} else {
 
-				// close the form
-				jQuery('.bill-fields').slideUp();
-
-			}
+			// close the form
+			jQuery('.bill-fields').slideUp();
 
 		}
+
+	},
+
+	controlBillFields: function(){
 
 		// listen for checkbox toggle
 		jQuery('#bill-to-different-address-checkbox').change(function(){
 
 			// run controller
-			toggleFields();
+			storeCheckout.toggleBillingFields();
 
 		});
 
-		// kick it
-		toggleFields();
+		// kick controller
+		storeCheckout.toggleBillingFields();
 
 	}
 

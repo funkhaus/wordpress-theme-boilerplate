@@ -68,16 +68,14 @@ var store = {
 				// set term as last element in URL array
 				href[(href.length - 1)] = newFilter;
 
-				// remove protocol from array
-				href = href.filter(function(el){
-					return el !== 'http:' && el !== 'https:';
+				// concat secondary slash after protocol
+				href = href.map(function(el){
+					if ( el == 'http:' || el == 'https:' ) return el + '/';
+					return el;
 				});
 
-				// rebuild URL
-				var newHref = 'http://' + href.join('/');
-
-				// replace this href with new URL
-				jQuery(this).attr('href', newHref);
+				// rebuild URL and set as href
+				jQuery(this).attr('href', href.join('/'));
 
 			});
 
