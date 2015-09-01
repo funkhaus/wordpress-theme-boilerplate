@@ -7,6 +7,7 @@ The purpose of this style guide is to provide guidance on building WordPress sit
 ## Table of Contents
 1. **Setting Up**
    - [Theme Setup](#theme-setup)
+   - [Store Considerations](#store-considerations)
    - [JavaScript Setup](#javascript-setup)
    - [CSS Setup](#css-setup)
    - [Markup Guidelines](#markup-guidelines)
@@ -90,6 +91,26 @@ Icons and image assets should be named describing what they are, not what they r
 
 * `icon-email.svg`
 * `icon-previous.svg`
+
+___
+
+### Store Considerations
+
+By default, the template contains extra boilerplate structure to account for Woocommerce pages and functionality. Every time a new site is started, make sure you determine whether or not the store/Woocommerce components will be needed. If you won't be needing them (most sites), follow these steps:
+
+1. Edit [functions.php](/template/functions.php) and remove these lines:
+```php
+/*
+ * Check if functions-store file exists, if so include it
+ */
+	if ( $store_funcs = locate_template('store/functions-store.php') ) {
+		include( $store_funcs );
+	}
+```
+2. Completely remove these two directories out of the template:
+
+	- [/store](/template/store)
+	- [/woocommerce](/template/woocommerce)
 
 ___
 

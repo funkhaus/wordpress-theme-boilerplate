@@ -12,8 +12,8 @@
  * Enqueue Store-Related scripts
  */
 	function custom_store_scripts() {
-		wp_register_script('store-script', get_template_directory_uri() . '/js/store.js', 'jquery', '1.0');
-		wp_register_script('store-checkout', get_template_directory_uri() . '/js/store-checkout.js', 'jquery', '1.0');
+		wp_register_script('store-script', get_template_directory_uri() . '/store/js/main.js', 'jquery', '1.0');
+		wp_register_script('store-checkout', get_template_directory_uri() . '/store/js/checkout.js', 'jquery', '1.0');
 
 		wp_localize_script('store-script', 'site_vars', 
 			array(
@@ -31,7 +31,7 @@
  * Enqueue store Admin Script
  */
 	function store_admin_scripts() {
-		wp_register_script('store-admin', get_template_directory_uri() . '/js/store-admin.js', 'jquery', '1.0');
+		wp_register_script('store-admin', get_template_directory_uri() . '/store/js/admin.js', 'jquery', '1.0');
 		wp_enqueue_script('store-admin');
 	}
 	add_action( 'admin_enqueue_scripts', 'store_admin_scripts' );
@@ -41,7 +41,7 @@
  * Store custom styles
  */
     function custom_store_styles() {
-		wp_register_style('store-styles', get_template_directory_uri() . '/css/store.css');
+		wp_register_style('store-styles', get_template_directory_uri() . '/store/css/store.css');
 		wp_enqueue_style('store-styles');
     }
 	add_action('wp_enqueue_scripts', 'custom_store_styles', 10);
@@ -255,6 +255,23 @@
 	if ( $stripe_template = locate_template('store/stripe-template-class.php') ){
 		include( $stripe_template );
 	}
+
+/*
+ * Hook the mini cart and product filter elements so they
+ * appear right after the header
+ */
+	function add_minicart_after_header(){
+
+		if ( is_woocommerce() ):
+
+			if ( ! is_checkout() ) 
+				woocommerce_mini_cart();
+
+			get_template_part('store/part-product-filters');
+
+		endif;
+	}
+	add_action('fh_after_header', 'add_minicart_after_header');
 
 /*
  * AJAX Endpoint Functions
