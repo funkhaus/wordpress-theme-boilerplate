@@ -7,6 +7,7 @@ The purpose of this style guide is to provide guidance on building WordPress sit
 ## Table of Contents
 1. **Setting Up**
    - [Theme Setup](#theme-setup)
+   - [Store Considerations](#store-considerations)
    - [JavaScript Setup](#javascript-setup)
    - [CSS Setup](#css-setup)
    - [Markup Guidelines](#markup-guidelines)
