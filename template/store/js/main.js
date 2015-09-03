@@ -99,6 +99,10 @@ var store = {
 
 				// switch out mini-cart
 				jQuery('#sidecart').replaceWith( jQuery(data) );
+				
+				// Update cart count
+				var cartCount = jQuery(data).data('cart-count');
+				jQuery('#cart-count').text(cartCount);
 
 			})
 			.always(function(){

@@ -20,7 +20,7 @@ global $woocommerce;
     $cart_items = WC()->cart->get_cart();
 ?>
 
-<div id="sidecart">
+<div id="sidecart" data-cart-count="<?php echo sizeof($cart_items); ?>">
 
     <?php if( sizeof( $cart_items ) > 0 ) : ?>
 
