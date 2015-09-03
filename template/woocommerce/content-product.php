@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * The template for displaying products in a loop
+ *
+ * @version     99.1
+ */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }

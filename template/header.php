@@ -25,12 +25,12 @@
 <body <?php body_class(); ?>>
 
 	<div id="container">
-	
+
 	    <div id="header">
 	    	<?php if ( is_front_page() ) : ?>
 	        <div id="tagline"><p><?php bloginfo('description'); ?></p></div>
 	        <?php endif;?>
-	        
+
 			<?php 
 				$menuArgs = array(
 				    'container'         => 'false',
@@ -40,11 +40,9 @@
 				);
 				wp_nav_menu($menuArgs); 
 	        ?>
-	
+
 	        <a id="logo" href="<?php bloginfo('url'); ?>">
 	            <img class="svg " src="<?php echo get_template_directory_uri(); ?>/images/logo.svg" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">            
 	        </a>
-	        
-	    </div>
 
-		<?php do_action('fh_after_header'); ?>
+	    </div>

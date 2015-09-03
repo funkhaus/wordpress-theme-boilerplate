@@ -6,20 +6,21 @@
  *
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 2.3.10
+ * @version 99.1
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-$customer_orders = get_posts( apply_filters( 'woocommerce_my_account_my_orders_query', array(
+$order_args = array(
 	'numberposts' => $order_count,
 	'meta_key'    => '_customer_user',
 	'meta_value'  => get_current_user_id(),
 	'post_type'   => wc_get_order_types( 'view-orders' ),
 	'post_status' => array_keys( wc_get_order_statuses() )
-) ) );
+);
+$customer_orders = get_posts( apply_filters('woocommerce_my_account_my_orders_query', $order_args) );
 
 if ( $customer_orders ) : ?>
 

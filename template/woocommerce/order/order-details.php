@@ -4,7 +4,7 @@
  *
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 2.3.0
+ * @version 99.1
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -168,6 +168,7 @@ $order = wc_get_order( $order_id );
 <header>
 	<h2><?php _e( 'Customer details', 'woocommerce' ); ?></h2>
 </header>
+
 <table class="shop_table shop_table_responsive customer_details">
 <?php
 	if ( $order->billing_email ) {

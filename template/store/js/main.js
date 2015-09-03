@@ -1,5 +1,5 @@
 var store = {
-	ajaxURL: site_vars.ajaxURL,
+	ajaxURL: siteVars.ajaxURL,
     init: function() {
 
 		store.formatFilterMenu();
@@ -22,7 +22,7 @@ var store = {
 
 		// explode URL, clean
 		var currentURL = window.location.pathname.split( '/' );
-		currentURL = currentURL.filter(function(el){ return el.length; });
+		    currentURL = currentURL.filter(function(el){ return el.length; });
 
 		// if currently in a category filter...
 		if ( currentURL.indexOf('product-category') > -1 ) {
@@ -92,11 +92,13 @@ var store = {
 		jQuery('#sidecart').addClass('loading');
 
 		// run ajax to get mini-cart html
-		jQuery.get(store.ajaxURL, { action:  'get_minicart'})
-			.success(function(body){
+		jQuery.get(store.ajaxURL, { 
+    		    action:  'get_minicart'
+            })
+			.success(function(data){
 
 				// switch out mini-cart
-				jQuery('#sidecart').replaceWith( jQuery(body) );
+				jQuery('#sidecart').replaceWith( jQuery(data) );
 
 			})
 			.always(function(){
@@ -124,7 +126,7 @@ var store = {
 
 			// run ajax to add product
 			jQuery.get(url)
-				.success(function(body){
+				.success(function(data){
 
 					// rebuild cart
 					store.refreshCart();

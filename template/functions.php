@@ -75,12 +75,10 @@
 
         // Setup JS variables in scripts        
 		/*
-		wp_localize_script('site', 'site_vars', 
-			array(
-				'themeURL' => get_template_directory_uri(),
-				'homeURL'  => home_url()
-			)
-		);  
+		wp_localize_script('site', 'siteVars', array(
+    		'themeURL' => get_template_directory_uri(),
+    		'homeURL'  => home_url()
+        ));
 		*/      
         
     }

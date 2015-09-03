@@ -8,6 +8,13 @@
 	    add_theme_support( 'woocommerce' );
 	}
 
+
+/*
+ * Remove WooCommerce sidebar from site
+ */
+	remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
+
+
 /*
  * Enqueue Store-Related scripts
  */
@@ -15,7 +22,7 @@
 		wp_register_script('store-script', get_template_directory_uri() . '/store/js/main.js', 'jquery', '1.0');
 		wp_register_script('store-checkout', get_template_directory_uri() . '/store/js/checkout.js', 'jquery', '1.0');
 
-		wp_localize_script('store-script', 'site_vars', 
+		wp_localize_script('store-script', 'siteVars',
 			array(
 				'ajaxURL' => admin_url('admin-ajax.php')
 			)
@@ -54,7 +61,7 @@
 		add_meta_box('product_story_meta', 'Product Story', 'product_story_meta', 'product', 'normal', 'core');
 		add_meta_box('store_second_featured_image', 'Second Image', 'store_second_featured_image', 'product', 'side', 'core');
 	}
-	add_action('add_meta_boxes', 'store_add_metaboxes');
+	//add_action('add_meta_boxes', 'store_add_metaboxes');
 
 	function product_story_meta(){
 		global $post;
@@ -129,13 +136,15 @@
 		}
 
 	}
-	add_action('save_post', 'store_save_metaboxes');
+	//add_action('save_post', 'store_save_metaboxes');
 
 
-/*
+/**
  * Easy wrapper function for listing available variations
+ * @param mixed $product A product ID or object
+ * @param string $param The slug of the attribute you want to dispaly (size, color, etc).
  */
-	function show_variations_in_stock($product, $param){
+	function show_variations_in_stock($product = false, $param){
 
 		// init
 		$output = '';
@@ -168,7 +177,9 @@
 
 						// set availability class
 						$class = '';
-						if ( ! $filtered_var['is_purchasable'] ) $class = 'unavailable';
+						if ( ! $filtered_var['is_purchasable'] ) {
+                            $class = 'unavailable';
+						}
 
 						// build html
 						$output .= '<li class="' . $class . '">';
@@ -202,8 +213,9 @@
 	add_filter( 'woocommerce_default_address_fields', 'fh_change_required_fields' );
 
 
+
 /*
- * Function to check if user has elected to be a guest
+ * Function to check if user has elected to checkout as guest
  */
 	if ( !function_exists('is_store_guest') ){
 
@@ -229,7 +241,7 @@
 
 
 /*
- * If guest parameter is set, add a cookie
+ * If guest parameter is set add a cookie
  */
 	function store_set_guest_cookie(){
 
@@ -244,42 +256,25 @@
 	}
 	add_action('init', 'store_set_guest_cookie');
 
-/*
- * Remove sidebar from site
- */
-	remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
+
 
 /*
- * Check for stripe templating file and if it exists include it
+ * Check for custom Stripe templating file and if it exists include it
  */
 	if ( $stripe_template = locate_template('store/stripe-template-class.php') ){
 		include( $stripe_template );
 	}
 
-/*
- * Hook the mini cart and product filter elements so they
- * appear right after the header
- */
-	function add_minicart_after_header(){
 
-		if ( is_woocommerce() ):
-
-			if ( ! is_checkout() ) 
-				woocommerce_mini_cart();
-
-			get_template_part('store/part-product-filters');
-
-		endif;
-	}
-	add_action('fh_after_header', 'add_minicart_after_header');
 
 /*
- * AJAX Endpoint Functions
+ * AJAX Endpoint Functions.
+ * @see: https://codex.wordpress.org/Plugin_API/Action_Reference/wp_ajax_%28action%29
  */
 	function ajax_get_mini_cart() {
 		woocommerce_mini_cart();
 		exit;
 	}
-
 	add_action( 'wp_ajax_get_minicart', 'ajax_get_mini_cart' );
 	add_action( 'wp_ajax_nopriv_get_minicart', 'ajax_get_mini_cart' );
+	

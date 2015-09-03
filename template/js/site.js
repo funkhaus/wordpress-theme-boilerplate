@@ -1,6 +1,6 @@
 var site = {
-	//homeURL: site_vars.homeURL,
-	//themeURL: site_vars.themeURL,
+	//homeURL: siteVars.homeURL,
+	//themeURL: siteVars.themeURL,
     init: function() {
 	    
 	    // SVG things
