@@ -1,5 +1,6 @@
 var store = {
 	ajaxURL: siteVars.ajaxURL,
+	categoryBaseURL: siteVars.categoryBaseURL,	
     init: function() {
 
 		store.formatFilterMenu();
@@ -13,79 +14,153 @@ var store = {
 	},
 
 /*
- * 	This function reformats the filter menu
- * 	so that active elements are represented
- * 	and replaces each menu link href so it
- * 	filters properly when clicked
+ * 	This function formats a filter menu so that active elements are represented
+ * 	and replaces each menu items href so it filters properly when clicked
  */
 	formatFilterMenu: function(){
+        
+        // Get current active terms from window.location
+        var currentTerms = store.getCurrentTerms();
 
-		// explode URL, clean
-		var currentURL = window.location.pathname.split( '/' );
-		    currentURL = currentURL.filter(function(el){ return el.length; });
+        // Any menu item with a title attribute, treat as a "reset" filter button.
+        var $resetItems = jQuery('.filter-menu a[title^="Reset"]').removeAttr('title').closest('li').addClass('reset-item');
+		        
+        // Add data attributes and 
+        $filterItems = jQuery('.filter-menu a[href^="'+store.categoryBaseURL+'"]').not('.reset-item a');
+        $filterItems.each(function(){
+    		var $link = jQuery(this);
+    		var $menuItem = jQuery(this).closest('li');
+    		
+    		// Parse menu items terms into array
+    		var href = $link.attr('href');
+    		    href = href.replace(store.categoryBaseURL, '');
+    		    href = href.split('/').filter(function(el){ return el.length; });
+                
+            // Get the link's last term (so to avoid nesting), and set it as data attribute.
+            var newTerm = href.pop();
+            var newTermIndex = currentTerms.indexOf(newTerm); 
+            
+            // Account for toggeling off an active filter            
+            if( newTermIndex > -1  ) {
+                // Remove new term from href
+                var terms = store.removeTerm(newTerm);
+            } else {
+                // Add new term to href (replace trialing slashes before adding term)
+                var terms = store.addTerm(newTerm);
+            }
+            
+            // Add class if menu item term is currently present in URL
+            if( jQuery.inArray( newTerm, currentTerms ) > -1 ) {
+                $menuItem.addClass('current-menu-item');
+            }
+            
+            // Add new URL and class to menu item
+            var url = store.buildFilterUrl(terms);
+            $link.attr( 'href', url);               
+            $menuItem.attr('data-filter', newTerm).addClass('filter-item');            
+        });
 
-		// if currently in a category filter...
-		if ( currentURL.indexOf('product-category') > -1 ) {
+        // Make sure no reset-item has an active class, if a sibling is active
+        $resetItems.each(function(){
+            $resetItem = jQuery(this);
+            
+            // Check if a sibling is active
+            if( $resetItem.siblings('.current-menu-item').length ) {
+                jQuery(this).removeClass('current-menu-item');
+            }
 
-			// get the current filter
-			var currentFilter = currentURL[(currentURL.length - 1)];
+            // Make each reset item's href removes all siblings terms, but leave other terms in it            
+            var currentTerms = store.getCurrentTerms();
+            var siblingsTerms = store.getSiblingsTerms($resetItem);
+            var diffTerms = store.arraySubtract(currentTerms, siblingsTerms);            
+            
+            // Build URL
+            var url = store.buildFilterUrl(diffTerms);
+            $resetItem.find('a').attr('href', url);
+        });
 
-			// split filter by term
-			currentFilter.split('+').forEach(function(term){
-
-				// add active classes to each term within the URL
-				// ( By default only the first term will receive an active class )
-				jQuery('.filter-menu .sub-menu a[href$="' + term + '/"]').closest('li').addClass('current-menu-item');
-
-			});
-
-			// loop through filter menu
-			jQuery('.filter-menu .sub-menu a').each(function(){
-
-				// explode and clean this href
-				var href = jQuery(this).attr('href');
-				href = href.split('/').filter(function(el){ return el.length; });
-
-				// Append the current filter onto this href 
-				var newFilter = href[(href.length - 1)] + '+' + currentFilter;
-
-				// if this menu item is a 'current' item...
-				if ( jQuery(this).closest('li').hasClass('current-menu-item') ){
-
-					// split newly built filter into terms
-					var pieces = newFilter.split('+');
-
-					// remove this term
-					pieces = pieces.filter(function(piece){
-						return piece !== href[(href.length - 1)];
-					});
-
-					// put filter back together,
-					// now clicking active links will 'unfilter' that term
-					newFilter = pieces.join('+');
-				}
-
-				// set term as last element in URL array
-				href[(href.length - 1)] = newFilter;
-
-				// concat secondary slash after protocol
-				href = href.map(function(el){
-					if ( el == 'http:' || el == 'https:' ) return el + '/';
-					return el;
-				});
-
-				// rebuild URL and set as href
-				jQuery(this).attr('href', href.join('/'));
-
-			});
-
-		}
 
 	},
+	
+	// Given a URL, it parses out the term1+term2 part of the URL always. Returns an array of those terms.
+	getCurrentTerms: function(url){
+		url = url || window.location.href;
+		
+		// Get just the terms part of URL
+        url = url.replace(store.categoryBaseURL, '')
 
-/*
- *	Call this whenever you want to rebuild the cart
- */
+        // Are we splitting by a / or a + (to work on a fresh reload)
+		var delim = '/';
+		if( url.indexOf('+') >= -1 ) {
+    		delim = '+';
+    		
+    		// Replace all slashes
+    		url = url.replace(/\//g, '');
+		}
+
+		// Build array of all current terms
+		var currentTerms = url.split(delim).filter(function(el){ return el.length; });    	
+		return currentTerms;
+	},
+	
+	// Given a filter menu item, it returns all the terms for it's siblings
+	getSiblingsTerms: function($menuItem){
+    	var terms = [];
+    	$menuItem.siblings('.filter-item').each(function(){
+        	terms.push(jQuery(this).attr('data-filter'));
+    	});
+    	
+    	return terms;
+	},
+	
+	// This function builds out a URL/term1+term2
+	buildFilterUrl: function(terms, baseURL){
+    	baseURL = baseURL || store.categoryBaseURL;
+    	terms = terms || store.getCurrentTerms();
+        
+        // Make sure terms are unique
+        terms = store.arrayUnique(terms);
+        
+        // Make sure we arn't adding too many slashes to end of URL, so we remove it just to be sure, then add it back.
+        baseURL = baseURL.replace(/\/+$/, '');
+        return baseURL + '/' + terms.join('+');
+	},	
+	
+	// Helper function to add an element to a array
+	addTerm: function(add, stack){
+    	var array = stack || store.getCurrentTerms();
+    	array.push(add);
+    	return array;
+	},
+
+	// Helper function to remove an element to a array
+	removeTerm: function(remove, stack){
+    	var array = stack || store.getCurrentTerms();
+        
+        var index = array.indexOf(remove);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+        return array;
+	},
+
+	// Helper function to subtract one array from another, and return the result
+	arraySubtract: function(stack, remove){
+        var array = stack.filter( function(el) {
+          return remove.indexOf( el ) < 0;
+        }); 
+        return array;	
+	},
+
+	// Helper function to make sure an array never contains the same stirng twice
+	arrayUnique: function(stack){
+        var array = stack.filter(function(item, pos, self) {
+            return self.indexOf(item) == pos;
+        });
+        return array;
+	},
+
+    // Call this whenever you want to refresh the sidecart
 	refreshCart: function(){
 
 		// add loading class to cart
@@ -113,10 +188,11 @@ var store = {
 			});
 
 	},
-
+    
+    // Binds the click event on an add to cart button.
 	addToCart: function(){
 
-		// click any add to cart button, unless loading
+		// click any add to cart <button>, unless loading
 		jQuery(document).on('click', 'button.add-to-cart:not(.loading button)', function(e){
 			e.preventDefault();
 
@@ -142,11 +218,11 @@ var store = {
 					$product.removeClass('loading');
 
 				});
-
 		});
 
 	},
 
+    // Binds the click event on a remove from cart button.
 	removeFromCart: function(){
 
 		// click a remove from cart button, unless loading...

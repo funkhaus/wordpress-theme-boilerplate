@@ -24,7 +24,8 @@
 
 		wp_localize_script('store-script', 'siteVars',
 			array(
-				'ajaxURL' => admin_url('admin-ajax.php')
+				'ajaxURL'           => admin_url('admin-ajax.php'),
+				'categoryBaseURL'   => trailingslashit( get_bloginfo('url') ) . trailingslashit ( store_get_product_category_base() )
 			)
 		);
 
@@ -277,4 +278,15 @@
 	}
 	add_action( 'wp_ajax_get_minicart', 'ajax_get_mini_cart' );
 	add_action( 'wp_ajax_nopriv_get_minicart', 'ajax_get_mini_cart' );
-	
+
+
+/*
+ * Return the product category slug
+ */
+	function store_get_product_category_base() {
+        $product_category_slug = get_option('woocommerce_product_category_slug');
+        if(empty($product_category_slug)) {
+            $product_category_slug = 'product-category';
+        }
+        return $product_category_slug;
+	}	
