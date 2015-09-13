@@ -32,9 +32,7 @@ var store = {
     		var $menuItem = jQuery(this).closest('li');
     		
     		// Parse menu items terms into array
-    		var href = $link.attr('href');
-    		    href = href.replace(store.categoryBaseURL, '');
-    		    href = href.split('/').filter(function(el){ return el.length; });
+    		var href = store.getCurrentTerms($link.attr('href'));
                 
             // Get the link's last term (so to avoid nesting), and set it as data attribute.
             var newTerm = href.pop();
@@ -66,7 +64,10 @@ var store = {
             
             // Check if a sibling is active
             if( $resetItem.siblings('.current-menu-item').length ) {
-                jQuery(this).removeClass('current-menu-item');
+                $resetItem.removeClass('current-menu-item');
+            } else {
+                // If no sibling, then mark the item active (as it is the "All" item
+                $resetItem.addClass('current-menu-item');                
             }
 
             // Make each reset item's href removes all siblings terms, but leave other terms in it            
@@ -88,16 +89,16 @@ var store = {
 		
 		// Get just the terms part of URL
         url = url.replace(store.categoryBaseURL, '')
-
-        // Are we splitting by a / or a + (to work on a fresh reload)
+        
+        // Are we splitting by a / or a + (to work on a fresh reload)?
 		var delim = '/';
-		if( url.indexOf('+') >= -1 ) {
+		if( url.indexOf('+') > -1 ) {
     		delim = '+';
     		
-    		// Replace all slashes
-    		url = url.replace(/\//g, '');
+            // Replace all slashes
+            url = url.replace(/\//g, '');
 		}
-
+        
 		// Build array of all current terms
 		var currentTerms = url.split(delim).filter(function(el){ return el.length; });    	
 		return currentTerms;
