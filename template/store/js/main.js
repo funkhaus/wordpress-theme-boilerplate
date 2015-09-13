@@ -24,9 +24,10 @@ var store = {
 
         // Any menu item with a title attribute, treat as a "reset" filter button.
         var $resetItems = jQuery('.filter-menu a[title^="Reset"]').removeAttr('title').closest('li').addClass('reset-item');
+        var $skipItems = jQuery('.filter-menu a[title^="Skip"]').removeAttr('title').closest('li').addClass('skip-item');                
 		        
         // Add data attributes and 
-        $filterItems = jQuery('.filter-menu a[href^="'+store.categoryBaseURL+'"]').not('.reset-item a');
+        $filterItems = jQuery('.filter-menu a[href^="'+store.categoryBaseURL+'"]').not('.reset-item > a, .skip-item > a');
         $filterItems.each(function(){
     		var $link = jQuery(this);
     		var $menuItem = jQuery(this).closest('li');
