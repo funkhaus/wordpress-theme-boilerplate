@@ -89,8 +89,8 @@
  * Enqueue Custom Styles
  */    
     function custom_styles() {
-		//wp_register_style('site-mobile', get_template_directory_uri() . '/css/mobile.css');
-		//wp_enqueue_style('site-mobile');
+		//wp_register_style('site-breakpoints', get_template_directory_uri() . '/css/breakpoints.css');
+		//wp_enqueue_style('site-breakpoints');
     }
 	add_action('wp_enqueue_scripts', 'custom_styles', 10);
 
@@ -166,31 +166,9 @@
     function rss_post_thumbnail($content) {
         global $post;
         
-        if(has_post_thumbnail($post->ID)) {
-            $content = '<p><a href='.get_permalink($post->ID).'>'.get_the_post_thumbnail($post->ID).'</a></p>'.$content;
-            
-        } else {
-        
-            // get first attached image
-            $args = array(
-        		'post_type' 		=> 'attachment',
-        		'posts_per_page' 	=> 1,
-        		'post_status' 		=> 'inherit',
-        		'order'				=> 'ASC',
-        		'orderby' 			=> 'menu_order',
-        		'post_mime_type' 	=> 'image',
-        		'post_parent' 		=> $post->ID
-        	);
-            $attachments = get_posts($args);
-            
-            if ($attachments) {
-            	foreach ($attachments as $attachment) {
-                    $firstImage = wp_get_attachment_image_src($attachment->ID, array(400,225));
-                    $content = '<p><a href='.get_permalink($post->ID).'><img src="'.$firstImage[0].'"/></a></p>'.$content;
-				}
-			}
-
-		}
+        if( has_post_thumbnail($post->ID) ) {
+            $content = '<p><a href='.get_permalink($post->ID).'>'.get_the_post_thumbnail($post->ID).'</a></p>'.$content;   
+        }
 
 		return $content;
 	}
@@ -199,12 +177,12 @@
 /*
  * Custom conditional function. Used to get the parent and all it's child.
  */
-    function is_tree($post_id) {
+    function is_tree($tree_id, $post_type = 'page') {
     	global $post;
-    	
-    	$ancestors = get_post_ancestors($post);
-    	
-    	if( is_page() && (is_page($post_id) || $post->post_parent == $post_id || in_array($post_id, $ancestors)) ) {
+
+    	$ancestors = get_ancestors($post, $post_type);
+
+    	if( is_page($tree_id) or in_array($tree_id, $ancestors) ) {
     		return true;
     	} else {
     		return false;
@@ -231,12 +209,12 @@
         );
         $children = get_posts($args);
 		
-        if( count( $children ) !== 0 ) { 
-			// Has Children
-	        return true; 
+        if( empty($children) ) {
+			// No Children
+	        return false;
 	    } else { 
-		    // No children
-		    return false; 
+		    // Has children
+		    return true;
 		}
     }
 
@@ -246,13 +224,13 @@
 /*
  * Split and wrap title
  */
-    function get_split_title($postID = false) {
-    	if( !$postID ) {
+    function get_split_title($post_id = false) {
+    	if( !$post_id ) {
 	    	global $post;
-	    	$postID = $post->ID;
+	    	$post_id = $post->ID;
     	}
     	
-        $title = get_the_title($postID);
+        $title = get_the_title($post_id);
         $lines = explode(' &#8211; ', $title);
         $output = false;
         $count = 0;
@@ -365,7 +343,7 @@
 /*
  * Next Project
  */
-	function get_next_page($exclude = null, $loop = true) {
+	function get_next_page_id($exclude = null, $loop = true) {
 		global $post;
 
 		// set current post type
@@ -394,10 +372,9 @@
         }
 
 		$current_key = array_search($current_project_id, $pages);
-
 		$output = false;
-		if( isset($pages[$current_key+1]) ) {
 
+		if( isset($pages[$current_key+1]) ) {
 			// Next page exists
 			$output = $pages[$current_key+1];
 
@@ -415,7 +392,7 @@
 /*
  * Previous Project
  */
-    function get_previous_page($exclude = null, $loop = true) {
+    function get_previous_page_id($exclude = null, $loop = true) {
 		global $post;
 
 		// set current post type
@@ -454,7 +431,7 @@
         } elseif ( $loop ) {
 
 			// Get last page
-			$output = $pages[count($pages)-1];
+			$output = array_pop($pages);
         }
 
 		return $output;
@@ -489,6 +466,7 @@
 	}
 	//add_filter( 'user_can_richedit', 'disabled_rich_editor');
 
+
 /*
  * Enqueue Custom Gallery
  */
@@ -499,6 +477,7 @@
 		return $output;
 	}
 	//add_shortcode('gallery', 'custom_gallery');
+
 
 /*
  * Check if functions-store file exists, if so include it

@@ -19,7 +19,7 @@
         <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
     <![endif]-->
     
-    <?php get_template_part('part-facebook-tags'); ?>
+    <?php get_template_part('part-og-tags'); ?>
     <?php wp_head();?>
 </head>
 <body <?php body_class(); ?>>

@@ -18,8 +18,8 @@
 	
 			    <?php 
 			        // Get image background form featured thumb
-			        $attachmentData = wp_get_attachment_image_src( get_post_thumbnail_id(), 'fullscreen');
-			        $image_url = $attachmentData[0];
+			        $attachment_data = wp_get_attachment_image_src( get_post_thumbnail_id(), 'fullscreen');
+			        $image_url = $attachment_data[0];
 			    ?>
 				    
 				<div id="post-<?php the_ID(); ?>" <?php post_class('slide fullbleed'); ?> style="background-image: url(<?php echo $image_url; ?>);">   
