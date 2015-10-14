@@ -180,7 +180,7 @@
     function is_tree($tree_id, $post_type = 'page') {
     	global $post;
 
-    	$ancestors = get_ancestors($post, $post_type);
+    	$ancestors = get_ancestors($post->ID, $post_type);
 
     	if( is_page($tree_id) or in_array($tree_id, $ancestors) ) {
     		return true;
