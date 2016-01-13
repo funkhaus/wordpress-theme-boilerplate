@@ -1,6 +1,6 @@
 /*
  * Mobile styles & Breakpoints
- * By Funkhaus - 2014
+ * By Funkhaus - 2016
  * www.funkhaus.us
  *
  */
@@ -9,15 +9,9 @@
 /* 
  * Globals
  */
-	.is-mobile #content {
-	 	
+	.is-mobile .work-block .overlay {
+
 	}
-
-
-/* 
- * Mobile Menu
- */ 
-
 
 
 /* 
@@ -37,3 +31,8 @@
     @media (max-width: 750px) {
 
     }
+
+    /* Smaller than tablet and landscape */
+    @media (max-width: 750px) and (orientation: landscape){    
+
+    }    
