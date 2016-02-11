@@ -1,9 +1,9 @@
 var site = {
-	//homeURL: siteVars.homeURL,
-	//themeURL: siteVars.themeURL,
+    //homeURL: siteVars.homeURL,
+    //themeURL: siteVars.themeURL,
     init: function() {
-	    
-	    // SVG things
+        
+        // SVG things
         //site.replaceSVGs();
         //site.initSVG();        
         
@@ -14,51 +14,51 @@ var site = {
     },
     
     onResize: function(){
-	    
+        
     },
 
-	initSVG: function(){
+    initSVG: function(){
 
-		// Set total and counter 
-		var $svgs = jQuery('img.svg');
-		var total = $svgs.length;
-		var count = 0;
+        // Set total and counter 
+        var $svgs = jQuery('img.svg');
+        var total = $svgs.length;
+        var count = 0;
 
-	    // Convert linked SVG to embedded SVG's
-	    $svgs.each(function(){
-	        var $img = jQuery(this);
-	        var imgID = $img.attr('id');
-	        var imgClass = $img.attr('class');
-	        var imgURL = $img.attr('src');
+        // Convert linked SVG to embedded SVG's
+        $svgs.each(function(){
+            var $img = jQuery(this);
+            var imgID = $img.attr('id');
+            var imgClass = $img.attr('class');
+            var imgURL = $img.attr('src');
 
-	        jQuery.get(imgURL, function(data) {
-	        
-				// Increment counter
-				count++;
-					        
-	            // Get the SVG tag, ignore the rest
-	            var $svg = jQuery(data).find('svg');
+            jQuery.get(imgURL, function(data) {
+            
+                // Increment counter
+                count++;
+                            
+                // Get the SVG tag, ignore the rest
+                var $svg = jQuery(data).find('svg');
 
-	            // Remove any invalid XML tags as per http://validator.w3.org
-	            $svg = $svg.removeAttr('xmlns:a');
-	            
+                // Remove any invalid XML tags as per http://validator.w3.org
+                $svg = $svg.removeAttr('xmlns:a');
+                
                 // Loop through IMG attributes and add them to SVG
                 jQuery.each(attributes, function() {
                     $svg.attr(this.name, this.value);
-                });	            
+                });             
 
-	            // Replace image with new SVG
-	            $img.replaceWith($svg);
-	        });
+                // Replace image with new SVG
+                $img.replaceWith($svg);
+            });
 
-		});
+        });
 
-    	// Fire callback event
-    	if ( total === count ) {
-    		jQuery(document).trigger('svgsLoaded', [count]);
-        }		
+        // Fire callback event
+        if ( total === count ) {
+            jQuery(document).trigger('svgsLoaded', [count]);
+        }       
 
-	},
+    },
 
     replaceSVGs: function(){
         
@@ -82,6 +82,6 @@ jQuery(document).ready(function($){
     
     site.init();
     jQuery(window).resize(function(){
-	    site.onResize();
+        site.onResize();
     });
 });
