@@ -24,9 +24,6 @@ var site = {
 		var total = $svgs.length;
 		var count = 0;
 
-		// If no SVGs on page, fire callback event
-		if ( total === count ) jQuery(document).trigger('svgsLoaded', [count]);
-
 	    // Convert linked SVG to embedded SVG's
 	    $svgs.each(function(){
 	        var $img = jQuery(this);
@@ -42,26 +39,24 @@ var site = {
 	            // Get the SVG tag, ignore the rest
 	            var $svg = jQuery(data).find('svg');
 
-	            // Add replaced image's ID to the new SVG
-	            if(typeof imgID !== 'undefined') {
-	                $svg = $svg.attr('id', imgID);
-	            }
-	            // Add replaced image's classes to the new SVG
-	            if(typeof imgClass !== 'undefined') {
-	                $svg = $svg.attr('class', imgClass+' replaced-svg');
-	            }
-
 	            // Remove any invalid XML tags as per http://validator.w3.org
 	            $svg = $svg.removeAttr('xmlns:a');
+	            
+                // Loop through IMG attributes and add them to SVG
+                jQuery.each(attributes, function() {
+                    $svg.attr(this.name, this.value);
+                });	            
 
 	            // Replace image with new SVG
 	            $img.replaceWith($svg);
-
-				// If this is the last svg, fire callback event
-				if ( total === count ) jQuery(document).trigger('svgsLoaded', [count]);
 	        });
 
 		});
+
+    	// Fire callback event
+    	if ( total === count ) {
+    		jQuery(document).trigger('svgsLoaded', [count]);
+        }		
 
 	},
 
