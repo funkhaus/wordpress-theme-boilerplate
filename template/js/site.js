@@ -30,6 +30,7 @@ var site = {
             var imgID = $img.attr('id');
             var imgClass = $img.attr('class');
             var imgURL = $img.attr('src');
+            var attributes = $img.prop("attributes");
 
             jQuery.get(imgURL, function(data) {
             
