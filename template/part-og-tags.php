@@ -1,7 +1,7 @@
-<?php    
+<?php
     /*
      * Build the image URL
-     */    
+     */
         $shared_image = get_template_directory_uri() . "/screenshot.png";
         if( is_single() || is_page() ) {
             // If page or is single, set the shared image to the post thumbnail.
@@ -15,8 +15,8 @@
 
     /*
      * This builds the summary text.
-     */       
-        $summary = get_bloginfo('description');                   
+     */
+        $summary = get_bloginfo('description');
         if( is_single() || is_page() ) {
             // If page has no children or is single, set the summary to the excerpt.
             $summary = get_the_excerpt();
@@ -29,6 +29,14 @@
         $summary = strip_tags($summary);
         $summary = esc_attr($summary);
         $summary = preg_replace('!\s+!', ' ', $summary);
+
+    /*
+     * Build permalink URL
+     */
+        $url = get_permalink($post->ID);
+        if( is_front_page() ) {
+            $url = get_bloginfo('url');
+        }
 ?>
 
 <!-- Start Open Graph Meta Tags -->
