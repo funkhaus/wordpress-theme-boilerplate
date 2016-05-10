@@ -219,19 +219,31 @@
     }
 
 /*
- * Get all tags of a post listed as a string
+ * Get all tags of a post listed as a string of links
  */
     function get_tags_as_string($target_post = null, $separator = ', '){
         $target_post = get_post($target_post);
 
         $tags = get_the_tags($target_post->ID);
-        $tag_display = array();
+        $output = '';
         if ( !empty($tags) ) {
-            foreach ( $tags as $tag ) {
-                $tag_display[] = $tag->name;
+            $key_list = array_keys($tags);
+            $last_tag = end($key_list);
+
+            foreach ( $tags as $key => $tag ) {
+                $opening_tag = '<a href="' . get_tag_link($tag->term_id) . '">';
+                $closing_tag = '</a>';
+
+                $output .= $opening_tag . $tag->name . $closing_tag;
+
+                // Add a separator if this isn't the last tag
+                if ( $key != $last_tag ) {
+                    $output .= $separator;
+                }
             }
         }
-        echo implode($tag_display, $separator);
+
+        echo $output;
     }
 
 
