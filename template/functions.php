@@ -208,17 +208,29 @@
         	'posts_per_page'	=> 1
         );
         $children = get_posts($args);
-		
+
         if( empty($children) ) {
 			// No Children
 	        return false;
-	    } else { 
+	    } else {
 		    // Has children
 		    return true;
 		}
     }
 
 
+/*
+ * Get featured image dimensions and calculate padding percentage based on aspect ratio
+ */
+    function responsive_image_padding($target_post = null, $size = 'medium'){
+        $target_post = get_post($target_post);
+
+        $img_data = wp_get_attachment_image_src(get_post_thumbnail_id($target_post->ID), $size);
+        $width = $img_data[1];
+        $height = $img_data[2];
+
+        return ($height / $width) * 100;
+    }
 
 
 /*
@@ -477,6 +489,15 @@
 		return $output;
 	}
 	//add_shortcode('gallery', 'custom_gallery');
+
+
+/*
+ * Remove [...] from default excerpt
+ */
+    function fh_remove_excerpt_ellipsis( $more ) {
+        return ' ';
+    }
+    //add_filter('excerpt_more', 'fh_remove_excerpt_ellipsis');
 
 
 /*
