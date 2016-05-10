@@ -208,17 +208,31 @@
         	'posts_per_page'	=> 1
         );
         $children = get_posts($args);
-		
+
         if( empty($children) ) {
 			// No Children
 	        return false;
-	    } else { 
+	    } else {
 		    // Has children
 		    return true;
 		}
     }
 
+/*
+ * Get all tags of a post listed as a string
+ */
+    function get_tags_as_string($target_post = null, $separator = ', '){
+        $target_post = get_post($target_post);
 
+        $tags = get_the_tags($target_post->ID);
+        $tag_display = array();
+        if ( !empty($tags) ) {
+            foreach ( $tags as $tag ) {
+                $tag_display[] = $tag->name;
+            }
+        }
+        echo implode($tag_display, $separator);
+    }
 
 
 /*
