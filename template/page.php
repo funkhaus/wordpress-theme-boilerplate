@@ -1,8 +1,9 @@
 <?php
 	global $post;
-	
+	$state = get_conditional_state($post);
+
 	switch (true) {
-	    case is_page('work') :
+	    case $state == 'work' :
 	        // Redirect to first child page.
 	        $pagekids = get_pages("child_of=".$post->ID."&sort_column=menu_order");
 	        $firstchild = $pagekids[0];
@@ -13,22 +14,15 @@
 	            get_template_part('index');
 	        }
 	        break;
-	
-	    case has_children($post->ID) :
-	        // If has child pages
+
+	    case $state == 'work-grid' :
 	        get_template_part('template-work-grid');
 	        break;
-	
-	    case is_tree(5) :
-	        // Is in the "About" tree.
-	        get_template_part('template-work-grid');
-	        break;
-	
-	    case !empty($post->_custom_video_url) : 
-	        // Page has a video URL metabox value saved, so use the work detail template. 
+
+	    case $state == 'work-detail' :
 	        get_template_part('template-work-detail');
-	        break;          
-	
+	        break;
+
 	    default:
 	        get_template_part('index');
 	        break;
