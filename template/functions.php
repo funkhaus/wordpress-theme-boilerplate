@@ -528,6 +528,15 @@
     }
     //add_filter('excerpt_more', 'fh_remove_excerpt_ellipsis');
 
+/*
+ * Allow SVG uploads
+ */
+    function add_mime_types($mimes) {
+        $mimes['svg'] = 'image/svg+xml';
+        return $mimes;
+    }
+    //add_filter('upload_mimes', 'add_mime_types');
+
 
 /*
  * Check if functions-store file exists, if so include it
