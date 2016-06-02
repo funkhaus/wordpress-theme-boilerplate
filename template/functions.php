@@ -104,19 +104,56 @@
 	}
 	add_action( 'admin_enqueue_scripts', 'custom_admin_scripts' );
 
+/*
+ * Function to get state of page
+ */
+    function get_conditional_state($target_post = null){
+        $target_post = get_post($target_post);
+
+        // init output
+        $output = false;
+
+        // make key that's unique to this post
+        $transient_key = 'fh_state_' . $target_post->ID;
+
+        // check for transient, set a new one if needed.
+        if ( ! $output = get_transient( $transient_key ) ){
+
+            // set state conditions here
+            switch (true){    
+                case $target_post->ID == 5:
+                    $output = 'work';
+                    break;
+
+                case has_children($target_post->ID) and is_tree(5, $target_post):
+                    $output = 'work-grid';
+                    break;
+
+                case !has_children($target_post->ID) and is_tree(5, $target_post):
+                    $output = 'work-detail';
+                    break;
+
+            }
+
+            // set new 1 second transient
+            set_transient( $transient_key, $output, 1 );
+
+        }
+
+        // return post state
+        return $output;
+    }
 
 /*
  * Custom Background Classes
  */    
     // Add specific CSS class by filter
     function custom_class_names($classes) {
+        global $post;
+        $state = get_conditional_state($post);
 
-		// Add classes
-		switch (true) {
-		    case is_page('contact') :
-				$classes[] = 'contact';
-				break;
-		}
+        if ( $state )
+            $classes[] = $state;
 
 		// Mobile Detects
 		if( wp_is_mobile() ) {
@@ -177,16 +214,16 @@
 /*
  * Custom conditional function. Used to get the parent and all it's child.
  */
-    function is_tree($tree_id, $post_type = 'page') {
-    	global $post;
+    function is_tree($tree_id, $target_post = null) {
 
-    	$ancestors = get_ancestors($post->ID, $post_type);
+        // get full post object
+        $target_post = get_post($target_post);
 
-    	if( is_page($tree_id) or in_array($tree_id, $ancestors) ) {
-    		return true;
-    	} else {
-    		return false;
-    	}
+        // get all post ancestors
+        $ancestors = get_ancestors($target_post->ID, $target_post->post_type);
+
+        // if ID is target post OR in target post tree, return true
+        return (($target_post->ID == $tree_id) or in_array($tree_id, $ancestors));
     }
 
 
@@ -194,31 +231,35 @@
 /*
  * Custom conditional function. Used to test if current page has children.
  */
-    function has_children($post_id = false, $post_type = 'page') {
-    	// Defaults
-    	if( !$post_id ) {
-	    	global $post;
-	    	$post_id = $post->ID;
-    	}
+    function has_children($target_post = null) {
 
-    	// Check if the post/page has a child
+        // get full post object
+        $target_post = get_post($target_post);
+
+        // Check if the post/page has a child
         $args = array(
-        	'post_parent' 		=> $post_id,
-        	'post_type'			=> $post_type,
+        	'post_parent' 		=> $target_post->ID,
+        	'post_type'			=> $target_post->post_type,
         	'posts_per_page'	=> 1
         );
         $children = get_posts($args);
-		
-        if( empty($children) ) {
-			// No Children
-	        return false;
-	    } else { 
-		    // Has children
-		    return true;
-		}
+
+        return !empty($children);
     }
 
 
+/*
+ * Get featured image dimensions and calculate padding percentage based on aspect ratio
+ */
+    function responsive_image_padding($target_post = null, $size = 'medium'){
+        $target_post = get_post($target_post);
+
+        $img_data = wp_get_attachment_image_src(get_post_thumbnail_id($target_post->ID), $size);
+        $width = $img_data[1];
+        $height = $img_data[2];
+
+        return ($height / $width) * 100;
+    }
 
 
 /*
@@ -477,6 +518,15 @@
 		return $output;
 	}
 	//add_shortcode('gallery', 'custom_gallery');
+
+
+/*
+ * Remove [...] from default excerpt
+ */
+    function fh_remove_excerpt_ellipsis( $more ) {
+        return ' ';
+    }
+    //add_filter('excerpt_more', 'fh_remove_excerpt_ellipsis');
 
 
 /*
