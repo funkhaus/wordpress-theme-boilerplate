@@ -493,6 +493,7 @@
             wp_redirect( get_permalink($first_child->ID), 301 );
             exit;
         }
+        return false;
     }
 
 
