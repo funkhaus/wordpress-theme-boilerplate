@@ -478,6 +478,23 @@
 		return $output;
     }
 
+/*
+ * Redirect to first child
+ */
+    function redirect_to_first_child ( $target_post = null ) {
+        $target_post = get_post($target_post);
+        $args = array(
+            'child_of'      => $post->ID,
+            'sort_column'   => 'menu_order'
+        );
+        $children = get_pages($args);
+        $first_child = $children[0];
+        if( $first_child ) {
+            wp_redirect( get_permalink($first_child->ID), 301 );
+            exit;
+        }
+    }
+
 
 /*
  * Allow subscriber to see Private posts/pages
