@@ -6,6 +6,9 @@ var site = {
     resizeTimer : null,
     // Maximum times per second to call onResize
     resizeFPS : 60,
+    // Scroll throttle
+    scrollTimer : null,
+    scrollFPS : 60,
 
     init: function() {
 
@@ -25,6 +28,10 @@ var site = {
     onResize: function(){
         site.winHeight = jQuery(window).height();
         site.winWidth = jQuery(window).width();
+    },
+
+    onScroll: function(){
+
     },
 
     initSVG: function(prop){
@@ -112,4 +119,8 @@ jQuery(document).ready(function($){
         clearTimeout(site.resizeTimer);
         site.resizeTimer = setTimeout(site.onResize, (1 / site.resizeFPS) * 1000);
     });
+    jQuery(window).scroll(function(){
+        clearTimeout(site.scrollTimer);
+        site.scrollTimer = setTimeout(site.onResize, (1 / site.scrollFPS) * 1000)
+    })
 });
