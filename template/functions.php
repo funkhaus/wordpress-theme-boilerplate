@@ -493,16 +493,24 @@
  * Redirect to first child
  */
     function redirect_to_first_child ( $target_post = null ) {
+
         $target_post = get_post($target_post);
+
         $args = array(
-            'child_of'      => $post->ID,
-            'sort_column'   => 'menu_order'
+            'post_type'         => get_post_type($target_post),
+            'post_parent'       => $target_post->ID,
+            'order'             => 'ASC',
+            'orderby'           => 'menu_order',
+            'fields'            => 'ids',
+            'posts_per_page'    => 1
         );
-        $children = get_pages($args);
-        if( isset($children[0]) and $first_child = $children[0] ) {
-            wp_redirect( get_permalink($first_child->ID), 301 );
+        $children = get_posts($args);
+
+        if( isset($children[0]) ) {
+            wp_redirect( get_permalink($children[0]), 301 );
             exit;
         }
+
         return false;
     }
 
