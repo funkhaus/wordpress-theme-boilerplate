@@ -27,9 +27,6 @@
 	    // Turn on menus
 		add_theme_support('menus');
 
-		// Enable HTML5 support
-		add_theme_support('html5');
-
 	}
 	add_action( 'after_setup_theme', 'custom_theme_setup' );
 
