@@ -19,6 +19,9 @@ var site = {
         //site.replaceSVGs();
         //site.initSVG();
 
+        // Padding things
+        //site.createImageContainers();
+
         // Size things
 
         // Init things
@@ -109,6 +112,35 @@ var site = {
             });
         }
 
+    },
+
+    createImageContainers: function(){
+        // Create responsive image containers for all entry images.
+        // Images will take up the full size of their containers, so to style wrapped images,
+        //  make sure to style `.image-wrap` instead of `img`
+        jQuery('.entry > p > img').each(function() {
+            // Ignore images marked as .no-img-wrap
+            if ( ! jQuery(this).hasClass('no-img-wrap') ) {
+                // Get image aspect ratio
+                var ratio = (jQuery(this).attr('height') / jQuery(this).attr('width')) * 100;
+                jQuery(this).
+                    // Unwrap from <p> tags
+                    unwrap()
+                    // Wrap in appropriate divs
+                    .wrap('<div class="image-wrap"><div class="responsive-padding"></div></div>')
+                    // Image will take up the full size of its container
+                    .css({
+                        'height': 'auto',
+                        'width' : '100%'
+                    })
+                    // Set up padding for image
+                    .closest('.responsive-padding')
+                    .css({
+                        'padding-bottom': ratio + '%',
+                        'height': 0
+                    });
+            }
+        });
     }
 
 };
