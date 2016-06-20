@@ -499,8 +499,7 @@
             'sort_column'   => 'menu_order'
         );
         $children = get_pages($args);
-        $first_child = $children[0];
-        if( $first_child ) {
+        if( isset($children[0]) and $first_child = $children[0] ) {
             wp_redirect( get_permalink($first_child->ID), 301 );
             exit;
         }
