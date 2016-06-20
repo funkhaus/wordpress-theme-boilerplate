@@ -4,14 +4,8 @@
 
 	switch (true) {
 	    case $state == 'work' :
-	        // Redirect to first child page.
-	        $pagekids = get_pages("child_of=".$post->ID."&sort_column=menu_order");
-	        $firstchild = $pagekids[0];
-	        if( $firstchild ) {
-	            wp_redirect(get_permalink($firstchild->ID), 301);        
-	            exit;
-	        } else {
-	            get_template_part('index');
+	        if ( ! redirect_to_first_child($post) ) {
+    	       get_template_part('index');
 	        }
 	        break;
 
@@ -27,4 +21,4 @@
 	        get_template_part('index');
 	        break;
 	}
-?>	
+?>
