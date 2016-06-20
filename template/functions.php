@@ -19,7 +19,7 @@
 	function custom_theme_setup() {
 
 		// Enable post thumbnail support
-		add_theme_support( 'post-thumbnails' );	
+		add_theme_support( 'post-thumbnails' );
 		//set_post_thumbnail_size( 600, 400, true ); // Normal post thumbnails
 		//add_image_size( 'banner-thumb', 566, 250, true ); // Small thumbnail size
 	    add_image_size( 'social-preview', 600, 315, true ); // Square thumbnail used by sharethis and facebook
@@ -41,7 +41,7 @@
 	function set_content_width() {
 		global $content_width;
 		if ( is_single() ) {
-			$content_width = 960;		
+			$content_width = 960;
 		} else {
 			$content_width = 960;
 		}
@@ -57,37 +57,37 @@
         //wp_register_script('site', get_template_directory_uri() . '/js/site.js', 'jquery', '1.0');
         //wp_register_script('cycle2', get_template_directory_uri() . '/js/jquery.cycle2.min.js', 'jquery', '2.1.5');
 		//wp_register_script('gallery', get_template_directory_uri() . '/js/gallery2012.js', 'jquery', '1.0');
-		//wp_register_script('masonry', get_template_directory_uri() . '/js/jquery.masonry.min.js', 'jquery', '1.0');		
-		//wp_register_script('carouFredSel', get_template_directory_uri() . '/js/jquery.carouFredSel-6.2.1-packed.js', 'jquery', '1.0');				
+		//wp_register_script('masonry', get_template_directory_uri() . '/js/jquery.masonry.min.js', 'jquery', '1.0');
+		//wp_register_script('carouFredSel', get_template_directory_uri() . '/js/jquery.carouFredSel-6.2.1-packed.js', 'jquery', '1.0');
 		//wp_register_script('vimeo-api', 'http://a.vimeocdn.com/js/froogaloop2.min.js', 'jquery', '1.0');
-        //wp_register_script('vimeoplayer', get_template_directory_uri() . '/js/vimeoplayer2013.js', 'jquery', '1.0');		
-        //wp_register_script('infinitescroll', get_template_directory_uri() . '/js/jquery.infinitescroll.min.js', 'jquery', '1.0');	
-      
+        //wp_register_script('vimeoplayer', get_template_directory_uri() . '/js/vimeoplayer2013.js', 'jquery', '1.0');
+        //wp_register_script('infinitescroll', get_template_directory_uri() . '/js/jquery.infinitescroll.min.js', 'jquery', '1.0');
+
         //wp_enqueue_script('jquery');
-        //wp_enqueue_script('carouFredSel', 'jquery');    	        
+        //wp_enqueue_script('carouFredSel', 'jquery');
         //wp_enqueue_script('masonry', 'jquery');
-        //wp_enqueue_script('cycle2', 'jquery');                
-        //wp_enqueue_script('infinitescroll', 'jquery');          
+        //wp_enqueue_script('cycle2', 'jquery');
+        //wp_enqueue_script('infinitescroll', 'jquery');
         //wp_enqueue_script('vimeo-api', 'jquery');
         //wp_enqueue_script('vimeoplayer', 'jquery');
         //wp_enqueue_script('gallery', 'jquery');
-        //wp_enqueue_script('site', 'jquery');         
+        //wp_enqueue_script('site', 'jquery');
 
-        // Setup JS variables in scripts        
+        // Setup JS variables in scripts
 		/*
 		wp_localize_script('site', 'siteVars', array(
     		'themeURL' => get_template_directory_uri(),
     		'homeURL'  => home_url()
         ));
-		*/      
-        
+		*/
+
     }
     add_action('wp_enqueue_scripts', 'custom_scripts', 10);
 
 
 /*
  * Enqueue Custom Styles
- */    
+ */
     function custom_styles() {
 		//wp_register_style('site-breakpoints', get_template_directory_uri() . '/css/breakpoints.css');
 		//wp_enqueue_style('site-breakpoints');
@@ -120,7 +120,7 @@
         if ( ! $output = get_transient( $transient_key ) ){
 
             // set state conditions here
-            switch (true){    
+            switch (true){
                 case $target_post->ID == 5:
                     $output = 'work';
                     break;
@@ -146,7 +146,7 @@
 
 /*
  * Custom Background Classes
- */    
+ */
     // Add specific CSS class by filter
     function custom_class_names($classes) {
         global $post;
@@ -164,7 +164,7 @@
 
     	return $classes;
     }
-    add_filter('body_class','custom_class_names');    
+    add_filter('body_class','custom_class_names');
 
 
 
@@ -184,16 +184,16 @@
 	}
 	function custom_loginpage_styles()
 	{
-        wp_enqueue_style( 'login_css', get_template_directory_uri() . '/css/login.css' );        
+        wp_enqueue_style( 'login_css', get_template_directory_uri() . '/css/login.css' );
 	}
 	function custom_admin_styles() {
         wp_enqueue_style('admin-stylesheet', get_template_directory_uri() . '/css/admin.css');
-	}	
+	}
 	// Hook in
 	add_filter('login_headerurl','custom_loginpage_logo_link');
 	add_filter('login_headertitle','custom_loginpage_logo_title');
 	add_action('login_head','custom_loginpage_styles');
-    add_action('admin_print_styles', 'custom_admin_styles');    
+    add_action('admin_print_styles', 'custom_admin_styles');
 
 
 
@@ -202,9 +202,9 @@
  */
     function rss_post_thumbnail($content) {
         global $post;
-        
+
         if( has_post_thumbnail($post->ID) ) {
-            $content = '<p><a href='.get_permalink($post->ID).'>'.get_the_post_thumbnail($post->ID).'</a></p>'.$content;   
+            $content = '<p><a href='.get_permalink($post->ID).'>'.get_the_post_thumbnail($post->ID).'</a></p>'.$content;
         }
 
 		return $content;
@@ -249,15 +249,26 @@
 
 
 /*
- * Get featured image dimensions and calculate padding percentage based on aspect ratio
+ * Get image dimensions and calculate padding percentage based on aspect ratio
  */
-    function responsive_image_padding($target_post = null, $size = 'medium'){
-        $target_post = get_post($target_post);
+    function get_responsive_image_padding($target_attachment = null, $size = 'medium'){
 
-        $img_data = wp_get_attachment_image_src(get_post_thumbnail_id($target_post->ID), $size);
+        // no image provided, use featured
+        if ( ! $target_attachment ){
+            $post = get_post();
+            $target_attachment = get_post(get_post_thumbnail_id($post->ID));
+
+        // image was provided, get full post object
+        } else {
+            $target_attachment = get_post($target_attachment);
+        }
+
+        // get src data of attachment, set dimensions
+        $img_data = wp_get_attachment_image_src($target_attachment->ID, $size);
         $width = $img_data[1];
         $height = $img_data[2];
 
+        // return percentage for padding
         return ($height / $width) * 100;
     }
 
@@ -270,7 +281,7 @@
 	    	global $post;
 	    	$post_id = $post->ID;
     	}
-    	
+
         $title = get_the_title($post_id);
         $lines = explode(' &#8211; ', $title);
         $output = false;
@@ -315,36 +326,36 @@
     // @see: https://codex.wordpress.org/Javascript_Reference/wp.media
     function custom_second_featured_image(){
         global $post;
-        
+
         // Meta key (need to update the save_metabox function below to reflect this too!)
         $meta_key = '_second_post_thumbnail';
-        
+
         // Get WordPress' media upload URL
         $upload_link = esc_url( get_upload_iframe_src( 'image', $post->ID ) );
-        
+
         // See if there's a media id already saved as post meta
         $image_id = get_post_meta( $post->ID, $meta_key, true );
-        
+
         // Get the image src
         $image_src = wp_get_attachment_image_src( $image_id, 'post-thumbnail' );
-        
+
         // For convenience, see if the array is valid
         $has_image = is_array( $image_src );
-        
+
         ?>
-        
+
         <div class="custom-meta custom-image-uploader">
 
             <!-- A hidden input to set and post the chosen image id -->
-            <input class="custom-image-id" name="<?php echo $meta_key; ?>" type="hidden" value="<?php echo $image_id; ?>" />        
-        
+            <input class="custom-image-id" name="<?php echo $meta_key; ?>" type="hidden" value="<?php echo $image_id; ?>" />
+
             <!-- Image container, which is manipulated with js -->
             <div class="custom-image-container">
                 <?php if ( $has_image ) : ?>
                     <img src="<?php echo $image_src[0] ?>"/>
                 <?php endif; ?>
             </div>
-            
+
             <!-- Add & remove image links -->
             <p class="hide-if-no-js">
                 <a class="upload-custom-image <?php if ( $has_image  ) { echo 'hidden'; } ?>" href="<?php echo $upload_link ?>">
@@ -357,7 +368,7 @@
 
         </div>
 
-        <?php        
+        <?php
     }
 
 /*
@@ -441,7 +452,7 @@
 
 		// Set vars
         $current_project_id = $post->ID;
-        $cache_key = 'all_pages_parent_'.$current_project_id;        
+        $cache_key = 'all_pages_parent_'.$current_project_id;
 
         // Check for cached $pages
         $pages = get_transient( $cache_key );
@@ -459,7 +470,7 @@
 
 			// Save cache
 			set_transient($cache_key, $pages, 30 );
-        }       
+        }
 
         $current_key = array_search($current_project_id, $pages);
 		$output = false;
@@ -499,12 +510,12 @@
 
 /*
  * Allow subscriber to see Private posts/pages
- */    
+ */
 	function add_theme_caps() {
 	    // Gets the author role
 	    $role = get_role('subscriber');
-	
-	    // Add capabilities  
+
+	    // Add capabilities
 	    $role->add_cap( 'read_private_posts' );
 		$role->add_cap( 'read_private_pages' );
 	}
@@ -519,7 +530,7 @@
 		global $post;
 
 		if($post->post_name == 'contact') {
-			return false;		    
+			return false;
 		}
 		return $allow_rich_editor;
 	}
@@ -542,7 +553,7 @@
  * Remove [...] from default excerpt
  */
     function fh_remove_excerpt_ellipsis( $more ) {
-        return ' ';
+        return '...';
     }
     //add_filter('excerpt_more', 'fh_remove_excerpt_ellipsis');
 
@@ -554,6 +565,35 @@
         return $mimes;
     }
     //add_filter('upload_mimes', 'add_mime_types');
+
+
+/*
+ * Override default vimeo oembed behavior, to work with Vimeo API
+ */
+    function set_vimeo_api_defaults(){
+
+        // Unregister default Vimeo embed
+        $format = '#https?://(.+\.)?vimeo\.com/.*#i';
+        wp_oembed_remove_provider($format);
+
+        // set vimeo oembed args
+        // see full list here: developer.vimeo.com/apis/oembed
+        $args = array(
+            'color'     => 'ffffff',
+            'title'     => false,
+            'portrait'  => false,
+            'byline'    => false,
+            'api'       => true,
+            'player_id' => uniqid('vimeo-')
+        );
+
+        // set regex and oembed url
+        $provider = 'http://vimeo.com/api/oembed.{format}?' . http_build_query($args);
+
+        // override the default vimeo configuration
+        return wp_oembed_add_provider($format, $provider, true);
+    }
+    add_action('init', 'set_vimeo_api_defaults');
 
 
 /*
