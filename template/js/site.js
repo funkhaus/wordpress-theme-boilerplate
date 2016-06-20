@@ -3,12 +3,6 @@ var site = {
     //themeURL: siteVars.themeURL,
     winHeight : 0,
     winWidth : 0,
-    resizeTimer : null,
-    // Maximum times per second to call onResize
-    resizeFPS : 60,
-    // Scroll throttle
-    scrollTimer : null,
-    scrollFPS : 60,
 
     init: function() {
 
@@ -148,11 +142,9 @@ jQuery(document).ready(function($){
 
     site.init();
     jQuery(window).resize(function(){
-        clearTimeout(site.resizeTimer);
-        site.resizeTimer = setTimeout(site.onResize, (1 / site.resizeFPS) * 1000);
+        window.requestAnimationFrame( site.onResize );
     });
     jQuery(window).scroll(function(){
-        clearTimeout(site.scrollTimer);
-        site.scrollTimer = setTimeout(site.onResize, (1 / site.scrollFPS) * 1000)
+        window.requestAnimationFrame( site.onScroll );
     })
 });
