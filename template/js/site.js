@@ -1,7 +1,16 @@
 var site = {
     //homeURL: siteVars.homeURL,
     //themeURL: siteVars.themeURL,
+    winHeight : 0,
+    winWidth : 0,
+    resizeTimer : null,
+    // Maximum times per second to call onResize
+    resizeFPS : 60,
+
     init: function() {
+
+        site.winHeight = jQuery(window).height();
+        site.winWidth = jQuery(window).width();
 
         // SVG things
         //site.replaceSVGs();
@@ -14,7 +23,8 @@ var site = {
     },
 
     onResize: function(){
-
+        site.winHeight = jQuery(window).height();
+        site.winWidth = jQuery(window).width();
     },
 
     initSVG: function(prop){
@@ -99,6 +109,7 @@ jQuery(document).ready(function($){
 
     site.init();
     jQuery(window).resize(function(){
-        site.onResize();
+        clearTimeout(site.resizeTimer);
+        site.resizeTimer = setTimeout(site.onResize, (1 / site.resizeFPS) * 1000);
     });
 });
