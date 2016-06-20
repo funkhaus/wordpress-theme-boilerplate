@@ -3,11 +3,9 @@
 	$state = get_conditional_state($post);
 
 	switch (true) {
-	    case $state == 'work' :
-	        if ( ! redirect_to_first_child($post) ) {
-    	       get_template_part('index');
-	        }
-	        break;
+	    case $state = 'work' and $child_id = get_first_child_id():
+            wp_redirect($child_id, 301);
+            exit;
 
 	    case $state == 'work-grid' :
 	        get_template_part('template-work-grid');

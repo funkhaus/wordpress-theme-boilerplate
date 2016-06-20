@@ -492,10 +492,11 @@
 /*
  * Redirect to first child
  */
-    function redirect_to_first_child ( $target_post = null ) {
+    function get_first_child_id ( $target_post = null ) {
 
         $target_post = get_post($target_post);
 
+        $output = false;
         $args = array(
             'post_type'         => get_post_type($target_post),
             'post_parent'       => $target_post->ID,
@@ -507,11 +508,10 @@
         $children = get_posts($args);
 
         if( isset($children[0]) ) {
-            wp_redirect( get_permalink($children[0]), 301 );
-            exit;
+            $output = $children[0];
         }
 
-        return false;
+        return $output;
     }
 
 
