@@ -573,6 +573,16 @@
     }
     add_action('init', 'set_vimeo_api_defaults');
 
+/*
+ * Get second post thumbnail (mimic functionality of get_the_post_thumbnail)
+ */
+    function get_the_second_post_thumbnail( $post = null, $size = 'medium', $attr = '' ) {
+        $post = get_post($post);
+        if ( ! $post or empty( $image = $post->_second_post_thumbnail ) ) {
+            return '';
+        }
+        return wp_get_attachment_image( $image, $size, false, $attr );
+    }
 
 /*
  * Check if functions-store file exists, if so include it
