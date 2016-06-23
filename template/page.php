@@ -3,17 +3,9 @@
 	$state = get_conditional_state($post);
 
 	switch (true) {
-	    case $state == 'work' :
-	        // Redirect to first child page.
-	        $pagekids = get_pages("child_of=".$post->ID."&sort_column=menu_order");
-	        $firstchild = $pagekids[0];
-	        if( $firstchild ) {
-	            wp_redirect(get_permalink($firstchild->ID), 301);        
-	            exit;
-	        } else {
-	            get_template_part('index');
-	        }
-	        break;
+	    case $state = 'work' and $child_id = get_first_child_id():
+            wp_redirect($child_id, 301);
+            exit;
 
 	    case $state == 'work-grid' :
 	        get_template_part('template-work-grid');
@@ -27,4 +19,4 @@
 	        get_template_part('index');
 	        break;
 	}
-?>	
+?>
