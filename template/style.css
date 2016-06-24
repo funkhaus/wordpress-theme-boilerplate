@@ -8,12 +8,12 @@ Version: 1.0
 
 Fonts:
     font-family: Helvetica, Arial, sans-serif;
-        font-weight: 400;     
+        font-weight: 400;
         font-weight: 500;
 
     font-family: 'franklin-gothic-cond', sans-serif;
         font-weight: 500;
-        font-weight: 700;       
+        font-weight: 700;
 
 Colors:
     Black: #222222;
@@ -29,11 +29,11 @@ Colors:
 
 
 /*
- * Globals 
+ * Globals
  */
-    body { 
-        font-family: Helvetica, Arial, sans-serif; 
-        font-size: 11px; 
+    body {
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 11px;
         color: #333;
     }
     h1,h2,h3,h4,h5,h6 {
@@ -49,18 +49,18 @@ Colors:
     ::-moz-selection {
         color: #ebebe3;
         background: #222;
-    }   
-
-
-/* 
- * Links 
- */
-    a { 
-        color: #333; 
-        text-decoration: none;
-        outline: none;      
     }
-    a:hover { 
+
+
+/*
+ * Links
+ */
+    a {
+        color: #333;
+        text-decoration: none;
+        outline: none;
+    }
+    a:hover {
         color: #666;
         text-decoration: underline;
     }
@@ -69,8 +69,8 @@ Colors:
     }
 
 
-/* 
- * Page Structure 
+/*
+ * Page Structure
  */
     #container {
 
@@ -86,55 +86,65 @@ Colors:
     }
 
 
-/* 
+/*
+ * Utilities
+ */
+    /* Responsive image containers */
+    .fluid-width-image-wrapper img {
+        height: auto;
+        width: 100%;
+    }
+
+
+/*
  * Menus
  */
 
 
 
-/* 
+/*
  * Header
- */ 
+ */
 
 
 
-/* 
+/*
  * Home
  */
 
 
 
-/* 
+/*
  * Work Grid
  */
 
 
 
- /* 
+ /*
  * Work Detail
- */ 
+ */
 
 
 
-/* 
+/*
  * Category
- */ 
+ */
 
 
 
-/* 
+/*
  * Single (Blog detail)
- */ 
+ */
 
 
-/* 
+/*
  * Fallback Page
- */ 
+ */
 
 
-/* 
+/*
  * Footer
- */ 
+ */
 
 
 
@@ -144,7 +154,7 @@ Colors:
     /* Color */
     a {
         transition: color 0.4s;
-    }    
+    }
 
     /* Opacity */
     .browse {
@@ -155,48 +165,48 @@ Colors:
     svg path {
         transition: 0.4s;
     }
-    
-    
+
+
 
 /*
- * Wordpress Required 
+ * Wordpress Required
  */
-	.alignleft { 
-	    display: inline; 
+	.alignleft {
+	    display: inline;
 	    float: left;
 	}
-	.aligncenter { 
-	    clear: both; 
-	    display: block; 
-	    margin: 0 auto 10px auto; 
-	}
-	.alignright { 
-	    display: inline; 
-	    float: right;
-	}
-	img.alignleft { 
-	    margin: 0 10px 10px 0;
-	}
-	img.alignright { 
-	    margin: 0 0 10px 10px;
-	}
-	img.aligncenter { 
+	.aligncenter {
+	    clear: both;
+	    display: block;
 	    margin: 0 auto 10px auto;
 	}
-	.wp-caption { 
-	    background: #f1f1f1; 
-	    color: #888; 
-	    text-align: center; 
-	    margin-bottom: 15px; 
+	.alignright {
+	    display: inline;
+	    float: right;
+	}
+	img.alignleft {
+	    margin: 0 10px 10px 0;
+	}
+	img.alignright {
+	    margin: 0 0 10px 10px;
+	}
+	img.aligncenter {
+	    margin: 0 auto 10px auto;
+	}
+	.wp-caption {
+	    background: #f1f1f1;
+	    color: #888;
+	    text-align: center;
+	    margin-bottom: 15px;
 	    width: auto !important;
 	    -moz-border-radius: 0 0 4px 4px;
 	    border-radius: 0 0 4px 4px;
 	}
-	.wp-caption img { 
+	.wp-caption img {
 	    margin: 0px;
 	}
-	.wp-caption p.wp-caption-text { 
-	    margin: 0 0 5px; 
-	    padding: 4px; 
+	.wp-caption p.wp-caption-text {
+	    margin: 0 0 5px;
+	    padding: 4px;
 	    font-style: italic;
 	}
