@@ -576,7 +576,7 @@
 /*
  * Get second post thumbnail (mimic functionality of get_the_post_thumbnail)
  */
-    function get_the_second_post_thumbnail( $post = null, $size = 'medium', $attr = '' ) {
+    function get_the_second_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr = '' ) {
         $post = get_post($post);
         if ( ! $post or empty( $image = $post->_second_post_thumbnail ) ) {
             return '';
