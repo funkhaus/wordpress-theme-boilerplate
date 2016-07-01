@@ -578,8 +578,17 @@
  */
     function get_the_second_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr = '' ) {
         $post = get_post($post);
-        if ( ! $post or empty( $image = $post->_second_post_thumbnail ) ) {
-            return '';
+        $image = $post->_second_post_thumbnail;
+        $classes = 'attachment-second-post-thumbnail size-full wp-second-post-image';
+        if ( $attr == '' ) {
+            // Create $attr array if none exists yet
+            $attr = array('class' => $classes);
+        } else if ( !empty($attr['class']) ){
+            // Append to $attr['class'] if it exists
+            $attr['class'] .= ' ' . $classes;
+        } else if ( gettype($attr) == 'array' ) {
+            // Append to $attr array if ['class'] doesn't exist yet
+            $attr['class'] = $classes;
         }
         return wp_get_attachment_image( $image, $size, false, $attr );
     }
