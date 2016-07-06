@@ -494,6 +494,31 @@
 		return $output;
     }
 
+/*
+ * Redirect to first child
+ */
+    function get_first_child_id ( $target_post = null ) {
+
+        $target_post = get_post($target_post);
+
+        $output = false;
+        $args = array(
+            'post_type'         => get_post_type($target_post),
+            'post_parent'       => $target_post->ID,
+            'order'             => 'ASC',
+            'orderby'           => 'menu_order',
+            'fields'            => 'ids',
+            'posts_per_page'    => 1
+        );
+        $children = get_posts($args);
+
+        if( isset($children[0]) ) {
+            $output = $children[0];
+        }
+
+        return $output;
+    }
+
 
 /*
  * Allow subscriber to see Private posts/pages
@@ -543,6 +568,15 @@
         return '...';
     }
     //add_filter('excerpt_more', 'fh_remove_excerpt_ellipsis');
+
+/*
+ * Allow SVG uploads
+ */
+    function add_mime_types($mimes) {
+        $mimes['svg'] = 'image/svg+xml';
+        return $mimes;
+    }
+    //add_filter('upload_mimes', 'add_mime_types');
 
 
 /*
