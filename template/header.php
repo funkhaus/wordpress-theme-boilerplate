@@ -24,15 +24,6 @@
 </head>
 <body <?php body_class(); ?>>
 
-    <?php
-        // Include side cart
-        /*
-    	if ( !is_checkout() ) {
-    		woocommerce_mini_cart();
-    	}
-        */
-    ?>
-
 	<div id="container">
 
 	    <div id="header">
@@ -53,8 +44,6 @@
 	        <a id="logo" href="<?php bloginfo('url'); ?>">
 	            <img class="svg " src="<?php echo get_template_directory_uri(); ?>/images/logo.svg" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">
 	        </a>
-
-	        <?php //get_template_part('store/part-store-controls'); ?>
 
 	        <?php get_template_part('part-breadcrumb'); ?>
 

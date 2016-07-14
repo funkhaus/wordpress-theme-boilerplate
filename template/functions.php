@@ -30,10 +30,6 @@
 	}
 	add_action( 'after_setup_theme', 'custom_theme_setup' );
 
-/*
- * Disable Woo CSS
- */
-	add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
 
 /*
  * Handle content width edge cases
@@ -172,24 +168,20 @@
  * Style login page and dashboard
  */
 	// Style the login page
-	function custom_loginpage_logo_link($url)
-	{
+	function custom_loginpage_logo_link($url) {
 	     // Return a url; in this case the homepage url of wordpress
 	     return get_bloginfo('url');
 	}
-	function custom_loginpage_logo_title($message)
-	{
+	function custom_loginpage_logo_title($message) {
 	     // Return title text for the logo to replace 'wordpress'; in this case, the blog name.
 	     return get_bloginfo('name');
 	}
-	function custom_loginpage_styles()
-	{
+	function custom_loginpage_styles() {
         wp_enqueue_style( 'login_css', get_template_directory_uri() . '/css/login.css' );
 	}
 	function custom_admin_styles() {
         wp_enqueue_style('admin-stylesheet', get_template_directory_uri() . '/css/admin.css');
 	}
-	// Hook in
 	add_filter('login_headerurl','custom_loginpage_logo_link');
 	add_filter('login_headertitle','custom_loginpage_logo_title');
 	add_action('login_head','custom_loginpage_styles');
@@ -247,20 +239,229 @@
         return !empty($children);
     }
 
+/*
+ * Next page/post ID
+ */
+	function get_next_page_id($exclude = null, $loop = true) {
+		global $post;
+
+		// set current post type
+		$post_type = get_post_type( $post );
+
+		// Set vars
+		$current_project_id = $post->ID;
+		$cache_key = 'all_pages_parent_'.$current_project_id;
+
+		// Check for cached $pages
+		$pages = get_transient( $cache_key );
+		if ( empty( $pages ) ){
+			$args = array(
+				'post_type'         => $post_type,
+				'order'             => 'ASC',
+				'orderby'           => 'menu_order',
+				'post_parent'       => $post->post_parent,
+				'fields'            => 'ids',
+				'posts_per_page'    => -1,
+				'post__not_in' 		=> $exclude
+			);
+			$pages = get_posts($args);
+
+			// Save cache
+			set_transient($cache_key, $pages, 30 );
+        }
+
+		$current_key = array_search($current_project_id, $pages);
+		$output = false;
+
+		if( isset($pages[$current_key+1]) ) {
+			// Next page exists
+			$output = $pages[$current_key+1];
+
+		// No next page, should we loop to first?
+		} elseif ( $loop ) {
+
+			// Get first page
+			$output = $pages[0];
+		}
+
+		return $output;
+	}
+
+
+/*
+ * Previous page/post ID
+ */
+    function get_previous_page_id($exclude = null, $loop = true) {
+		global $post;
+
+		// set current post type
+		$post_type = get_post_type( $post );
+
+		// Set vars
+        $current_project_id = $post->ID;
+        $cache_key = 'all_pages_parent_'.$current_project_id;
+
+        // Check for cached $pages
+        $pages = get_transient( $cache_key );
+        if ( empty( $pages ) ){
+			$args = array(
+				'post_type'         => $post_type,
+				'order'             => 'ASC',
+				'orderby'           => 'menu_order',
+				'post_parent'       => $post->post_parent,
+				'fields'            => 'ids',
+				'posts_per_page'    => -1,
+				'post__not_in' 		=> $exclude
+			);
+			$pages = get_posts($args);
+
+			// Save cache
+			set_transient($cache_key, $pages, 30 );
+        }
+
+        $current_key = array_search($current_project_id, $pages);
+		$output = false;
+
+        if( isset($pages[$current_key-1]) ) {
+            // Previous page exists
+            $output = $pages[$current_key-1];
+
+		// No previous page, should we loop to last?
+        } elseif ( $loop ) {
+
+			// Get last page
+			$output = array_pop($pages);
+        }
+
+		return $output;
+    }
+
+
+/*
+ * Redirect to first child
+ */
+    function get_first_child_id( $target_post = null ) {
+
+        $target_post = get_post($target_post);
+
+        $id = false;
+        $args = array(
+            'post_type'         => get_post_type($target_post),
+            'post_parent'       => $target_post->ID,
+            'order'             => 'ASC',
+            'orderby'           => 'menu_order',
+            'fields'            => 'ids',
+            'posts_per_page'    => 1
+        );
+        $children = get_posts($args);
+
+        if( isset($children[0]) ) {
+            $id = $children[0];
+        }
+
+        return $id;
+    }
+
+
+/*
+ * Allow subscriber to see Private posts/pages
+ */
+	function add_theme_caps() {
+	    // Gets the author role
+	    $role = get_role('subscriber');
+
+	    // Add capabilities
+	    $role->add_cap( 'read_private_posts' );
+		$role->add_cap( 'read_private_pages' );
+	}
+	//add_action( 'switch_theme', 'add_theme_caps');
+
+
+
+/*
+ * Disable Rich Editor on certain pages
+ */
+	function disabled_rich_editor($allow_rich_editor) {
+		global $post;
+
+		if($post->post_name == 'contact') {
+			return false;
+		}
+		return $allow_rich_editor;
+	}
+	//add_filter( 'user_can_richedit', 'disabled_rich_editor');
+
+
+/*
+ * Change the [...] that comes after excerpts
+ */
+    function custom_excerpt_ellipsis( $more ) {
+        return '...';
+    }
+    //add_filter('excerpt_more', 'custom_excerpt_ellipsis');
+
+/*
+ * Allow SVG uploads
+ */
+    function add_mime_types($mimes) {
+        $mimes['svg'] = 'image/svg+xml';
+        return $mimes;
+    }
+    //add_filter('upload_mimes', 'add_mime_types');
+
+
+/*
+ * Enqueue Custom Gallery
+ */
+	function custom_gallery($atts) {
+		if ( !is_admin() ) {
+			include('part-gallery.php');
+		}
+		return $output;
+	}
+	//add_shortcode('gallery', 'custom_gallery');
+
+
+/*
+ * Override default vimeo oembed behavior, to work with Vimeo API
+ */
+    function set_vimeo_api_defaults(){
+
+        // Unregister default Vimeo embed
+        $format = '#https?://(.+\.)?vimeo\.com/.*#i';
+        wp_oembed_remove_provider($format);
+
+        // set vimeo oembed args
+        // see full list here: developer.vimeo.com/apis/oembed
+        $args = array(
+            'color'     => 'ffffff',
+            'title'     => false,
+            'portrait'  => false,
+            'byline'    => false,
+            'api'       => true,
+            'player_id' => uniqid('vimeo-')
+        );
+
+        // set regex and oembed url
+        $provider = 'http://vimeo.com/api/oembed.{format}?' . http_build_query($args);
+
+        // override the default vimeo configuration
+        return wp_oembed_add_provider($format, $provider, true);
+    }
+    //add_action('init', 'set_vimeo_api_defaults');
+
 
 /*
  * Get image dimensions and calculate padding percentage based on aspect ratio
  */
-    function get_responsive_image_padding($target_attachment = null, $size = 'medium'){
+    function get_responsive_image_padding($target_attachment = null, $size = 'post-thumbnail'){
 
-        // no image provided, use featured
-        if ( ! $target_attachment ){
-            $post = get_post();
-            $target_attachment = get_post(get_post_thumbnail_id($post->ID));
-
-        // image was provided, get full post object
-        } else {
+        // Always have an image to work with
+        if ( $target_attachment ){
             $target_attachment = get_post($target_attachment);
+        } else {
+            $post = get_post();
+            $target_attachment = get_post( get_post_thumbnail_id($post->ID) );
         }
 
         // get src data of attachment, set dimensions
@@ -299,13 +500,13 @@
 /*
  * Add custom metabox to the new/edit page
  */
-    function custom2015_add_metaboxes(){
+    function custom_add_metaboxes(){
 
 		// add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');
 		// add_meta_box("custom_second_featured_image", "Second Featured Image", "custom_second_featured_image", "page", "side", "low");
 
     }
-	add_action('add_meta_boxes', 'custom2015_add_metaboxes');
+	add_action('add_meta_boxes', 'custom_add_metaboxes');
 
 	// Build media meta box
 	function custom_media_meta() {
@@ -371,10 +572,11 @@
         <?php
     }
 
+
 /*
  * Save the metabox vaule
  */
-    function custom2015_save_metabox($post_id){
+    function custom_save_metabox($post_id){
 
         // check autosave
         if( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
@@ -389,225 +591,7 @@
         }
 
     }
-    add_action('save_post', 'custom2015_save_metabox');
+    add_action('save_post', 'custom_save_metabox');
 
-
-/*
- * Next Project
- */
-	function get_next_page_id($exclude = null, $loop = true) {
-		global $post;
-
-		// set current post type
-		$post_type = get_post_type( $post );
-
-		// Set vars
-		$current_project_id = $post->ID;
-		$cache_key = 'all_pages_parent_'.$current_project_id;
-
-		// Check for cached $pages
-		$pages = get_transient( $cache_key );
-		if ( empty( $pages ) ){
-			$args = array(
-				'post_type'         => $post_type,
-				'order'             => 'ASC',
-				'orderby'           => 'menu_order',
-				'post_parent'       => $post->post_parent,
-				'fields'            => 'ids',
-				'posts_per_page'    => -1,
-				'post__not_in' 		=> $exclude
-			);
-			$pages = get_posts($args);
-
-			// Save cache
-			set_transient($cache_key, $pages, 30 );
-        }
-
-		$current_key = array_search($current_project_id, $pages);
-		$output = false;
-
-		if( isset($pages[$current_key+1]) ) {
-			// Next page exists
-			$output = $pages[$current_key+1];
-
-		// No next page, should we loop to first?
-		} elseif ( $loop ) {
-
-			// Get first page
-			$output = $pages[0];
-		}
-
-		return $output;
-	}
-
-
-/*
- * Previous Project
- */
-    function get_previous_page_id($exclude = null, $loop = true) {
-		global $post;
-
-		// set current post type
-		$post_type = get_post_type( $post );
-
-		// Set vars
-        $current_project_id = $post->ID;
-        $cache_key = 'all_pages_parent_'.$current_project_id;
-
-        // Check for cached $pages
-        $pages = get_transient( $cache_key );
-        if ( empty( $pages ) ){
-			$args = array(
-				'post_type'         => $post_type,
-				'order'             => 'ASC',
-				'orderby'           => 'menu_order',
-				'post_parent'       => $post->post_parent,
-				'fields'            => 'ids',
-				'posts_per_page'    => -1,
-				'post__not_in' 		=> $exclude
-			);
-			$pages = get_posts($args);
-
-			// Save cache
-			set_transient($cache_key, $pages, 30 );
-        }
-
-        $current_key = array_search($current_project_id, $pages);
-		$output = false;
-
-        if( isset($pages[$current_key-1]) ) {
-            // Previous page exists
-            $output = $pages[$current_key-1];
-
-		// No previous page, should we loop to last?
-        } elseif ( $loop ) {
-
-			// Get last page
-			$output = array_pop($pages);
-        }
-
-		return $output;
-    }
-
-/*
- * Redirect to first child
- */
-    function get_first_child_id ( $target_post = null ) {
-
-        $target_post = get_post($target_post);
-
-        $output = false;
-        $args = array(
-            'post_type'         => get_post_type($target_post),
-            'post_parent'       => $target_post->ID,
-            'order'             => 'ASC',
-            'orderby'           => 'menu_order',
-            'fields'            => 'ids',
-            'posts_per_page'    => 1
-        );
-        $children = get_posts($args);
-
-        if( isset($children[0]) ) {
-            $output = $children[0];
-        }
-
-        return $output;
-    }
-
-
-/*
- * Allow subscriber to see Private posts/pages
- */
-	function add_theme_caps() {
-	    // Gets the author role
-	    $role = get_role('subscriber');
-
-	    // Add capabilities
-	    $role->add_cap( 'read_private_posts' );
-		$role->add_cap( 'read_private_pages' );
-	}
-	//add_action( 'switch_theme', 'add_theme_caps');
-
-
-
-/*
- * Disable Rich Editor on certain pages
- */
-	function disabled_rich_editor($allow_rich_editor) {
-		global $post;
-
-		if($post->post_name == 'contact') {
-			return false;
-		}
-		return $allow_rich_editor;
-	}
-	//add_filter( 'user_can_richedit', 'disabled_rich_editor');
-
-
-/*
- * Enqueue Custom Gallery
- */
-	function custom_gallery($atts) {
-		if ( !is_admin() ) {
-			include('part-gallery.php');
-		}
-		return $output;
-	}
-	//add_shortcode('gallery', 'custom_gallery');
-
-
-/*
- * Remove [...] from default excerpt
- */
-    function fh_remove_excerpt_ellipsis( $more ) {
-        return '...';
-    }
-    //add_filter('excerpt_more', 'fh_remove_excerpt_ellipsis');
-
-/*
- * Allow SVG uploads
- */
-    function add_mime_types($mimes) {
-        $mimes['svg'] = 'image/svg+xml';
-        return $mimes;
-    }
-    //add_filter('upload_mimes', 'add_mime_types');
-
-
-/*
- * Override default vimeo oembed behavior, to work with Vimeo API
- */
-    function set_vimeo_api_defaults(){
-
-        // Unregister default Vimeo embed
-        $format = '#https?://(.+\.)?vimeo\.com/.*#i';
-        wp_oembed_remove_provider($format);
-
-        // set vimeo oembed args
-        // see full list here: developer.vimeo.com/apis/oembed
-        $args = array(
-            'color'     => 'ffffff',
-            'title'     => false,
-            'portrait'  => false,
-            'byline'    => false,
-            'api'       => true,
-            'player_id' => uniqid('vimeo-')
-        );
-
-        // set regex and oembed url
-        $provider = 'http://vimeo.com/api/oembed.{format}?' . http_build_query($args);
-
-        // override the default vimeo configuration
-        return wp_oembed_add_provider($format, $provider, true);
-    }
-    add_action('init', 'set_vimeo_api_defaults');
-
-
-/*
- * Check if functions-store file exists, if so include it
- */
-	if ( $store_funcs = locate_template('store/functions-store.php') ) {
-		include( $store_funcs );
-	}
 
 ?>
