@@ -117,15 +117,15 @@
 
             // set state conditions here
             switch (true){
-                case $target_post->ID == 5:
+                case $target_post->ID == 5 :
                     $output = 'work';
                     break;
 
-                case has_children($target_post->ID) and is_tree(5, $target_post):
+                case has_children($target_post->ID) and is_tree(5, $target_post) :
                     $output = 'work-grid';
                     break;
 
-                case !has_children($target_post->ID) and is_tree(5, $target_post):
+                case !has_children($target_post->ID) and is_tree(5, $target_post) :
                     $output = 'work-detail';
                     break;
 
@@ -148,8 +148,9 @@
         global $post;
         $state = get_conditional_state($post);
 
-        if ( $state )
+        if ( $state ) {
             $classes[] = $state;
+        }
 
 		// Mobile Detects
 		if( wp_is_mobile() ) {
@@ -215,7 +216,7 @@
         $ancestors = get_ancestors($target_post->ID, $target_post->post_type);
 
         // if ID is target post OR in target post tree, return true
-        return (($target_post->ID == $tree_id) or in_array($tree_id, $ancestors));
+        return ( ($target_post->ID == $tree_id) or in_array($tree_id, $ancestors) );
     }
 
 
@@ -371,8 +372,8 @@
 	    $role = get_role('subscriber');
 
 	    // Add capabilities
-	    $role->add_cap( 'read_private_posts' );
-		$role->add_cap( 'read_private_pages' );
+	    $role->add_cap('read_private_posts');
+		$role->add_cap('read_private_pages');
 	}
 	//add_action( 'switch_theme', 'add_theme_caps');
 
@@ -415,7 +416,7 @@
  */
 	function custom_gallery($atts) {
 		if ( !is_admin() ) {
-			include('part-gallery.php');
+			include('parts/gallery.php');
 		}
 		return $output;
 	}
@@ -545,29 +546,29 @@
 
         ?>
 
-        <div class="custom-meta custom-image-uploader">
+            <div class="custom-meta custom-image-uploader">
 
-            <!-- A hidden input to set and post the chosen image id -->
-            <input class="custom-image-id" name="<?php echo $meta_key; ?>" type="hidden" value="<?php echo $image_id; ?>" />
+                <!-- A hidden input to set and post the chosen image id -->
+                <input class="custom-image-id" name="<?php echo $meta_key; ?>" type="hidden" value="<?php echo $image_id; ?>" />
 
-            <!-- Image container, which is manipulated with js -->
-            <div class="custom-image-container">
-                <?php if ( $has_image ) : ?>
-                    <img src="<?php echo $image_src[0] ?>"/>
-                <?php endif; ?>
+                <!-- Image container, which is manipulated with js -->
+                <div class="custom-image-container">
+                    <?php if ( $has_image ) : ?>
+                        <img src="<?php echo $image_src[0] ?>"/>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Add & remove image links -->
+                <p class="hide-if-no-js">
+                    <a class="upload-custom-image <?php if ( $has_image  ) { echo 'hidden'; } ?>" href="<?php echo $upload_link ?>">
+                        <?php _e('Set second featured image') ?>
+                    </a>
+                    <a class="delete-custom-image <?php if ( ! $has_image  ) { echo 'hidden'; } ?>" href="#">
+                        <?php _e('Remove image') ?>
+                    </a>
+                </p>
+
             </div>
-
-            <!-- Add & remove image links -->
-            <p class="hide-if-no-js">
-                <a class="upload-custom-image <?php if ( $has_image  ) { echo 'hidden'; } ?>" href="<?php echo $upload_link ?>">
-                    <?php _e('Set banner ad') ?>
-                </a>
-                <a class="delete-custom-image <?php if ( ! $has_image  ) { echo 'hidden'; } ?>" href="#">
-                    <?php _e('Remove banner ad') ?>
-                </a>
-            </p>
-
-        </div>
 
         <?php
     }
@@ -583,11 +584,11 @@
             return $post_id;
         }
 
-        if( isset($_POST["_custom_video_url"]) ) {
-	        update_post_meta($post_id, "_custom_video_url", $_POST["_custom_video_url"]);
+        if( isset($_POST['_custom_video_url']) ) {
+	        update_post_meta($post_id, '_custom_video_url', $_POST['_custom_video_url']);
         }
-        if( isset($_POST["_second_post_thumbnail"]) ) {
-	        //update_post_meta($post_id, "_second_post_thumbnail", $_POST["_second_post_thumbnail"]);
+        if( isset($_POST['_second_post_thumbnail']) ) {
+	        //update_post_meta($post_id, '_second_post_thumbnail', $_POST['_second_post_thumbnail']);
         }
 
     }
