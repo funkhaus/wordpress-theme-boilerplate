@@ -4,7 +4,7 @@
 
 	switch (true) {
         case $state == 'work' and $child_id = get_first_child_id() :
-            wp_redirect($child_id, 301);
+            wp_redirect( get_permalink($child_id), 301 );
             exit;
 
 	    case $state == 'work-grid' :
