@@ -467,6 +467,12 @@
 
         // get src data of attachment, set dimensions
         $img_data = wp_get_attachment_image_src($target_attachment->ID, $size);
+
+        // About if no attachment found
+        if( !$img_data ) {
+            return 0;
+        }
+
         $width = $img_data[1];
         $height = $img_data[2];
 
@@ -504,7 +510,7 @@
     function custom_add_metaboxes(){
 
 		// add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');
-		// add_meta_box("custom_second_featured_image", "Second Featured Image", "custom_second_featured_image", "page", "side", "low");
+		// add_meta_box('custom_second_featured_image', 'Second Featured Image', 'custom_second_featured_image', 'page', 'side', 'low');
 
     }
 	add_action('add_meta_boxes', 'custom_add_metaboxes');
