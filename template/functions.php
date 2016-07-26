@@ -513,11 +513,10 @@
 		// add_meta_box('custom_second_featured_image', 'Second Featured Image', 'custom_second_featured_image', 'page', 'side', 'low');
 
     }
-	add_action('add_meta_boxes', 'custom_add_metaboxes');
+	add_action('add_meta_boxes', 'custom_add_metaboxes', 10, 2);
 
 	// Build media meta box
-	function custom_media_meta() {
-		global $post;
+	function custom_media_meta($post) {
 
 		?>
         	<div class="custom-meta">
@@ -532,8 +531,7 @@
 
     // Second featured image uploader (requires changes to admin.js too).
     // @see: https://codex.wordpress.org/Javascript_Reference/wp.media
-    function custom_second_featured_image(){
-        global $post;
+    function custom_second_featured_image($post){
 
         // Meta key (need to update the save_metabox function below to reflect this too!)
         $meta_key = '_second_post_thumbnail';
