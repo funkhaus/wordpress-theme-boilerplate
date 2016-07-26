@@ -507,7 +507,7 @@
 /*
  * Add custom metabox to the new/edit page
  */
-    function custom_add_metaboxes(){
+    function custom_add_metaboxes($post_type, $post){
 
 		// add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');
 		// add_meta_box('custom_second_featured_image', 'Second Featured Image', 'custom_second_featured_image', 'page', 'side', 'low');
