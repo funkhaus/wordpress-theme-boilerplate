@@ -424,35 +424,6 @@
 
 
 /*
- * Override default vimeo oembed behavior, to work with Vimeo API
- */
-    function set_vimeo_api_defaults(){
-
-        // Unregister default Vimeo embed
-        $format = '#https?://(.+\.)?vimeo\.com/.*#i';
-        wp_oembed_remove_provider($format);
-
-        // set vimeo oembed args
-        // see full list here: developer.vimeo.com/apis/oembed
-        $args = array(
-            'color'     => 'ffffff',
-            'title'     => false,
-            'portrait'  => false,
-            'byline'    => false,
-            'api'       => true,
-            'player_id' => uniqid('vimeo-')
-        );
-
-        // set regex and oembed url
-        $provider = 'http://vimeo.com/api/oembed.{format}?' . http_build_query($args);
-
-        // override the default vimeo configuration
-        return wp_oembed_add_provider($format, $provider, true);
-    }
-    //add_action('init', 'set_vimeo_api_defaults');
-
-
-/*
  * Get image dimensions and calculate padding percentage based on aspect ratio
  */
     function get_responsive_image_padding($target_attachment = null, $size = 'post-thumbnail'){
