@@ -33,10 +33,6 @@
 	}
 	add_action( 'after_setup_theme', 'custom_theme_setup' );
 
-/*
- * Disable Woo CSS
- */
-	add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
 
 /*
  * Handle content width edge cases
@@ -126,15 +122,15 @@
 
             // set state conditions here
             switch (true){
-                case $target_post->ID == 5:
+                case $target_post->ID == 5 :
                     $output = 'work';
                     break;
 
-                case has_children($target_post->ID) and is_tree(5, $target_post):
+                case has_children($target_post->ID) and is_tree(5, $target_post) :
                     $output = 'work-grid';
                     break;
 
-                case !has_children($target_post->ID) and is_tree(5, $target_post):
+                case !has_children($target_post->ID) and is_tree(5, $target_post) :
                     $output = 'work-detail';
                     break;
 
@@ -157,8 +153,9 @@
         global $post;
         $state = get_conditional_state($post);
 
-        if ( $state )
+        if ( $state ) {
             $classes[] = $state;
+        }
 
 		// Mobile Detects
 		if( wp_is_mobile() ) {
@@ -177,24 +174,20 @@
  * Style login page and dashboard
  */
 	// Style the login page
-	function custom_loginpage_logo_link($url)
-	{
+	function custom_loginpage_logo_link($url) {
 	     // Return a url; in this case the homepage url of wordpress
 	     return get_bloginfo('url');
 	}
-	function custom_loginpage_logo_title($message)
-	{
+	function custom_loginpage_logo_title($message) {
 	     // Return title text for the logo to replace 'wordpress'; in this case, the blog name.
 	     return get_bloginfo('name');
 	}
-	function custom_loginpage_styles()
-	{
+	function custom_loginpage_styles() {
         wp_enqueue_style( 'login_css', get_template_directory_uri() . '/css/login.css' );
 	}
 	function custom_admin_styles() {
         wp_enqueue_style('admin-stylesheet', get_template_directory_uri() . '/css/admin.css');
 	}
-	// Hook in
 	add_filter('login_headerurl','custom_loginpage_logo_link');
 	add_filter('login_headertitle','custom_loginpage_logo_title');
 	add_action('login_head','custom_loginpage_styles');
@@ -228,7 +221,7 @@
         $ancestors = get_ancestors($target_post->ID, $target_post->post_type);
 
         // if ID is target post OR in target post tree, return true
-        return (($target_post->ID == $tree_id) or in_array($tree_id, $ancestors));
+        return ( ($target_post->ID == $tree_id) or in_array($tree_id, $ancestors) );
     }
 
 
@@ -252,153 +245,8 @@
         return !empty($children);
     }
 
-
 /*
- * Get image dimensions and calculate padding percentage based on aspect ratio
- */
-    function get_responsive_image_padding($target_attachment = null, $size = 'medium'){
-
-        // no image provided, use featured
-        if ( ! $target_attachment ){
-            $post = get_post();
-            $target_attachment = get_post(get_post_thumbnail_id($post->ID));
-
-        // image was provided, get full post object
-        } else {
-            $target_attachment = get_post($target_attachment);
-        }
-
-        // get src data of attachment, set dimensions
-        $img_data = wp_get_attachment_image_src($target_attachment->ID, $size);
-        $width = $img_data[1];
-        $height = $img_data[2];
-
-        // return percentage for padding
-        return ($height / $width) * 100;
-    }
-
-
-/*
- * Split and wrap title
- */
-    function get_split_title($post_id = false) {
-    	if( !$post_id ) {
-	    	global $post;
-	    	$post_id = $post->ID;
-    	}
-
-        $title = get_the_title($post_id);
-        $lines = explode(' &#8211; ', $title);
-        $output = false;
-        $count = 0;
-
-        foreach( $lines as $line ) {
-            $count++;
-            $output .= '<span class="line line-'.$count.'">'.$line.'</span> ';
-        }
-
-        return $output;
-    }
-
-
-/*
- * Add custom metabox to the new/edit page
- */
-    function custom2015_add_metaboxes(){
-
-		// add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');
-		// add_meta_box("custom_second_featured_image", "Second Featured Image", "custom_second_featured_image", "page", "side", "low");
-
-    }
-	add_action('add_meta_boxes', 'custom2015_add_metaboxes');
-
-	// Build media meta box
-	function custom_media_meta() {
-		global $post;
-
-		?>
-        	<div class="custom-meta">
-				<label for="video-url">Enter the video URL for this page:</label>
-				<input id="video-url" class="short" title="This is needed for all video pages" name="_custom_video_url" type="text" value="<?php echo $post->_custom_video_url; ?>">
-				<br/>
-
-        	</div>
-
-		<?php
-	}
-
-    // Second featured image uploader (requires changes to admin.js too).
-    // @see: https://codex.wordpress.org/Javascript_Reference/wp.media
-    function custom_second_featured_image(){
-        global $post;
-
-        // Meta key (need to update the save_metabox function below to reflect this too!)
-        $meta_key = '_second_post_thumbnail';
-
-        // Get WordPress' media upload URL
-        $upload_link = esc_url( get_upload_iframe_src( 'image', $post->ID ) );
-
-        // See if there's a media id already saved as post meta
-        $image_id = get_post_meta( $post->ID, $meta_key, true );
-
-        // Get the image src
-        $image_src = wp_get_attachment_image_src( $image_id, 'post-thumbnail' );
-
-        // For convenience, see if the array is valid
-        $has_image = is_array( $image_src );
-
-        ?>
-
-        <div class="custom-meta custom-image-uploader">
-
-            <!-- A hidden input to set and post the chosen image id -->
-            <input class="custom-image-id" name="<?php echo $meta_key; ?>" type="hidden" value="<?php echo $image_id; ?>" />
-
-            <!-- Image container, which is manipulated with js -->
-            <div class="custom-image-container">
-                <?php if ( $has_image ) : ?>
-                    <img src="<?php echo $image_src[0] ?>"/>
-                <?php endif; ?>
-            </div>
-
-            <!-- Add & remove image links -->
-            <p class="hide-if-no-js">
-                <a class="upload-custom-image <?php if ( $has_image  ) { echo 'hidden'; } ?>" href="<?php echo $upload_link ?>">
-                    <?php _e('Set banner ad') ?>
-                </a>
-                <a class="delete-custom-image <?php if ( ! $has_image  ) { echo 'hidden'; } ?>" href="#">
-                    <?php _e('Remove banner ad') ?>
-                </a>
-            </p>
-
-        </div>
-
-        <?php
-    }
-
-/*
- * Save the metabox vaule
- */
-    function custom2015_save_metabox($post_id){
-
-        // check autosave
-        if( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
-            return $post_id;
-        }
-
-        if( isset($_POST["_custom_video_url"]) ) {
-	        update_post_meta($post_id, "_custom_video_url", $_POST["_custom_video_url"]);
-        }
-        if( isset($_POST["_second_post_thumbnail"]) ) {
-	        //update_post_meta($post_id, "_second_post_thumbnail", $_POST["_second_post_thumbnail"]);
-        }
-
-    }
-    add_action('save_post', 'custom2015_save_metabox');
-
-
-/*
- * Next Project
+ * Next page/post ID
  */
 	function get_next_page_id($exclude = null, $loop = true) {
 		global $post;
@@ -447,7 +295,7 @@
 
 
 /*
- * Previous Project
+ * Previous page/post ID
  */
     function get_previous_page_id($exclude = null, $loop = true) {
 		global $post;
@@ -494,14 +342,15 @@
 		return $output;
     }
 
+
 /*
  * Redirect to first child
  */
-    function get_first_child_id ( $target_post = null ) {
+    function get_first_child_id( $target_post = null ) {
 
         $target_post = get_post($target_post);
 
-        $output = false;
+        $id = false;
         $args = array(
             'post_type'         => get_post_type($target_post),
             'post_parent'       => $target_post->ID,
@@ -513,10 +362,10 @@
         $children = get_posts($args);
 
         if( isset($children[0]) ) {
-            $output = $children[0];
+            $id = $children[0];
         }
 
-        return $output;
+        return $id;
     }
 
 
@@ -528,8 +377,8 @@
 	    $role = get_role('subscriber');
 
 	    // Add capabilities
-	    $role->add_cap( 'read_private_posts' );
-		$role->add_cap( 'read_private_pages' );
+	    $role->add_cap('read_private_posts');
+		$role->add_cap('read_private_pages');
 	}
 	//add_action( 'switch_theme', 'add_theme_caps');
 
@@ -550,24 +399,12 @@
 
 
 /*
- * Enqueue Custom Gallery
+ * Change the [...] that comes after excerpts
  */
-	function custom_gallery($atts) {
-		if ( !is_admin() ) {
-			include('part-gallery.php');
-		}
-		return $output;
-	}
-	//add_shortcode('gallery', 'custom_gallery');
-
-
-/*
- * Remove [...] from default excerpt
- */
-    function fh_remove_excerpt_ellipsis( $more ) {
+    function custom_excerpt_ellipsis( $more ) {
         return '...';
     }
-    //add_filter('excerpt_more', 'fh_remove_excerpt_ellipsis');
+    //add_filter('excerpt_more', 'custom_excerpt_ellipsis');
 
 /*
  * Allow SVG uploads
@@ -580,32 +417,141 @@
 
 
 /*
- * Override default vimeo oembed behavior, to work with Vimeo API
+ * Enqueue Custom Gallery
  */
-    function set_vimeo_api_defaults(){
+	function custom_gallery($atts) {
+		if ( !is_admin() ) {
+			include('parts/gallery.php');
+		}
+		return $output;
+	}
+	//add_shortcode('gallery', 'custom_gallery');
 
-        // Unregister default Vimeo embed
-        $format = '#https?://(.+\.)?vimeo\.com/.*#i';
-        wp_oembed_remove_provider($format);
 
-        // set vimeo oembed args
-        // see full list here: developer.vimeo.com/apis/oembed
-        $args = array(
-            'color'     => 'ffffff',
-            'title'     => false,
-            'portrait'  => false,
-            'byline'    => false,
-            'api'       => true,
-            'player_id' => uniqid('vimeo-')
-        );
+/*
+ * Get image dimensions and calculate padding percentage based on aspect ratio
+ */
+    function get_responsive_image_padding($target_attachment = null, $size = 'post-thumbnail'){
 
-        // set regex and oembed url
-        $provider = 'http://vimeo.com/api/oembed.{format}?' . http_build_query($args);
+        // Always have an image to work with
+        if ( $target_attachment ){
+            $target_attachment = get_post($target_attachment);
+        } else {
+            $post = get_post();
+            $target_attachment = get_post( get_post_thumbnail_id($post->ID) );
+        }
 
-        // override the default vimeo configuration
-        return wp_oembed_add_provider($format, $provider, true);
+        // get src data of attachment, set dimensions
+        $img_data = wp_get_attachment_image_src($target_attachment->ID, $size);
+
+        // About if no attachment found
+        if( !$img_data ) {
+            return 0;
+        }
+
+        $width = $img_data[1];
+        $height = $img_data[2];
+
+        // return percentage for padding
+        return ($height / $width) * 100;
     }
-    add_action('init', 'set_vimeo_api_defaults');
+
+
+/*
+ * Split and wrap title
+ */
+    function get_split_title($post_id = false) {
+    	if( !$post_id ) {
+	    	global $post;
+	    	$post_id = $post->ID;
+    	}
+
+        $title = get_the_title($post_id);
+        $lines = explode(' &#8211; ', $title);
+        $output = false;
+        $count = 0;
+
+        foreach( $lines as $line ) {
+            $count++;
+            $output .= '<span class="line line-'.$count.'">'.$line.'</span> ';
+        }
+
+        return $output;
+    }
+
+
+/*
+ * Add custom metabox to the new/edit page
+ */
+    function custom_add_metaboxes($post_type, $post){
+
+		// add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');
+		// add_meta_box('custom_second_featured_image', 'Second Featured Image', 'custom_second_featured_image', 'page', 'side', 'low');
+
+    }
+	add_action('add_meta_boxes', 'custom_add_metaboxes', 10, 2);
+
+	// Build media meta box
+	function custom_media_meta($post) {
+
+		?>
+        	<div class="custom-meta">
+				<label for="video-url">Enter the video URL for this page:</label>
+				<input id="video-url" class="short" title="This is needed for all video pages" name="_custom_video_url" type="text" value="<?php echo $post->_custom_video_url; ?>">
+				<br/>
+
+        	</div>
+
+		<?php
+	}
+
+    // Second featured image uploader (requires changes to admin.js too).
+    // @see: https://codex.wordpress.org/Javascript_Reference/wp.media
+    function custom_second_featured_image($post){
+
+        // Meta key (need to update the save_metabox function below to reflect this too!)
+        $meta_key = '_second_post_thumbnail';
+
+        // Get WordPress' media upload URL
+        $upload_link = esc_url( get_upload_iframe_src( 'image', $post->ID ) );
+
+        // See if there's a media id already saved as post meta
+        $image_id = get_post_meta( $post->ID, $meta_key, true );
+
+        // Get the image src
+        $image_src = wp_get_attachment_image_src( $image_id, 'post-thumbnail' );
+
+        // For convenience, see if the array is valid
+        $has_image = is_array( $image_src );
+
+        ?>
+
+            <div class="custom-meta custom-image-uploader">
+
+                <!-- A hidden input to set and post the chosen image id -->
+                <input class="custom-image-id" name="<?php echo $meta_key; ?>" type="hidden" value="<?php echo $image_id; ?>" />
+
+                <!-- Image container, which is manipulated with js -->
+                <div class="custom-image-container">
+                    <?php if ( $has_image ) : ?>
+                        <img src="<?php echo $image_src[0] ?>"/>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Add & remove image links -->
+                <p class="hide-if-no-js">
+                    <a class="upload-custom-image <?php if ( $has_image  ) { echo 'hidden'; } ?>" href="<?php echo $upload_link ?>">
+                        <?php _e('Set second featured image') ?>
+                    </a>
+                    <a class="delete-custom-image <?php if ( ! $has_image  ) { echo 'hidden'; } ?>" href="#">
+                        <?php _e('Remove image') ?>
+                    </a>
+                </p>
+
+            </div>
+
+        <?php
+    }
 
 /*
  * Get second post thumbnail (mimic functionality of get_the_post_thumbnail)
@@ -628,10 +574,24 @@
     }
 
 /*
- * Check if functions-store file exists, if so include it
+ * Save the metabox vaule
  */
-	if ( $store_funcs = locate_template('store/functions-store.php') ) {
-		include( $store_funcs );
-	}
+    function custom_save_metabox($post_id){
+
+        // check autosave
+        if( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+            return $post_id;
+        }
+
+        if( isset($_POST['_custom_video_url']) ) {
+	        update_post_meta($post_id, '_custom_video_url', $_POST['_custom_video_url']);
+        }
+        if( isset($_POST['_second_post_thumbnail']) ) {
+	        //update_post_meta($post_id, '_second_post_thumbnail', $_POST['_second_post_thumbnail']);
+        }
+
+    }
+    add_action('save_post', 'custom_save_metabox');
+
 
 ?>
