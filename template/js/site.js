@@ -13,12 +13,10 @@ var site = {
         //site.replaceSVGs();
         //site.initSVG();
 
-        // Padding things
-        //site.initFitImages();
-
         // Size things
 
         // Init things
+        //site.initFitImages();
 
     },
 
@@ -115,7 +113,7 @@ var site = {
             var $el = jQuery(this);
             // Get image aspect ratio
             var ratio = ($el.attr('height') / $el.attr('width')) * 100;
-            var style = 'padding-bottom: ' + ratio + '%';
+            var style = 'padding-bottom: ' + ratio + '%;';
             $el.
                 // Unwrap from <p> tags
                 unwrap()
