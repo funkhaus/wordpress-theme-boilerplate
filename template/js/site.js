@@ -1,7 +1,13 @@
 var site = {
     //homeURL: siteVars.homeURL,
     //themeURL: siteVars.themeURL,
+    winHeight : 0,
+    winWidth : 0,
+
     init: function() {
+
+        site.winHeight = jQuery(window).height();
+        site.winWidth = jQuery(window).width();
 
         // SVG things
         //site.replaceSVGs();
@@ -10,10 +16,16 @@ var site = {
         // Size things
 
         // Init things
+        //site.initFitImages();
 
     },
 
     onResize: function(){
+        site.winHeight = jQuery(window).height();
+        site.winWidth = jQuery(window).width();
+    },
+
+    onScroll: function(){
 
     },
 
@@ -92,13 +104,32 @@ var site = {
             });
         }
 
-    }
+    },
+
+    initFitImages: function(){
+        // Create responsive image containers for all entry images.
+        // Ignores images marked as .no-img-wrap
+        jQuery('.entry > p > img:not(.no-img-wrap)').each(function() {
+            var $el = jQuery(this);
+            // Get image aspect ratio
+            var ratio = ($el.attr('height') / $el.attr('width')) * 100;
+            var style = 'padding-bottom: ' + ratio + '%;';
+            $el.
+                // Unwrap from <p> tags
+                unwrap()
+                // Wrap in appropriate divs
+                .wrap('<div class="fluid-width-image-wrapper"><div class="responsive-container" style="' + style + '"></div></div>');
+        });
+    },
 
 };
 jQuery(document).ready(function($){
 
     site.init();
     jQuery(window).resize(function(){
-        site.onResize();
+        window.requestAnimationFrame( site.onResize );
     });
+    jQuery(window).scroll(function(){
+        window.requestAnimationFrame( site.onScroll );
+    })
 });

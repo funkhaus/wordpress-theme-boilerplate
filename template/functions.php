@@ -27,6 +27,9 @@
 	    // Turn on menus
 		add_theme_support('menus');
 
+		// Enable HTML5 support
+		add_theme_support('html5');
+
 	}
 	add_action( 'after_setup_theme', 'custom_theme_setup' );
 
@@ -52,6 +55,7 @@
     function custom_scripts() {
         //wp_register_script('site', get_template_directory_uri() . '/js/site.js', 'jquery', '1.0');
         //wp_register_script('cycle2', get_template_directory_uri() . '/js/jquery.cycle2.min.js', 'jquery', '2.1.5');
+        //wp_register_script('fitVids', get_template_directory_uri() . '/js/jquery.fitvids.js', 'jquery', '1.1');
 		//wp_register_script('gallery', get_template_directory_uri() . '/js/gallery2012.js', 'jquery', '1.0');
 		//wp_register_script('masonry', get_template_directory_uri() . '/js/jquery.masonry.min.js', 'jquery', '1.0');
 		//wp_register_script('carouFredSel', get_template_directory_uri() . '/js/jquery.carouFredSel-6.2.1-packed.js', 'jquery', '1.0');
@@ -63,6 +67,7 @@
         //wp_enqueue_script('carouFredSel', 'jquery');
         //wp_enqueue_script('masonry', 'jquery');
         //wp_enqueue_script('cycle2', 'jquery');
+        //wp_enqueue_script('fitVids');
         //wp_enqueue_script('infinitescroll', 'jquery');
         //wp_enqueue_script('vimeo-api', 'jquery');
         //wp_enqueue_script('vimeoplayer', 'jquery');
@@ -548,6 +553,25 @@
         <?php
     }
 
+/*
+ * Get second post thumbnail (mimic functionality of get_the_post_thumbnail)
+ */
+    function get_the_second_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr = '' ) {
+        $post = get_post($post);
+        $image = $post->_second_post_thumbnail;
+        $classes = 'attachment-second-post-thumbnail size-full wp-second-post-image';
+        if ( $attr == '' ) {
+            // Create $attr array if none exists yet
+            $attr = array('class' => $classes);
+        } else if ( !empty($attr['class']) ){
+            // Append to $attr['class'] if it exists
+            $attr['class'] .= ' ' . $classes;
+        } else if ( gettype($attr) == 'array' ) {
+            // Append to $attr array if ['class'] doesn't exist yet
+            $attr['class'] = $classes;
+        }
+        return wp_get_attachment_image( $image, $size, false, $attr );
+    }
 
 /*
  * Save the metabox vaule
