@@ -460,13 +460,10 @@
 /*
  * Split and wrap title
  */
-    function get_split_title($post_id = false) {
-    	if( !$post_id ) {
-	    	global $post;
-	    	$post_id = $post->ID;
-    	}
+    function get_split_title($post = null) {
+        $post = get_post($post);
 
-        $title = get_the_title($post_id);
+        $title = get_the_title($post->ID);
         $lines = explode(' &#8211; ', $title);
         $output = false;
         $count = 0;
@@ -573,6 +570,7 @@
         return wp_get_attachment_image( $image, $size, false, $attr );
     }
 
+
 /*
  * Save the metabox vaule
  */
@@ -593,5 +591,3 @@
     }
     add_action('save_post', 'custom_save_metabox');
 
-
-?>
