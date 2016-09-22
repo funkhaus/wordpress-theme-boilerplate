@@ -111,6 +111,9 @@ var site = {
         // Ignores images marked as .no-img-wrap
         jQuery('.entry > p > img:not(.no-img-wrap)').each(function() {
             var $el = jQuery(this);
+            // Set max width to image native width
+            var maxWidth = $el.attr('width');
+
             // Get image aspect ratio
             var ratio = ($el.attr('height') / $el.attr('width')) * 100;
             var style = 'padding-bottom: ' + ratio + '%;';
@@ -118,7 +121,7 @@ var site = {
                 // Unwrap from <p> tags
                 unwrap()
                 // Wrap in appropriate divs
-                .wrap('<div class="fluid-width-image-wrapper"><div class="responsive-container" style="' + style + '"></div></div>');
+                .wrap('<div class="fluid-width-image-wrapper" style="max-width: '+ maxWidth +'px;"><div class="responsive-container" style="' + style + '"></div></div>');
         });
     },
 
