@@ -459,7 +459,7 @@
 /*
  * Return the URL to a given attachment, while respecting size
  */
-    function get_custom_attachment_url($attachment_id = false, $size = 'fullscreen') {
+    function get_custom_attachment_url($attachment_id = false, $size = 'post-thumbnail') {
         if( !$attachment_id ) {
             global $post;
             $attachment_id = get_post_thumbnail_id($post->ID);
@@ -474,10 +474,8 @@
 /*
  * Return the URL to a given post's featured image, respecting size
  */
-    function get_featured_image_url($target_post = null, $size = 'fullscreen') {
-        $target_post = get_post($target_post);
+    function get_featured_image_url($target_post = null, $size = 'post-thumbnail') {
         $attachment_id = get_post_thumbnail_id($target_post);
-
         return get_custom_attachment_url($attachment_id, $size);
     }
 
