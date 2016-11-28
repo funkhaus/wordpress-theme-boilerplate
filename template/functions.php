@@ -456,6 +456,29 @@
         return ($height / $width) * 100;
     }
 
+/*
+ * Return the URL to a given attachment, while respecting size
+ */
+    function get_custom_attachment_url($attachment_id = false, $size = 'post-thumbnail') {
+        if( !$attachment_id ) {
+            global $post;
+            $attachment_id = get_post_thumbnail_id($post->ID);
+        }
+        $attachment_data = wp_get_attachment_image_src( $attachment_id, $size);
+        if( isset($attachment_data[0]) ) {
+            return $attachment_data[0];
+        }
+        return '';
+    }
+
+/*
+ * Return the URL to a given post's featured image, respecting size
+ */
+    function get_featured_image_url($target_post = null, $size = 'post-thumbnail') {
+        $attachment_id = get_post_thumbnail_id($target_post);
+        return get_custom_attachment_url($attachment_id, $size);
+    }
+
 
 /*
  * Split and wrap title

@@ -13,49 +13,51 @@
         background-image: url(../images/favicon.png);
         background-position: center center;
         background-repeat: no-repeat;
-		background-size: 26px auto;
+        background-size: 26px auto;
     }
     #wpwrap #wpadminbar #wp-admin-bar-wp-logo > .ab-item span {
-		visibility: hidden;
-    }    
+        visibility: hidden;
+    }
 
 /*
  * Post/Page Meta Boxs
- */ 
-	.custom-meta label {
-		width: 280px;
-		display: inline-block;
-	    text-align: right;		
-	}
-	.custom-meta input {
-		width: 500px;
-		height: 25px;
-		vertical-align: middle;
-	}
-	.custom-meta .short {
-		width: 200px;
-	}
-	.custom-meta input[type="checkbox"], 
-	.custom-meta input[type="radio"] {
-		height: auto;
-		width: auto;
-		display: inline-block;
-		vertical-align: baseline;
-	}	
-	/* Image Uploader */
-	.custom-meta .custom-image-container img {
-    	width: 100%;
-    	height: auto;
-	}
-	.custom-meta.custom-image-uploader p:last-child {
-        margin-bottom: 1px;	
-	}	
-	
+ */
+    .custom-meta label {
+        width: 280px;
+        display: inline-block;
+        text-align: right;
+    }
+    .custom-meta input {
+        width: 500px;
+        height: 25px;
+        vertical-align: middle;
+    }
+    .custom-meta .short {
+        width: 200px;
+    }
+    .custom-meta input[type="checkbox"],
+    .custom-meta input[type="radio"] {
+        height: auto;
+        width: auto;
+        display: inline-block;
+        vertical-align: baseline;
+    }
+    /* Image Uploader */
+    .custom-meta .custom-image-container img {
+        width: 100%;
+        height: auto;
+    }
+    .custom-meta.custom-image-uploader p:last-child {
+        margin-bottom: 1px;
+    }
 
+    #menu-comments {
+        display: none;
+    }
 
 /*
  * Turn off menus
- */ 
+ */
 /*
     #menu-posts {
         display: none;
@@ -67,9 +69,6 @@
         display: none;
     }
     #menu-pages {
-        display: none;
-    }
-    #menu-comments {
         display: none;
     }
     #menu-appearance {
