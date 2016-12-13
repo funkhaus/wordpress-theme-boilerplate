@@ -1,23 +1,23 @@
 /*
  * Style login page
- * By Drew Baker - 2011
- * drew@funkhausdesign.com
+ * By Drew Baker & Funkhaus - 2011-2016
+ * funkhaus.us
  *
- */	
+ */
 
 /*
  * Import fonts
- */ 
+ */
     @import url("../fonts/fonts.css");
 
 
 /*
  * Globals
  */
-    html { 
-    	background: white;
+    html {
+    	background: #ffffff;
     }
-    
+
     body.login {
         font-size: 13px; 
         color: #666666;    
@@ -36,17 +36,22 @@
 /*
  * Login Banner Image
  */
-    #login h1 a { 
-    	background: url(../images/backend/login-banner.png) no-repeat 9px 0;
-    	margin: 0; 
-    	background-size: auto;
+    #login h1 a {
+    	background-image: url(../images/backend/login-banner.png) no-repeat 9px 0;
+    	background-position: center;
+    	background-size: contain;
+    	margin: 0;
     	width: auto;
-    }	
+    }
 
 
 /*
  * Login Form
  */
+    .login form {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
     .login label {
         color: #DB8F39;
     }   
@@ -59,7 +64,21 @@
     body.login input[type="checkbox"], 
     body.login input[type="radio"] {
         vertical-align: baseline;
-    }    
+    }
+    #rememberme {
+	    border-radius: 5px;
+	    vertical-align: middle;
+    }
+    #rememberme[type=checkbox]:checked:before {
+        /* check color here */
+	    color: #4f4f4f;
+    }
+    #rememberme[type=checkbox]:focus {
+        /* checkbox outline color here */
+        -webkit-box-shadow: 0 0 2px rgba(30,140,190,.8);
+        box-shadow: 0 0 2px rgba(30,140,190,.8);
+    }
+
 
 
 /*
@@ -79,20 +98,25 @@
 /*
  * "Lost password" dialog
  */
-    .login #nav { 
-    	text-shadow: none; 
-    } 
-    .login #nav a { 
-    	text-decoration: none; 
-    	color: #444545 !important; 
-    	padding: auto 1px auto 1px; 
+    .login #nav {
     	text-shadow: none;
     }
-    .login #nav a:hover { 
-    	color: #DB8F39 !important; 
-    	font-weight: bold; 
-    	text-shadow: none; 
-    }    
+    .login #nav a {
+    	text-decoration: none;
+    	color: #444545 !important;
+    	padding: auto 1px auto 1px;
+    	text-shadow: none;
+    }
+    .login #nav a:hover {
+    	color: #DB8F39 !important;
+    	font-weight: bold;
+    	text-shadow: none;
+    }
+    .login #login_error {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
 
 
 /*
@@ -102,4 +126,10 @@
     	display: none;
     }
 
+/*
+ * Animations
+ */
+    #wp-submit {
+        transition: background-color 0.4s, color 0.4s;
+    }
 
