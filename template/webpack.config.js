@@ -3,5 +3,10 @@ module.exports = {
   output: {
     path: './static',
     filename: 'bundle.js'
+  },
+  module: {
+    loaders: [
+      { test: /\.css$/, loader: "style!css" }
+    ]
   }
 }
