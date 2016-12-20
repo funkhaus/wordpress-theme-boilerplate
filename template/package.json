@@ -1,0 +1,14 @@
+{
+  "name": "funkhaus-webpack-template",
+  "version": "1.0.0",
+  "description": "A template for all Funkhaus webpack-based sites.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --progress --colors --watch"
+  },
+  "author": "Drew Baker, John Robson, Sander Moolin, Funkhaus",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^1.14.0"
+  }
+}

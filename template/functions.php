@@ -53,26 +53,8 @@
  * Enqueue Custom Scripts
  */
     function custom_scripts() {
-        //wp_register_script('site', get_template_directory_uri() . '/js/site.js', 'jquery', '1.0');
-        //wp_register_script('cycle2', get_template_directory_uri() . '/js/jquery.cycle2.min.js', 'jquery', '2.1.5');
-        //wp_register_script('fitVids', get_template_directory_uri() . '/js/jquery.fitvids.js', 'jquery', '1.1');
-		//wp_register_script('gallery', get_template_directory_uri() . '/js/gallery2012.js', 'jquery', '1.0');
-		//wp_register_script('masonry', get_template_directory_uri() . '/js/jquery.masonry.min.js', 'jquery', '1.0');
-		//wp_register_script('carouFredSel', get_template_directory_uri() . '/js/jquery.carouFredSel-6.2.1-packed.js', 'jquery', '1.0');
-		//wp_register_script('vimeo-api', 'http://a.vimeocdn.com/js/froogaloop2.min.js', 'jquery', '1.0');
-        //wp_register_script('vimeoplayer', get_template_directory_uri() . '/js/vimeoplayer2013.js', 'jquery', '1.0');
-        //wp_register_script('infinitescroll', get_template_directory_uri() . '/js/jquery.infinitescroll.min.js', 'jquery', '1.0');
-
-        //wp_enqueue_script('jquery');
-        //wp_enqueue_script('carouFredSel', 'jquery');
-        //wp_enqueue_script('masonry', 'jquery');
-        //wp_enqueue_script('cycle2', 'jquery');
-        //wp_enqueue_script('fitVids');
-        //wp_enqueue_script('infinitescroll', 'jquery');
-        //wp_enqueue_script('vimeo-api', 'jquery');
-        //wp_enqueue_script('vimeoplayer', 'jquery');
-        //wp_enqueue_script('gallery', 'jquery');
-        //wp_enqueue_script('site', 'jquery');
+			wp_register_script('bundle', get_template_directory_uri() . '/static/bundle.js', array(), '1.0');
+			wp_enqueue_script('bundle');
 
         // Setup JS variables in scripts
 		/*
@@ -613,4 +595,3 @@
 
     }
     add_action('save_post', 'custom_save_metabox');
-
