@@ -507,6 +507,7 @@
 
 		// add_meta_box('custom_media_meta', 'Media Meta', 'custom_media_meta', 'page', 'normal', 'low');
 		// add_meta_box('custom_second_featured_image', 'Second Featured Image', 'custom_second_featured_image', 'page', 'side', 'low');
+		// add_meta_box('custom_image_alignment', 'Post Meta', 'custom_image_alignment', 'post', 'normal', 'low');
 
     }
 	add_action('add_meta_boxes', 'custom_add_metaboxes', 10, 2);
@@ -595,6 +596,40 @@
 
 
 /*
+ * Custom background image alignment
+ */
+	function custom_image_alignment($post){
+			// Get image alginment defaults
+			$alignment = $post->_featured_alignment;
+			if( empty($alignment) ) {
+				$alignment = 'center center';
+			}
+		?>
+			<div class="custom-meta">
+
+				<label for="featured-image-alignment">Featured image alignment:</label>
+				<select name="_featured_alignment">
+					<option value="top left" <?php selected($alignment, 'top left'); ?>>Top left</option>
+					<option value="top center" <?php selected($alignment, 'top center'); ?>>Top center</option>
+					<option value="top right" <?php selected($alignment, 'top right'); ?>>Top right</option>
+
+					<option value="center left" <?php selected($alignment, 'center left'); ?>>Center left</option>
+					<option value="center center" <?php selected($alignment, 'center center'); ?>>Center center</option>
+					<option value="center right" <?php selected($alignment, 'center right'); ?>>Center right</option>
+
+					<option value="bottom left" <?php selected($alignment, 'bottom left'); ?>>Bottom left</option>
+					<option value="bottom center" <?php selected($alignment, 'bottom center'); ?>>Bottom center</option>
+					<option value="bottom right" <?php selected($alignment, 'bottom right'); ?>>Bottom right</option>
+				</select>
+				<br>
+
+			</div>
+
+		<?php
+	}
+
+
+/*
  * Save the metabox vaule
  */
     function custom_save_metabox($post_id){
@@ -610,7 +645,9 @@
         if( isset($_POST['_second_post_thumbnail']) ) {
 	        //update_post_meta($post_id, '_second_post_thumbnail', $_POST['_second_post_thumbnail']);
         }
+		if( isset($_POST["_featured_alignment"]) ) {
+			//update_post_meta($post_id, "_featured_alignment", $_POST["_featured_alignment"]);
+		}
 
     }
     add_action('save_post', 'custom_save_metabox');
-
