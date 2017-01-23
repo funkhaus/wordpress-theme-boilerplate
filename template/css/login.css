@@ -37,7 +37,7 @@
  * Login Banner Image
  */
     #login h1 a {
-    	background-image: url(../images/backend/login-banner.png) no-repeat 9px 0;
+    	background-image: url(../images/backend/login-banner.png);
     	background-position: center;
     	background-size: contain;
     	margin: 0;
