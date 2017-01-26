@@ -1,8 +1,7 @@
 /*
  * Style Dashboard
- * By Drew Baker - 2011
- * drew@funkhuasdesign.com
- *
+ * By Funkhaus, Drew Baker - 2017
+ * funkhuas.us
  */
 
 /*
@@ -27,8 +26,8 @@
         display: inline-block;
         text-align: right;
     }
-    .custom-meta input {
-        width: 500px;
+    .custom-meta input[type="text"] {
+        width: calc(100% - 300px);
         height: 25px;
         vertical-align: middle;
     }
@@ -37,11 +36,9 @@
     }
     .custom-meta input[type="checkbox"],
     .custom-meta input[type="radio"] {
-        height: auto;
-        width: auto;
-        display: inline-block;
-        vertical-align: baseline;
+        margin-left: 1px;
     }
+
     /* Image Uploader */
     .custom-meta .custom-image-container img {
         width: 100%;
@@ -51,13 +48,12 @@
         margin-bottom: 1px;
     }
 
+/*
+ * Turn off menus
+*/
     #menu-comments {
         display: none;
     }
-
-/*
- * Turn off menus
- */
 /*
     #menu-posts {
         display: none;
