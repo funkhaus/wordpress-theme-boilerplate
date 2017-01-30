@@ -47,6 +47,16 @@ ___
 
 Below are some general guidelines to follow while you get started:
 
+### Installation
+
+1. Download this repo and paste in the `wp-content/themes` directory on your local setup. (Recommended: [Local by Flywheel](https://local.getflywheel.com/))
+1. Rename the `wp-content/themes/template` folder to the name of the theme (see [Theme Setup](#theme-setup)).
+1. Use Terminal to navigate to the `src` directory of your theme.
+1. `npm run initial` to install dependencies.
+1. `npm run dev` to build your file and watch for changes.
+
+That's it! You'll develop using the `src/index.js` and `src/style.css` files as entry points, and every time you make a change, the code will recompile to `js/bundle.js`. The CSS is included in this bundled file.
+
 ### Theme Setup
 
 The theme directory name should be something short and indicative of the client's name, with the year the theme was built. For example, `bmw2015`, or `prettybird2015`. We do it this way so we can quickly tell how old a code base is, and easily build a new theme years later, and not worry about local caching of files.
@@ -63,7 +73,15 @@ clientname2015
 		admin.css
 		login.css
 	/js
-		clientname2015.js
+		bundle.js
+    /src
+        /lib
+            [commonly-used functions like initSvg here]
+        .eslintrc.json [eslint config file]
+        index.js [entry point JS]
+        package.json
+        style.css [entry point CSS]
+        webpack.config.json [webpack config file]
 	style.css
 	index.php
 	header.php
@@ -127,10 +145,10 @@ var client2015 = {
 		client2015.thirdFunction();
     },
     firstFunction: function(){
-		
+
     },
 	secondFunction: function(){
-		
+
     },
 	thirdFunction: function(){
 
@@ -147,12 +165,12 @@ var client2015 = {
 	homeURL: client2015_vars.homeURL,
 	themeURL: client2015_vars.themeURL,
 	winHeight: null,
-	winwidth: null,	
+	winwidth: null,
     init: function() {
 		// Size things
 		client2015.setWinSize();
     },
-    
+
     setWinSize: function({
 	    // Set window size
 	    client2015.winHeight = jQuery(window).height();
@@ -202,7 +220,7 @@ In general when a site is finished the stylesheet should be between 800 and 1500
 
 We like to use a semantic approach to CSS up to a certain point. The idea is for you to be able to read the CSS and get some idea of what the HTML would look like. In most cases we avoid making extremely general classes, doing things like `.three-col`, `.blue_font`, or `.largeText` is bad. We'd rather things be intuitive and easy to read when going through the stylesheet.
 
-Here are some base style names we commonly use: 
+Here are some base style names we commonly use:
 * `.block`
 * `.section`
 * `.grid`
@@ -231,10 +249,10 @@ We use variations of these to describe different parts of the site (i.e. `.direc
 
 /* Bad */
 .uppercase {
-	text-transform: uppercase;	
+	text-transform: uppercase;
 }
 .red {
-	color: red;	
+	color: red;
 }
 .center-align {
 	text-align: center;
@@ -243,13 +261,13 @@ We use variations of these to describe different parts of the site (i.e. `.direc
 	margin-bottom: 10px;
 }
 .column_1 {
-	
+
 }
 .priority-2 {
-	
+
 }
 .largeText {
-	
+
 }
 ```
 
@@ -537,7 +555,7 @@ All CSS should have 4-space tabs and everything should be on new lines. Whenever
 
 /*
  * Another section heading
- */	
+ */
 	.another-class-name {
 		font-size: 100%;
 		text-transform: uppercase;
@@ -557,16 +575,16 @@ var $svgs = jQuery('img.svg');
 
 // Convert linked SVG to embedded SVG's
 $svgs.each(function(){
-	
+
 	// Cache things
     var $img = jQuery(this);
     var imgID = $img.attr('id');
     var imgClass = $img.attr('class');
     var imgURL = $img.attr('src');
-	
+
 	// Get SVG XML from the server
     jQuery.get(imgURL, function(data) {
-			        
+
         // Get the SVG tag, ignore the rest
         var $svg = jQuery(data).find('svg');
 
@@ -604,7 +622,7 @@ $svgs.each(function(){
 	    	'order'            => 'ASC'
 	    );
 	    $posts = get_posts($args);		
-	?>	
+	?>
 	<?php foreach($posts as $post) : setup_postdata($post); ?>
 		<p>
 			Four space tabs, opening and closing tags (including <?php ?>) on new lines.
@@ -650,7 +668,7 @@ if( $foo ) {
 // This is bad
 if($foo) return true;
 
-if($foo) 
+if($foo)
 	return true;
 ```
 
@@ -675,27 +693,27 @@ And here is that same code, but in a way more readable format and debuggable for
 // This is a correct example of the above code
 <?php
 	foreach ( $images as $image ) {
-		
+
 		// Set vars
 		$count++;
 		$class = 'thumb';
-		
-		// Skip if only child	
+
+		// Skip if only child
 		if ( $total === 1 ) {
-			continue; 
+			continue;
 		}
-		
+
 		// If on the first item, set class
 		if ( $count == 1 ) {
 			$class = 'active';
-		} 
-		
+		}
+
 		// Set args
-		$args = array( 
+		$args = array(
 			'class' 		=> $class,
-			'data-image-id' => $image->ID 
+			'data-image-id' => $image->ID
 		);
-		
+
 		// Show image
 		echo wp_get_attachment_image($image->ID, 'store-gallery-thumb', false, $args);
 
@@ -743,7 +761,7 @@ First you include an SVG as an IMG tag:
 Then you'd place this code in your JS file. It's easy to modify this to work with a callback, once all SVG's are replaced.
 
 ```javascript
-// Set total and counter 
+// Set total and counter
 var $svgs = jQuery('img.svg');
 
 // Convert linked SVG to embedded SVG's
@@ -754,7 +772,7 @@ $svgs.each(function(){
     var imgURL = $img.attr('src');
 
     jQuery.get(imgURL, function(data) {
-			        
+
         // Get the SVG tag, ignore the rest
         var $svg = jQuery(data).find('svg');
 
@@ -778,11 +796,11 @@ $svgs.each(function(){
 
 ```
 
-Sometimes you'll want to add SVG to content that has been enetered in the by the user. A common example is for an email icon next to an person's name, or a map pin icon next to a link to an address. This can be done like below 
+Sometimes you'll want to add SVG to content that has been enetered in the by the user. A common example is for an email icon next to an person's name, or a map pin icon next to a link to an address. This can be done like below
 
 ```javascript
 if( jQuery('#content').hasClass('contact') ) {
-    
+
     // Load email icons
     jQuery('a.email').each(function(){
         jQuery(this).prepend('<img class="svg" src="'+prettybird2015.themeURL+'/images/icon-email.svg" /> ');
@@ -823,12 +841,12 @@ All mobile-related CSS should be included in the [mobile.css](template/css/mobil
 ```css
  /* Smaller than an iPad portrait (so all phones) */
 @media (max-width: 767px) {
-    
+
 }
 
 /* Up to a tablet (includes iPads in landscape) */
 @media (min-width: 768px) and (max-width: 1024px) {
-    
+
 }
 
 /* Larger than a tablet, but smaller than a big screen (basicaly this is a MacBook Air) */
@@ -933,7 +951,7 @@ The stylesheet should normally be added in header.php like so:
 <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>?v1.0" />
 ```
 
-Each js script should be properly enqueued using `wp_enqueue_scripts`. For example, in functions.php you'd do something like this: 
+Each js script should be properly enqueued using `wp_enqueue_scripts`. For example, in functions.php you'd do something like this:
 
 ```php
 function custom_scripts() {
@@ -947,7 +965,7 @@ function custom_scripts() {
 	wp_enqueue_script('prettybird2015');
 
 	// Setup JS variables in scripts. This can be used to pass in data from PHP to JavaScript. It is not always needed.
-	wp_localize_script('prettybird2015', 'prettybird2015_vars', 
+	wp_localize_script('prettybird2015', 'prettybird2015_vars',
 		array(
 			'themeURL' => get_template_directory_uri(),
 			'homeURL'  => home_url()
@@ -959,7 +977,7 @@ add_action('wp_enqueue_scripts', 'custom_scripts', 10);
 
 Some additional notes:
 
-* Be sure to set version numbers and dependencies. 
+* Be sure to set version numbers and dependencies.
 * Each `wp_register_script` and `wp_enqueue_script` should be on a new line.
 * Avoid using any 3rd part CDNs unless it's a major web project (like Vimeo or Goggle Maps.)
 * Be sure to check what scripts ship with WordPress (Masonry and jQuery are good examples).
@@ -991,7 +1009,7 @@ We try to use WordPress Menu's where possible. We only use generated menus based
     	  'main_menu' => 'Main Menu',
     	)
 	);
-	
+
 	// Then display them like so (in header.php generally):
 	$args = array(
 	    'container'         => 'false',
@@ -1006,7 +1024,7 @@ ___
 
 ### Metaboxes
 
-The most common thing you'll generally need is to save a video URL (usually Vimeo) to a page. THe best way to do that is via a custom field metabox. THe below code shows how to build a basic one, and then save the value. 
+The most common thing you'll generally need is to save a video URL (usually Vimeo) to a page. THe best way to do that is via a custom field metabox. THe below code shows how to build a basic one, and then save the value.
 
 ```php
 /*
@@ -1019,7 +1037,7 @@ The most common thing you'll generally need is to save a video URL (usually Vime
         add_meta_box("custom_media_meta", "Media Meta", "custom_media_meta", "page", "normal", "low");     
     }
 	add_action("add_meta_boxes", "custom2015_add_metaboxes");    
-	
+
     // Build media metabox
     function custom_media_meta() {
         global $post;
@@ -1034,7 +1052,7 @@ The most common thing you'll generally need is to save a video URL (usually Vime
 
         <?php
     }
-    
+
 
 /*
  * Save the metabox vaule
@@ -1052,7 +1070,7 @@ The most common thing you'll generally need is to save a video URL (usually Vime
 
     }
     add_action('save_post', 'custom2015_save_metabox');
-    
+
 ```
 
 Sometimes you'll see examples on the internet which save mutlple vlaues in one key. This should eb avoided, as it becomes very hard to query for that parameter. For example:
@@ -1063,7 +1081,7 @@ Sometimes you'll see examples on the internet which save mutlple vlaues in one k
 	<label for="video-url">Enter the video URL for this page:</label>            
 	<input id="video-url" class="short" title="This is needed for all video pages" name="_custom_video[url]" type="text" value="<?php echo $post->_custom_video['url']; ?>">
 	<br/>			
-	
+
 	<label for="video-credit">Enter credit information for this page:</label>            
 	<input id="video-credit" class="short" title="This is needed for all video pages" name="_custom_video[credit]" type="text" value="<?php echo $post->_custom_video['credit']; ?>">
 	<br/>					
@@ -1109,7 +1127,7 @@ Often you'll need to do a secondary loop (eg. when displaying a grid of pages). 
     $posts = get_posts($args);
 ?>
 <?php foreach($posts as $post) : setup_postdata($post); ?>
-  
+
 	<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		Content in here
 	</div>
@@ -1133,7 +1151,7 @@ Sometimes you'll need to use WP_Query if you need pagination on a loop (with cus
 		'paged'				=> max( 1, get_query_var('paged') )
 	);
 	$episodes_query = new WP_Query($args);
-?>	
+?>
 <?php if( $episodes_query->have_posts() ) : ?>
 	<div id="content" class="episodes-grid">
 
@@ -1144,7 +1162,7 @@ Sometimes you'll need to use WP_Query if you need pagination on a loop (with cus
 			</div>
 
 		<?php endwhile; ?>
-	
+
 	</div>
 
 	<?php build_pagination_links($episodes_query); ?>
@@ -1166,13 +1184,13 @@ Then in functions.php you'd define the `build_pagination_links` like this:
 		if( empty($wp_query) ) {
 			global $wp_query;
 		}
-		
+
 		?>
 			<div class="pagination-links">
 				<?php
 					// Setup vars used as per Codex
 					$big = 999999999; // need an unlikely integer
-				
+
 					$args = array(
 						'base' 		=> str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
 						'format' 	=> '?paged=%#%',
@@ -1229,7 +1247,7 @@ Using the method discribed in the "Template Routing" section above, you put the 
         $sections = get_posts( $args );
 
 		// loop through each section
-		foreach( $sections as $post ) { 
+		foreach( $sections as $post ) {
 
 			// Setup post data for each section
 			setup_postdata($post);
@@ -1274,7 +1292,7 @@ ___
 
 ### Admin & Login Pages
 
-For every site we build, the Wordpress login page gets styled to match the front-end. This is a very simple process, and is partially built into the template. Once the template theme is installed you'll notice that the login page changes to a blank white page with no Wordpress logo and a greenish login button. 
+For every site we build, the Wordpress login page gets styled to match the front-end. This is a very simple process, and is partially built into the template. Once the template theme is installed you'll notice that the login page changes to a blank white page with no Wordpress logo and a greenish login button.
 
 To customize this, just open the [login.css](/template/css/login.css) file within the /css folder in the template. This is where all of the login page styling is done. Near the top of the file you'll see this style being applied:
 
@@ -1282,9 +1300,9 @@ To customize this, just open the [login.css](/template/css/login.css) file withi
 /*
  * Login Banner Image
  */
-    #login h1 a { 
+    #login h1 a {
     	background: url(../images/backend/login-banner.png) no-repeat 9px 0;
-    	margin: 0; 
+    	margin: 0;
     	background-size: auto;
     	width: auto;
     }
@@ -1312,7 +1330,7 @@ There is also an example of using the manual [Froogaloop2 method here](http://la
 When attempting to display a Vimeo video, you'll generally be using a URL from a saved metabox. You should use the [wp_oembed_get](http://codex.wordpress.org/Function_Reference/wp_oembed_get) function to do this, like so:
 
 ```
-	<?php 
+	<?php
 		// Show Vimeo video
 		$args = array(
 			'width' => 1280
@@ -1342,7 +1360,7 @@ Using galleries effectively in WordPress requires the following in your function
   	return $output;
    }
   add_shortcode('gallery', 'custom_gallery');
-```	
+```
 
 And then in `part-gallery.php` you'd have code that looks something like this:
 
@@ -1353,13 +1371,13 @@ And then in `part-gallery.php` you'd have code that looks something like this:
 	 * Build out gallery
 	 */
 		global $post;
-		
+
 		// This turns the atts into $vars
 		extract(shortcode_atts(array(
 			'order'   => 'ASC',
 			'ids'     => '',
 		), $atts));
-		
+
 		// Set default gallery args
 		$args = array(
 			'post_type'       => 'attachment',
@@ -1371,23 +1389,23 @@ And then in `part-gallery.php` you'd have code that looks something like this:
 			'post_parent'     => $post->post_parent,
 			'post__in'        => null
 	    );
-		
+
 		// Should we get all images attached to the page, or just those specified?
 	    if( !empty($ids) ) {
 		    $args['post__in'] 		= explode(',', $ids);
 		    $args['post_parent'] 	= null;
 		    $args['orderby'] 		= 'post__in';
 	    }
-	
+
 		// Get images
 		$attachments = get_posts($args);
-		$total = count($attachments);	
-	
+		$total = count($attachments);
+
 	    // Return false if no images attached
 	    if($total == 0) {
 	        return false;
 	    }
-	    
+
 		// Start building the output. Use output buffering for speed!
 		ob_start();
 ?>
@@ -1398,7 +1416,7 @@ And then in `part-gallery.php` you'd have code that looks something like this:
 			<div class="browse prev">
 				<img src="<?php echo get_template_directory_uri(); ?>/images/arrow-left.svg" class="svg arrow arrow-left" />
 			</div>
-			
+
 			<div class="browse next">
 				<img src="<?php echo get_template_directory_uri(); ?>/images/arrow-right.svg" class="svg arrow arrow-right" />
 			</div>
@@ -1406,16 +1424,16 @@ And then in `part-gallery.php` you'd have code that looks something like this:
 
 		<?php foreach ($attachments as $attachment) : ?>
 
-		    <?php 
+		    <?php
 		        // Get image background URL
 		        $attachmentData = wp_get_attachment_image_src( $attachment->ID, 'gallery-stage');
 		        $imageURL = $attachmentData[0];
 		    ?>
-			
+
             <div class="gallery-item gallery-image cover" style="background-image: url('<?php echo $imageURL; ?>');">
-            
+
 				<?php echo wp_get_attachment_image( $attachment->ID, 'gallery-stage'); ?>
-				
+
 				<div class="caption">
 					<?php echo $attachment->post_excerpt; ?>
 				</div>
@@ -1448,7 +1466,7 @@ Single slideshows are those that scroll only one element at a time. The most com
 		<div class="slide"></div>
 	</div>
 	```
-	
+
 	__CSS:__
 	```css
 		.slideshow {
@@ -1459,7 +1477,7 @@ Single slideshows are those that scroll only one element at a time. The most com
 			float: left;
 		}
 	```
-	
+
 	__Javascript:__
 	```javascript
 	jQuery('.slideshow').cycle({
@@ -1468,13 +1486,13 @@ Single slideshows are those that scroll only one element at a time. The most com
 		speed: 1000
 	});
 	```
-	
+
 	To make the slideshow fullscreen, you would need to manually size the height within your resize handler:
 	```javascript
 	jQuery(window).resize(function(){
-	
+
 		jQuery('.slideshow').height( jQuery(window).height() );
-	
+
 	});
 	```
 
@@ -1486,7 +1504,7 @@ Multiple slideshows are those that scroll several elements at a time. The most c
 	__Markup:__
 	```html
 	<div class="video-thumb-tray">
-	
+
 		<div class="slider">
 			<a class="video-thumb" href="#linkToSpot">
 				<img src="#thumbnail" class="thumbnail" />
@@ -1498,10 +1516,10 @@ Multiple slideshows are those that scroll several elements at a time. The most c
 				<img src="#thumbnail" class="thumbnail" />
 			</a>
 		</div>
-	
+
 	</div>
 	```
-	
+
 	__CSS:__
 	```css
 		.video-thumb-tray {
@@ -1517,11 +1535,11 @@ Multiple slideshows are those that scroll several elements at a time. The most c
 			float: left;
 		}
 	```
-	
+
 	__Javascript:__
 	```javascript
 	if ( jQuery('.video-thumb-tray').length ) {
-	
+
 		jQuery('.slider').carouFredSel({
 			circular: false,
 			infinite: false,
@@ -1549,10 +1567,10 @@ Multiple slideshows are those that scroll several elements at a time. The most c
 				items: 1
 			}
 		});
-	
+
 	}
 	```
-	
+
 	You can check out the full documentation for carouFredSel [here](http://docs.dev7studios.com/jquery-plugins/caroufredsel).
 
 ___
@@ -1589,24 +1607,24 @@ So your HTML in the content editor might look like this:
 		+12 345 678 9101
 	</li>
 	<li>
-		<a class="email" href="mailto:example@funkhaus.us">Drew Baker</a>	
+		<a class="email" href="mailto:example@funkhaus.us">Drew Baker</a>
 		<span class="job">Managing Director</span>
 
-		<a class="email" href="mailto:example@funkhaus.us">Kim Darwin</a>	
+		<a class="email" href="mailto:example@funkhaus.us">Kim Darwin</a>
 		<span class="job">Business Affairs Manager</span>
 	</li>
 	<li>
-		<a class="email" href="mailto:example@funkhaus.us">George Meeker</a>	
+		<a class="email" href="mailto:example@funkhaus.us">George Meeker</a>
 		<span class="job">Executive Producer / Partner</span>
 
-		<a class="email" href="mailto:example@funkhaus.us">Sharon Morov</a>	
+		<a class="email" href="mailto:example@funkhaus.us">Sharon Morov</a>
 		<span class="job">Bidding Producer</span>
 	</li>
 	<li>
-		<a class="email" href="mailto:example@funkhaus.us">Tara Riddell</a>	
+		<a class="email" href="mailto:example@funkhaus.us">Tara Riddell</a>
 		<span class="job">Executive Producer<br>
 		Australia</span>
-		
+
 		<a class="email" href="mailto:example@funkhaus.us">Alex Johnson</a>
 		<span class="job">Staff Coordinator</span>		
 	</li>
@@ -1625,13 +1643,13 @@ When use the UL/LI approach, it's very important to disable the rich editor in W
  */
     function disabled_rich_editor($allow_rich_editor) {
 	    global $post;
-		
+
 		// Disable rich editor on contact page
 	    if($post->post_name == 'contact') {
 		    return false;		    
 	    }
 	    return $allow_rich_editor;
-    }	
+    }
     add_filter('user_can_richedit', 'disabled_rich_editor');
 ```
 
@@ -1688,7 +1706,7 @@ If a user clicks into post #1 and then clicks a link to go back to the main inde
 			session_start();       
 		}
 	}
-	add_action('init', 'start_session', 1);	
+	add_action('init', 'start_session', 1);
 
 	// Update Cookie trail whenever viewing archive page
 	function update_cookie_trail() {
@@ -1727,8 +1745,8 @@ Here are some general steps to get you started, these examples are done using th
 function get_geoip_region() {
 
 	// This is the IP database, get country by IP
-	include("GeoIP/geoip.inc");	
-	$ip = $_SERVER['REMOTE_ADDR'];	
+	include("GeoIP/geoip.inc");
+	$ip = $_SERVER['REMOTE_ADDR'];
 
 	$db = geoip_open( get_template_directory() . "/GeoIP/GeoIP-VERSION.dat", GEOIP_STANDARD );
 	$country_code = strtolower( geoip_country_code_by_addr($db, $ip) );
@@ -1736,7 +1754,7 @@ function get_geoip_region() {
 
 	// Include country arrays
 	include("functions/country-codes.php");
-	
+
 	// Uppercase code
 	$country_code = strtoupper($country_code);
 
@@ -1747,7 +1765,7 @@ function get_geoip_region() {
 	} elseif( in_array( $country_code, $asia) ) {
 		// User is in Asia
 		$region = 'asia';
-		
+
 	} else {
 		// User is anywhere else, assume USA
 		$region = 'usa';
@@ -1813,7 +1831,7 @@ The basic checklist is designed so that a non-tech person could do them. At Funk
 
 #### Does it pass validation?
 
-Run the major parts of the site through the validator at https://validator.w3.org/nu/. 
+Run the major parts of the site through the validator at https://validator.w3.org/nu/.
 
 It's fine to get non-critical errors/warnings like `An img element must have an alt attribute, except under certain conditions.` or the ones thrown by old attributes on the default Vimeo iframe embeds, like `The frameborder attribute on the iframe element is obsolete`. Another common one is it complaining about `&` symbols in Google Map URLs, those are fine to ignore. But anything else should be fixed, especially `Stray end tag` errors.
 

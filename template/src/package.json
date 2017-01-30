@@ -4,15 +4,18 @@
   "description": "A template for all Funkhaus webpack-based sites.",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --progress --colors --watch"
+    "initial": "NODE_PATH=. npm install && npm install --only=dev",
+    "dev": "NODE_PATH=. webpack --progress --colors --watch"
   },
   "author": "Drew Baker, John Robson, Sander Moolin, Funkhaus",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.21.0",
+    "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.10",
     "babel-preset-es2015": "^6.18.0",
     "css-loader": "^0.26.1",
+    "eslint": "^3.14.1",
     "style-loader": "^0.13.1",
     "webpack": "^1.14.0"
   },

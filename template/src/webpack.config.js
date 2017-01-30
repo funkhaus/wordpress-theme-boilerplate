@@ -1,18 +1,18 @@
 var webpack = require('webpack')
 var path = require('path')
-var resolve = file => path.resolve(__dirname, file)
 
 var config = {
-    entry: './src/entry',
+    entry: './index',
     output: {
-        path: './static',
+        path: '../js',
         filename: 'bundle.js'
     },
+
     module: {
         loaders: [
             {
                 test: /\.css$/,
-                loader: "style!css"
+                loader: 'style!css'
             }, {
                 test: /\.js$/,
                 exclude: /(node_modules|bower_components)/,
@@ -58,4 +58,4 @@ if (process.env.NODE_ENV === 'production') {
 
 }
 
-module.exports = config;
+module.exports = config

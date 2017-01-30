@@ -53,7 +53,7 @@
  * Enqueue Custom Scripts
  */
     function custom_scripts() {
-			wp_register_script('bundle', get_template_directory_uri() . '/static/bundle.js', array(), '1.0');
+			wp_register_script('bundle', get_template_directory_uri() . '/js/bundle.js', array(), '1.0');
 			wp_enqueue_script('bundle');
 
         // Setup JS variables in scripts

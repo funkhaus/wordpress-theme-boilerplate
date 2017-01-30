@@ -1,3 +1,2 @@
-index.php
-template/static
 *.log
+*.js.map
