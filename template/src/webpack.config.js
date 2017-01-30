@@ -4,7 +4,7 @@ var path = require('path')
 var config = {
     entry: './index',
     output: {
-        path: '../js',
+        path: '../static',
         filename: 'bundle.js'
     },
 
