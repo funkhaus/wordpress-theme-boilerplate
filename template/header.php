@@ -9,7 +9,8 @@
     <?php endif; ?>
 
     <link rel="profile" href="http://gmpg.org/xfn/11" />
-    <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>?ver=1.0" />
+    <link rel="stylesheet" type="text/css" media="all" href="<?php echo get_template_directory_uri(); ?>/static/bundle.css?ver=1.0" />
+    <!-- <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>?ver=1.0" /> -->
     <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
     <link rel="shortcut icon" href="<?php echo get_template_directory_uri(); ?>/images/favicon.png" />
     <link rel="apple-touch-icon" href="<?php echo get_template_directory_uri(); ?>/images/icon-touch.png"/>
@@ -42,7 +43,7 @@
 	        ?>
 
 	        <a id="logo" href="<?php bloginfo('url'); ?>">
-	            <img class="svg " src="<?php echo get_template_directory_uri(); ?>/images/logo.svg" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">
+	            <img class="svg " src="<?php echo get_template_directory_uri(); ?>/static/images/logo.svg" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">
 	        </a>
 
 	        <?php get_template_part('parts/breadcrumb'); ?>

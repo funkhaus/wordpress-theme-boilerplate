@@ -53,8 +53,10 @@
  * Enqueue Custom Scripts
  */
     function custom_scripts() {
-			wp_register_script('bundle', get_template_directory_uri() . '/js/bundle.js', array(), '1.0');
+			wp_register_script('bundle', get_template_directory_uri() . '/static/bundle.js', array(), '1.0');
+			wp_register_script('site', get_template_directory_uri() . '/static/js/site.js', array(), '1.0');
 			wp_enqueue_script('bundle');
+			// wp_enqueue_script('site');
 
         // Setup JS variables in scripts
 		/*
@@ -69,20 +71,10 @@
 
 
 /*
- * Enqueue Custom Styles
- */
-    function custom_styles() {
-		//wp_register_style('site-breakpoints', get_template_directory_uri() . '/css/breakpoints.css');
-		//wp_enqueue_style('site-breakpoints');
-    }
-	add_action('wp_enqueue_scripts', 'custom_styles', 10);
-
-
-/*
  * Enqueue Custom Admin Scripts
  */
 	function custom_admin_scripts() {
-		//wp_register_script('site-admin', get_template_directory_uri() . '/js/admin.js', 'jquery', '1.0');
+		//wp_register_script('site-admin', get_template_directory_uri() . '/static/js/admin.js', 'jquery', '1.0');
 		//wp_enqueue_script('site-admin');
 	}
 	add_action( 'admin_enqueue_scripts', 'custom_admin_scripts' );

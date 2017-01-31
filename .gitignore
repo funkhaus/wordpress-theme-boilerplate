@@ -1,2 +1,4 @@
 *.log
 *.js.map
+*.css.map
+node_modules/
