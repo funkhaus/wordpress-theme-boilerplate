@@ -31,9 +31,6 @@
         height: 25px;
         vertical-align: middle;
     }
-    .custom-meta .short {
-        width: 200px;
-    }
     .custom-meta input[type="checkbox"],
     .custom-meta input[type="radio"] {
         margin-left: 1px;
