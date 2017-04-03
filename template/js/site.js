@@ -1,13 +1,10 @@
 var site = {
     //homeURL: siteVars.homeURL,
     //themeURL: siteVars.themeURL,
-    winHeight : 0,
-    winWidth : 0,
+    winHeight : jQuery(window).height(),
+    winWidth : jQuery(window).width(),
 
     init: function() {
-
-        site.winHeight = jQuery(window).height();
-        site.winWidth = jQuery(window).width();
 
         // SVG things
         //site.replaceSVGs();
