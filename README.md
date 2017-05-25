@@ -7,7 +7,6 @@ The purpose of this style guide is to provide guidance on building WordPress sit
 ## Table of Contents
 1. **Setting Up**
    - [Theme Setup](#theme-setup)
-   - [Store Considerations](#store-considerations)
    - [JavaScript Setup](#javascript-setup)
    - [CSS Setup](#css-setup)
    - [Markup Guidelines](#markup-guidelines)
@@ -66,6 +65,13 @@ clientname2015
 		login.css
 	/js
 		clientname2015.js
+        ...
+    /templates
+        work-grid.php
+        ...
+    /parts
+        work-block.php
+        ...
 	style.css
 	index.php
 	header.php
@@ -74,13 +80,14 @@ clientname2015
 
 #### File Naming
 
-Any components that will be used on multiple pages should be abstracted into a separate file prefixed with the word "part." Common examples might be:
-- `part-newsletter-signup.php`
-- `part-slideshow.php`
+All page template files should be located in the `/templates` directory. Common examples:
+- `templates/director-grid.php`
+- `templates/video-detail.php`
 
-All page template files should be prefixed with the word `template-`. Common examples:
-- `template-director-grid.php`
-- `template-video-detail.php`
+
+Any components that will be used on multiple pages should be abstracted into a separate file in the `/parts` directory. Common examples might be:
+- `parts/newsletter-signup.php`
+- `parts/slideshow.php`
 
 Icons and image assets should be named describing what they are, not what they represent:
 
@@ -96,26 +103,6 @@ Icons and image assets should be named describing what they are, not what they r
 
 ___
 
-### Store Considerations
-
-By default, the template contains extra boilerplate structure to account for Woocommerce pages and functionality. Every time a new site is started, make sure you determine whether or not the store/Woocommerce components will be needed. If you won't be needing them (most sites), follow these steps:
-
-1. Edit [functions.php](/template/functions.php) and remove these lines:
-```php
-/*
- * Check if functions-store file exists, if so include it
- */
-	if ( $store_funcs = locate_template('store/functions-store.php') ) {
-		include( $store_funcs );
-	}
-```
-2. Completely remove these two directories out of the template:
-
-	- [/store](/template/store)
-	- [/woocommerce](/template/woocommerce)
-
-___
-
 ### JavaScript Setup
 
 We put all the main JavaScript for the site in one file, named just like the theme: `bmw2015.js`, or `prettybrid2015.js`, etc.
@@ -125,7 +112,7 @@ To avoid any namespace issues and keep things simple, all the main logic of the 
 var client2015 = {
     init: function() {
         client2015.firstFunction();
-		client2015.secondFunction();
+        client2015.secondFunction();
 		client2015.thirdFunction();
     },
     firstFunction: function(){
@@ -138,6 +125,7 @@ var client2015 = {
 
     }
 };
+
 jQuery(document).ready(function($){
     client2015.init();
 });
@@ -146,28 +134,30 @@ jQuery(document).ready(function($){
 This also allows you to turn off entire sections of the code, or change the run order, which makes debugging easier. It has the added benefit of providing a clear way to safely set global values:
 ```javascript
 var client2015 = {
-	homeURL: client2015_vars.homeURL,
-	themeURL: client2015_vars.themeURL,
-	winHeight: null,
-	winwidth: null,
+    homeURL: client2015_vars.homeURL,
+    themeURL: client2015_vars.themeURL,
+    winHeight: null,
+    winwidth: null,
     init: function() {
-		// Size things
-		client2015.setWinSize();
+        // Size things
+        client2015.setWinSize();
     },
 
     setWinSize: function({
-	    // Set window size
-	    client2015.winHeight = jQuery(window).height();
-	    client2015.winWidth = jQuery(window).width();
+        // Set window size
+        client2015.winHeight = jQuery(window).height();
+        client2015.winWidth = jQuery(window).width();
     }
 };
+
 jQuery(document).ready(function($){
     client2015.init();
     jQuery(window).resize(function(){
-    	client2015.onResize();
+        client2015.onResize();
     });
 });
 ```
+
 In this example we're setting globals brought in from Wordpress (via [wp_localize_script](https://codex.wordpress.org/Function_Reference/wp_localize_script)) and setting them at the top. We're also setting the window dimensions globally every time the browser is resized. Be sure to set any global values at the top of the script in order to make it obvious that they exist.
 
 Have a look through the [main JS file](template/js/site.js) in the template for a more in-depth example of how this js structure can be expanded.
@@ -181,17 +171,17 @@ Class names should all be lower case, with hyphens as spaces. So use `work-grid`
 
 ID's should be used very sparingly, and the mostly for top level elements. Some acceptable examples are `#menu`, `#sidebar` or `#overlay`.
 
-When defining styles try to keep things as simple as possible. Overcomplicated css definitetions are [more taxing on the browser](https://developers.google.com/speed/docs/best-practices/rendering#UseEfficientCSSSelectors) and make it more difficult to fix problems down the road. So for example:
+When defining styles try to keep things as simple as possible. Overcomplicated css definitions are [more taxing on the browser](https://developers.google.com/speed/docs/best-practices/rendering#UseEfficientCSSSelectors) and make it more difficult to fix problems down the road. So for example:
 
 ```css
 /* This is good */
 .work-grid .title {
-	font-size: 120%;
+    font-size: 120%;
 }
 
 /* This is bad */
 #container #content.work-grid .block .title {
-	font-size: 120%;
+    font-size: 120%;
 }
 ```
 
@@ -205,18 +195,21 @@ In general when a site is finished the stylesheet should be between 800 and 1500
 We like to use a semantic approach to CSS up to a certain point. The idea is for you to be able to read the CSS and get some idea of what the HTML would look like. In most cases we avoid making extremely general classes, doing things like `.three-col`, `.blue_font`, or `.largeText` is bad. We'd rather things be intuitive and easy to read when going through the stylesheet.
 
 Here are some base style names we commonly use:
-* `.block`
 * `.section`
-* `.grid`
 * `.detail`
 * `.title`
 * `.credit`
 * `.meta`
 * `.browse`
 * `.component`
+* `.nav`
+
+And a structure that we commonly use:
+* `.wrap`, which might wrap a...
+* `.grid`, which might contain some...
+* `.block`
 
 We use variations of these to describe different parts of the site (i.e. `.director-grid` or `.director-detail`).
-
 
 ```css
 /* Good */
@@ -255,10 +248,12 @@ We use variations of these to describe different parts of the site (i.e. `.direc
 }
 ```
 
+#### Requirements
+
 There are a few class names that should *always* be used in certain situations:
 
 * `.entry`
-  - every time you use **the_content()** it should be wrapped in an element with this class.
+  - every time you use `the_content()` it should be wrapped in an element with this class.
 * `.grid` or `.grid-X` where **X** is the type of grid being used.
   - any time you are displaying a loop of posts or pages, wrap the loop in this class
 * `.block`
@@ -357,7 +352,7 @@ The overall page structure should be fairly minimal. Use a `#container` div to w
 ```html
 <html>
 <head>
-	<script/meta/link tags go here>
+	<!--<script/meta/link tags go here>-->
 </head>
 <body>
 	<div id="container">
@@ -385,38 +380,7 @@ The overall page structure should be fairly minimal. Use a `#container` div to w
 
 #### Sticky Footers
 
-It's very common for our sites to require a sticky footer (a footer that remains attached to the bottom of the document regardless of the content length.) Here is a basic template for achieving that, we do not include it in the template by default.
-
-__Markup:__
-```html
-<html>
-<body>
-	<div id="container">
-    	<div id="content"></div>
-	</div>
-	<div id="footer"></div>
-</body>
-</html>
-```
-
-__CSS:__
-```css
-html, body {
-	height: 100%;
-	padding: 0;
-	margin: 0;
-}
-#container {
-	min-height: 100%;
-}
-#content {
-	padding-bottom: 100px; /* height of footer */    
-}
-#footer {
-	margin-top: -100px; /* negative value of footer height */
-	height: 100px;
-}
-```
+It's very common for our sites to require a sticky footer (a footer that remains attached to the bottom of the document regardless of the content length.) [Here](https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/) is a basic template for achieving that using `display: flex`.
 
 ___
 
@@ -428,16 +392,17 @@ The most common Wordpress plugin to avoid is "Advanced Custom Fields." It's such
 
 Here's a list of common plugins that we *do* use:
 
-1. [Simple Page Ordering](https://wordpress.org/plugins/simple-page-ordering/)
+1. [Nested Pages](https://wordpress.org/plugins/wp-nested-pages/)
 1. [Cycle2](http://jquery.malsup.com/cycle2/api/) (Don't use HTML data attributes, use it as jQuery('.slides').cycle() )
-1. [CaroFredSel](http://docs.dev7studios.com/caroufredsel-old/) (Although Cycle2 is better in most circumstances)
-1. [Vimeo jQuery API](https://github.com/jrue/Vimeo-jQuery-API)
+1. [Vimeo API](https://github.com/vimeo/player.js)
 1. [FitVids](https://github.com/davatron5000/FitVids.js)
 1. [Velocity](http://julian.com/research/velocity/)
 
 ___
 
 ### Template Routing
+
+***TODO: Update with `get_conditional_state()` method***
 
 The way Funkhaus does template selection is a little different than most. Normally you'd rely on [custom page templates](https://codex.wordpress.org/Page_Templates#Custom_Page_Template), but that gets very repetitive for the user when building a page-heavy site.
 
