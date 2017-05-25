@@ -481,19 +481,33 @@
 
 
 /*
- * Split and wrap title
+ * Split title by given character. Wrap all split pieces or return specific zero-indexed values.
  */
-    function get_split_title($post = null) {
+    function get_split_title($post = null, $pieces = null) {
         $post = get_post($post);
 
         $title = get_the_title($post->ID);
         $lines = explode(' &#8211; ', $title);
         $output = false;
-        $count = 0;
 
-        foreach( $lines as $line ) {
-            $count++;
-            $output .= '<span class="line line-'.$count.'">'.$line.'</span> ';
+        if( $pieces === null ){
+            $count = 0;
+
+            foreach( $lines as $line ) {
+                $output .= '<span class="line line-' . ++$count . '">' . $line . '</span> ';
+            }
+
+        } elseif( is_numeric($pieces) ) {
+
+            $output = array_key_exists( $pieces, $lines ) ? $lines[$pieces] : false;
+
+        } elseif( is_array($pieces) ) {
+
+            $output = array();
+            foreach( $pieces as $piece ){
+                $output[] = array_key_exists( $piece, $lines ) ? $lines[$piece] : false;
+            }
+
         }
 
         return $output;
