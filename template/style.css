@@ -1,5 +1,5 @@
 /*
-Theme Name: Template 2016
+Theme Name: Template 2017
 Theme URI: http://funkhaus.us
 Description: A theme for WordPress.
 Author: Funkhaus
@@ -93,6 +93,15 @@ Colors:
     .fluid-width-image-wrapper img {
         height: auto;
         width: 100%;
+    }
+    /* Overlay */
+    .overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.4);
     }
 
 
