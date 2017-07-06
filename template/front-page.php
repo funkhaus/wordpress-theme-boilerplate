@@ -16,13 +16,7 @@
         <div class="slideshow">
 			<?php foreach($slides as $post) : setup_postdata($post); ?>
 	
-			    <?php 
-			        // Get image background form featured thumb
-			        $attachment_data = wp_get_attachment_image_src( get_post_thumbnail_id(), 'fullscreen');
-			        $image_url = $attachment_data[0];
-			    ?>
-				    
-				<div id="post-<?php the_ID(); ?>" <?php post_class('slide fullbleed'); ?> style="background-image: url(<?php echo $image_url; ?>);">   
+				<div id="post-<?php the_ID(); ?>" <?php post_class('slide fullbleed'); ?> style="background-image: url(<?php echo get_featured_image_url(); ?>);">
 
 	                <div class="entry">
 	                    <?php the_content(); ?>
