@@ -22,6 +22,7 @@
 		add_theme_support( 'post-thumbnails' );
 		//set_post_thumbnail_size( 600, 400, true ); // Normal post thumbnails
 		//add_image_size( 'banner-thumb', 566, 250, true ); // Small thumbnail size
+		add_image_size( 'fullscreen', 1920, 0, true );
 	    add_image_size( 'social-preview', 600, 315, true ); // Square thumbnail used by sharethis and facebook
 
 	    // Turn on menus
@@ -474,7 +475,7 @@
 /*
  * Return the URL to a given post's featured image, respecting size
  */
-    function get_featured_image_url($target_post = null, $size = 'post-thumbnail') {
+    function get_featured_image_url($target_post = null, $size = 'fullscreen') {
         $attachment_id = get_post_thumbnail_id($target_post);
         return get_custom_attachment_url($attachment_id, $size);
     }
