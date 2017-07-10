@@ -54,7 +54,7 @@
  * Enqueue Custom Scripts
  */
     function custom_scripts() {
-        //wp_register_script('site', get_template_directory_uri() . '/js/site.js', 'jquery', '1.0');
+        //wp_register_script('site', get_template_directory_uri() . '/js/site.js', 'jquery', custom_latest_timestamp());
         //wp_register_script('cycle2', get_template_directory_uri() . '/js/jquery.cycle2.min.js', 'jquery', '2.1.5');
         //wp_register_script('fitVids', get_template_directory_uri() . '/js/jquery.fitvids.js', 'jquery', '1.1');
 		//wp_register_script('gallery', get_template_directory_uri() . '/js/gallery2012.js', 'jquery', '1.0');
@@ -670,3 +670,19 @@
 
     }
     add_action('save_post', 'custom_save_metabox');
+
+    function custom_latest_timestamp() {
+        $time_stamps = array();
+        $base_path =  getcwd() . '/wp-content/themes/swell';
+        if (file_exists($base_path . '/js/site.js')) {
+            array_push($time_stamps, filemtime($base_path . '/js/site.js'));
+        }
+        if (file_exists($base_path . '/style.css')){
+            array_push($time_stamps, filemtime($base_path . '/style.css'));
+        }
+        if (file_exists($base_path . '/css/breakpoints.css')){
+            array_push($time_stamps, filemtime($base_path . '/css/breakpoints.css'));
+        }
+        rsort($time_stamps);
+        return $time_stamps[0];
+    }
