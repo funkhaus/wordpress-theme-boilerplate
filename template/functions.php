@@ -673,7 +673,7 @@
 
     function custom_latest_timestamp() {
         $time_stamps = array();
-        $base_path =  getcwd() . '/wp-content/themes/' .wp_get_theme()->get('Name');
+        $base_path =  dirname( __FILE__ );
         if (file_exists($base_path . '/js/site.js')) {
             array_push($time_stamps, filemtime($base_path . '/js/site.js'));
         }
