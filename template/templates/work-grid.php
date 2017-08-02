@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-    <div id="content" class="work-grid">
+    <main class="work-grid">
 
         <?php
             // Get all children of this page
@@ -28,6 +28,6 @@
 
         <?php endforeach; ?>
 
-    </div>
+    </main>
 
 <?php get_footer(); ?>

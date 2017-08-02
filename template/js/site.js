@@ -88,7 +88,7 @@ var site = {
 
     replaceSVGs: function(){
 
-        if( jQuery('#content').hasClass('contact') ) {
+        if( jQuery('main').hasClass('contact') ) {
 
             // Load email icons
             jQuery('a.email').each(function(){

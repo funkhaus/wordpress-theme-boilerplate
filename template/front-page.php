@@ -1,6 +1,6 @@
 <?php get_header(); ?>
-    
-    <div id="content" class="home">
+
+    <main class="home">
 
         <?php
             // Get all child pages of this page
@@ -15,19 +15,19 @@
         ?>
         <div class="slideshow">
 			<?php foreach($slides as $post) : setup_postdata($post); ?>
-	
+
 				<div id="post-<?php the_ID(); ?>" <?php post_class('slide fullbleed'); ?> style="background-image: url(<?php echo get_featured_image_url(); ?>);">
 
 	                <div class="entry">
 	                    <?php the_content(); ?>
 						<?php edit_post_link('+ Edit', '<p>', '</p>'); ?>
 	                </div>
-	                
+
 	        	</div>
-	        
+
 			<?php endforeach; ?>
 		</div>
-				
-    </div>
-        
+
+    </main>
+
 <?php get_footer(); ?>

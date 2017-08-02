@@ -180,7 +180,7 @@ When defining styles try to keep things as simple as possible. Overcomplicated c
 }
 
 /* This is bad */
-#container #content.work-grid .block .title {
+#container main.work-grid .block .title {
     font-size: 120%;
 }
 ```
@@ -258,9 +258,9 @@ There are a few class names that should *always* be used in certain situations:
   - any time you are displaying a loop of posts or pages, wrap the loop in this class
 * `.block`
   - Use this for individual elements within a grid.
-* `#content.template-name` where **template-name** describes what template is being used.
-  - Every template should have all the main content in a `#content` div
-  - Every `#content` div should have a class name like `.contact` or `.video-detail`, describing what page template is being used.
+* `main.template-name` where **template-name** describes what template is being used.
+  - Every template should have all the main content in a `main` div
+  - Every `main` div should have a class name like `.contact` or `.video-detail`, describing what page template is being used.
 
 #### Style Sheet Struture
 
@@ -288,7 +288,7 @@ This also applies to individual elements too, so when defining any elements try 
 **Example CSS**
 
 ```css
-#content.work-detail {
+main.work-detail {
 	margin: auto;
 	max-width: 1100px;
 }
@@ -748,7 +748,7 @@ $svgs.each(function(){
 Sometimes you'll want to add SVG to content that has been enetered in the by the user. A common example is for an email icon next to an person's name, or a map pin icon next to a link to an address. This can be done like below
 
 ```javascript
-if( jQuery('#content').hasClass('contact') ) {
+if( jQuery('main').hasClass('contact') ) {
 
     // Load email icons
     jQuery('a.email').each(function(){

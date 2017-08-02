@@ -3,7 +3,7 @@
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>" />
     <title><?php bloginfo('name'); ?><?php wp_title(); ?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <?php if( is_front_page() ) : ?>
         <meta name="description" content="<?php bloginfo('description'); ?>">
     <?php endif; ?>
@@ -26,7 +26,7 @@
 
 	<div id="container">
 
-	    <div id="header">
+	    <header>
 	    	<?php if ( is_front_page() ) : ?>
 	        	<div id="tagline" aria-hidden="true"><p><?php bloginfo('description'); ?></p></div>
 	        <?php endif;?>
@@ -47,4 +47,4 @@
 
 	        <?php get_template_part('parts/breadcrumb'); ?>
 
-	    </div>
+	    </header>
