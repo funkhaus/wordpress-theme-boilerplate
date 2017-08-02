@@ -75,13 +75,13 @@ Colors:
     #container {
 
     }
-    #header {
+    #container > header {
 
     }
-    #content {
+    main {
 
     }
-    #footer {
+    #container > footer {
 
     }
 

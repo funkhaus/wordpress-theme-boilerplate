@@ -48,5 +48,3 @@
 	        <?php get_template_part('parts/breadcrumb'); ?>
 
 	    </header>
-
-        <main role="main">

@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-    <div id="content" class="fallback">
+    <main class="fallback">
         <?php if (have_posts()) : ?>
         <?php while (have_posts()) : the_post(); ?>
 
@@ -15,6 +15,6 @@
 
         <?php endwhile; ?>
         <?php endif; ?>
-    </div>
+    </main>
 
 <?php get_footer(); ?>

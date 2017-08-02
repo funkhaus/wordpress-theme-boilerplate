@@ -1,5 +1,3 @@
-	</main>
-
 	</div><!-- End of #container -->
 
     <footer>
