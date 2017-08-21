@@ -1835,6 +1835,7 @@ A common issue we see is developers not understanding when to use a float and a 
 
 * [HTML and CSS Is Hard](https://internetingishard.com/html-and-css/) - tutorials from the ground up
 * [HTML Reference](http://htmlreference.io/) - reference guide (with examples!) for HTML elements
+* [Maintainable CSS](https://maintainablecss.com/chapters/introduction/) - Best practices for writing clean CSS
 
 ___
 
