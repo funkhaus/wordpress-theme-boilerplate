@@ -120,7 +120,7 @@ var site = {
                 // Wrap in appropriate divs
                 .wrap('<div class="fluid-width-image-wrapper" style="max-width: '+ maxWidth +'px;"><div class="responsive-container" style="' + style + '"></div></div>');
         });
-    },
+    }
 
 };
 jQuery(document).ready(function($){
