@@ -60,8 +60,7 @@
 		//wp_register_script('gallery', get_template_directory_uri() . '/js/gallery2012.js', 'jquery', '1.0');
 		//wp_register_script('masonry', get_template_directory_uri() . '/js/jquery.masonry.min.js', 'jquery', '1.0');
 		//wp_register_script('carouFredSel', get_template_directory_uri() . '/js/jquery.carouFredSel-6.2.1-packed.js', 'jquery', '1.0');
-		//wp_register_script('vimeo-api', 'http://a.vimeocdn.com/js/froogaloop2.min.js', 'jquery', '1.0');
-        //wp_register_script('vimeoplayer', get_template_directory_uri() . '/js/vimeoplayer2013.js', 'jquery', '1.0');
+		//wp_register_script('vimeo-api', 'https://player.vimeo.com/api/player.js', 'jquery', '1.0');
         //wp_register_script('infinitescroll', get_template_directory_uri() . '/js/jquery.infinitescroll.min.js', 'jquery', '1.0');
 
         //wp_enqueue_script('jquery');
@@ -71,7 +70,6 @@
         //wp_enqueue_script('fitVids');
         //wp_enqueue_script('infinitescroll', 'jquery');
         //wp_enqueue_script('vimeo-api', 'jquery');
-        //wp_enqueue_script('vimeoplayer', 'jquery');
         //wp_enqueue_script('gallery', 'jquery');
         //wp_enqueue_script('site', 'jquery');
 
