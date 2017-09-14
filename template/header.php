@@ -20,6 +20,7 @@
     <![endif]-->
 
     <?php get_template_part('parts/og-tags'); ?>
+    <?php get_template_part('parts/schema'); ?>
     <?php wp_head();?>
 </head>
 <body <?php body_class(); ?>>
@@ -31,15 +32,17 @@
 	        	<div id="tagline" aria-hidden="true"><p><?php bloginfo('description'); ?></p></div>
 	        <?php endif;?>
 
-			<?php
-				$menuArgs = array(
-				    'container'         => 'false',
-				    'menu'              => 'Main Menu',
-				    'menu_id'           => 'main-menu',
-				    'menu_class'        => 'main-menu menu'
-				);
-				wp_nav_menu($menuArgs);
-	        ?>
+            <nav>
+    			<?php
+    				$menuArgs = array(
+    				    'container'         => 'false',
+    				    'menu'              => 'Main Menu',
+    				    'menu_id'           => 'main-menu',
+    				    'menu_class'        => 'main-menu menu'
+    				);
+    				wp_nav_menu($menuArgs);
+    	        ?>
+            </nav>
 
 	        <a id="logo" aria-label="Home" href="<?php bloginfo('url'); ?>">
 	            <img class="svg " src="<?php echo get_template_directory_uri(); ?>/images/logo.svg" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">
