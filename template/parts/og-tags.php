@@ -43,12 +43,13 @@
     $summary = preg_replace('!\s+!', ' ', $summary);
 ?>
 
+<meta name="description" content="<?php echo empty($summary) ? get_bloginfo('description') : $summary; ?>" />
+
 <!-- Start Open Graph Meta Tags -->
     <meta property="og:title" content="<?php echo trim($title); ?>"/>
     <meta property="og:type" content="<?php echo $type; ?>"/>
     <meta property="og:url" content="<?php echo $url; ?>"/>
     <meta property="og:image" content="<?php echo $shared_image; ?>"/>
-    <meta property="og:description" content="<?php echo $summary; ?>"/>
+    <meta property="og:description" content="<?php echo empty($summary) ? get_bloginfo('description') : $summary; ?>" />
     <meta property="og:site_name" content="<?php bloginfo('name'); ?>"/>
 <!-- End Open Graph Meta Tags -->
-
