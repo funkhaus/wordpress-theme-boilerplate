@@ -1,6 +1,6 @@
 # Funkhaus Programming Style Guide
 
-This is the Funkhaus programming style guide and WordPress template theme.
+This is the Funkhaus programming style guide.
 
 The purpose of this style guide is to get you started in our Vuehaus system and to get you acquainted with our coding conventions, styles, and best practices. Also included are some tips for how to do some things that may not be immediately obvious when working with our stack.
 
@@ -34,8 +34,12 @@ The theme directory name should be something short and indicative of the client'
 #### Common Next Steps
 
 1. Set up your Wordpress view/page structure with the `Nested Pages` plugin and then replicate that structure in `/ClientNamedWordpress/app/public/wp-content/themes/clientname2018/functions/router.php`
+1. Add all Advanced Custom Fields to the pages that you anticipate you'll need. This can take a bit of planning. You want to use ACF sparingly, but you also want to avoid putting data in places that they don't belong in for convenience.
 1. Create a Vue view for each of the required pages in your application's structure in `/ClientNamedWordpress/app/public/wp-content/themes/clientname2018/src/views`
 1. Set up your base styles including z-indexes.
+1. Get your global components set up like your hamburger, header, menu, footer, cookie crumbs, social links, etc.
+1. Flesh out your pages and componentize where you can.
+1. Push up to Flywheel using the up cloud button on Flywheel Local. This will allow for live content to be added to the website. **Once you push up using Flywheel be careful that you don't push up again because you'll override any content that was added. Use `npm run deploy` from that point on to update the logic, styling, and code content. If you want to use content from the live Flywheel site then copy your Vuehaus theme folder onto your Desktop and then pull from Flywheel and then put the theme back, overriding what you got from Flywheel. `npm run deploy` updates the theme, Flywheel pull and push updates everything, Wordpress, database, and theme.**
 
 ---
 
@@ -260,3 +264,28 @@ Some Text Editor plugins you'll want to consider are:
 - Teletype
 - VueJS
 - Terminal
+
+### Dropbox
+
+Set Smart Sync to Online-only in Dropbox preferences and when you have a new project you should selectively sync the folder with the `Choose folders to sync` button in Dropbox preferences. You'll then need to navigate to that folder in your Dropbox folder and right click it and set its `Smart Sync` to `Local`.
+
+### fh-components
+
+Funkhaus has its own library of reusable components that we use extensively throughout our applications. They are a npm package that we `require` in from our `/src/main.js`. Usually we'll leave the most commonly used components in commented out `require` statements for convenience and then uncomment them as we need them. They are pretty thoroughly documented on the Github Readme to get an idea of their function and parameters.
+
+### Illustrator SVG's
+
+Illustrator designs commonly have graphics that we need to use in the website such as a custom icon. We need to save these SVGs separately:
+
+1. Copy the icon from the board.
+1. Create a new Illustrator file. Paste the icon into the new file.
+1. We need to make the SVG contrained to the actual image. Go to `Object > Artboards > Constrain to Image`.
+1. Now round up the width and height of the image to the next whole number. E.g. `25.247 px` becomes `26 px`.
+1. Save the SVG with the following settings:
+
+- SVG Basic 1.1
+- Image location Embed
+- CSS Properties Presentation Attributes
+- Turn off responsive
+
+1. Now move the SVG into `/src/svgs` and use it in your application!
