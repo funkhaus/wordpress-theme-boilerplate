@@ -2,44 +2,14 @@
 
 This is the Funkhaus programming style guide and WordPress template theme.
 
-The purpose of this style guide is to get you started in our Vuehaus system and to get you acquainted with our coding conventions, styles, and best practices.
+The purpose of this style guide is to get you started in our Vuehaus system and to get you acquainted with our coding conventions, styles, and best practices. Also included are some tips for how to do some things that may not be immediately obvious when working with our stack.
 
 ## Table of Contents
 
 1. **Setting Up**
    - [Theme Setup](#theme-setup)
-   - [JavaScript Setup](#javascript-setup)
-   - [CSS Setup](#css-setup)
-   - [Markup Guidelines](#markup-guidelines)
-   - [Plugins](#plugins)
-   - [Template Routing](#template-routing)
-   - [Image Sizes](#image-sizes)
-   - [Open Graph Tags](#open-graph-tags)
-1. **Front-End Guidelines**
-   - [Whitespace](#whitespace)
-   - [Z-Index](#z-index)
-   - [SVGs](#svgs)
-   - [Mobile & Responsive](#mobile--responsive)
-1. **Working with Wordpress**
-   - [Custom Functions](#custom-functions)
-   - [Enqueue Scripts](#enqueue-scripts)
-   - [Menus](#menus)
-   - [Metaboxes](#metaboxes)
-   - [Loops](#loops)
-   - [Admin & Login Pages](#admin-login)
-1. **Common Elements**
-   - [Vimeo](#vimeo)
-   - [Galleries](#galleries)
-   - [Slideshows](#slideshows)
-   - [Contact Pages](#contact-pages)
-   - [Advanced Pagination](#advanced-pagination)
-   - [GeoIP Detect](#geoip-detect)
-1. **Testing**
-   - [Basic Checklist](#basic-checklist)
-   - [Code Checklist](#code-checklist)
-1. **Reference**
-   - [HTML and CSS guides](#html-and-css-guides)
-1. **[To Do List](#to-do-list)**
+   - [HTML and CSS](#html-and-css)
+   - [Good To Knows](#good-to-knows)
 
 ---
 
@@ -65,51 +35,13 @@ The theme directory name should be something short and indicative of the client'
 
 1. Set up your Wordpress view/page structure with the `Nested Pages` plugin and then replicate that structure in `/ClientNamedWordpress/app/public/wp-content/themes/clientname2018/functions/router.php`
 1. Create a Vue view for each of the required pages in your application's structure in `/ClientNamedWordpress/app/public/wp-content/themes/clientname2018/src/views`
-
-#### Vuehaus File Structure
-
-Generally, the structure of your theme directory will look like this:
-
-```
-clientname2018
-	/functions -> php utilities including routing and rest_easy
-	/static -> This folder contains all the relevant backend Wordpress styling and images
-	/src
-		/components -> Where all the sites reusable components live
-		/styles -> Where global style files like _vars and _base live
-		/svgs
-		/utils -> Where reusable helper/utility scripts live like the Vue router and store
-		/views -> Where the apps pages live
-		App.js -> Controller for all the pages and components where you handle any top level logic
-		main.js -> Where all the includes and utilities are tied into the app
-	.deploy.dev.js -> This file allows you to deploy your Vuehaus theme to a flywheel live site with npm run deploy
-```
-
-#### File Naming
-
-All view and component files should be located in the `/views` and `/components` directories. Common examples:
-
-- Folders are always lowercase names. Vue files are always Title Cased.
-- `views/GridDirector.vue` -> This will be interpreted in KebabCase by Vue. E.g. `GridDirector` becomes `grid-director`.
-- Components inside nested folders will have the folder name prepended. E.g. a file in `/components/block/Content.vue` becomes `<block-content>`.
-
-Icons and image assets should be named describing what they are, not what they represent:
-
-**Good:**
-
-- `icon-envelope.svg`
-- `icon-arrow-left.svg`
-
-**Bad:**
-
-- `icon-email.svg`
-- `icon-previous.svg`
+1. Set up your base styles including z-indexes.
 
 ---
 
-### HTML & CSS
+## HTML and CSS
 
-#### General Rules
+### General Rules
 
 - Class names should all be lower case, with hyphens as spaces. So use `work-grid`, not `WorkGrid` or `work_grid`.
 
@@ -131,23 +63,7 @@ Icons and image assets should be named describing what they are, not what they r
 
 - Avoid using wrappers for convenience. If you can reasonably make something look and function correctly without a wrapper, don't add it just for convenience.
 
-- Alternate layouts, hover states, and breakpoints should all be at the bottom of your CSS: ```.contact-page {
-  // Alternate Layout
-  &.alternate {
-
-      	}
-      	// Hover State
-      	@media (hover: hover) {
-
-      	}
-      	// Breakpoints
-      	@media #{$lt-phone} {
-
-      	}
-
-  }```
-
-- Transitions should generally be kept in the global \_transitons.scss file.
+- Transitions should generally be kept in the global `/styles/_transitons.scss` file.
 
 - When using scss if you’re going more than 2 levels deep, question yourself.
 
@@ -155,7 +71,39 @@ Icons and image assets should be named describing what they are, not what they r
 
 - We care about Firefox, Chrome and Safari.
 
-##### Markup Guidelines
+- Alternate layouts, hover states, and breakpoints should all be at the bottom of your CSS:
+
+```
+.contact-page {
+  	// Alternate Layout
+  	&.alternate {
+
+    }
+    // Hover State
+    @media (hover: hover) {
+
+    }
+    // Breakpoints
+    @media #{$lt-phone} {
+
+    }
+}
+```
+
+### Break Points
+
+These are some typical breakpoints you might have declared as variables in your `_vars.scss`
+
+```css
+// Breakpoints
+$gt-cinema: "only screen and (min-width: 1800px)";
+$lt-desktop: "only screen and (max-width: 1200px)";
+$lt-tablet: "only screen and (max-width: 900px)";
+$lt-phone: "only screen and (max-width: 750px)";
+$lt-phone-landscape: "only screen and (max-width: 750px) and (orientation: landscape)";
+```
+
+### Markup Guidelines
 
 All HTML should be concise, semantic, and use as few wrapping elements as possible. Here are a few strict guidelines we follow for specific tags:
 
@@ -166,11 +114,11 @@ All HTML should be concise, semantic, and use as few wrapping elements as possib
 - `address`: Any street address areas should be wrapped in this tag.
 - `HTML5 tags`: We don't use these very often, but feel free to use them in a way that makes sense.
 
-#### Preprocessors and Resets
+### Preprocessors and Resets
 
 When it comes to CSS, our current philosophy is to avoid using any frameworks, preprocessors, or resets of any kind. We have a very minimal amount of boilerplate code to start with in our `_base` stylesheet.
 
-#### CSS naming conventions
+### CSS naming conventions
 
 We like to use a semantic approach to CSS up to a certain point. The idea is for you to be able to read the CSS and get some idea of what the HTML would look like. In most cases we avoid making extremely general classes, doing things like `.three-col`, `.blue_font`, or `.largeText` is bad. We'd rather things be intuitive and easy to read when going through the stylesheet.
 
@@ -203,7 +151,7 @@ There are a few class names that should _always_ be used in certain situations:
   - Use this for individual elements within a grid.
 - `.template-name` where **template-name** describes what template is being used. E.g. `.contact-page` or `.video-detail`, describing what page is being made.
 
-#### Style Sheet Struture
+### Style Sheet Struture
 
 Our preferred approach with CSS is to structure it similar to the sites' visual structure. So things that appear at the top of the browser window, should be higher in the CSS document. This makes it faster to find a section of code, based on the visual hierarchy of the site.
 
@@ -246,7 +194,50 @@ This also applies to individual elements too, so when defining any elements try 
 }
 ```
 
-### Image sizes
+---
+
+## Good To Knows
+
+### Vuehaus File Structure
+
+Generally, the structure of your theme directory will look like this:
+
+```
+clientname2018
+	/functions -> php utilities including routing and rest_easy
+	/static -> This folder contains all the relevant backend Wordpress styling and images
+	/src
+		/components -> Where all the sites reusable components live
+		/styles -> Where global style files like _vars and _base live
+		/svgs
+		/utils -> Where reusable helper/utility scripts live like the Vue router and store
+		/views -> Where the apps pages live
+		App.js -> Controller for all the pages and components where you handle any top level logic
+		main.js -> Where all the includes and utilities are tied into the app
+	.deploy.dev.js -> This file allows you to deploy your Vuehaus theme to a flywheel live site with npm run deploy
+```
+
+### File Naming
+
+All view and component files should be located in the `/views` and `/components` directories. Common examples:
+
+- Folders are always lowercase names. Vue files are always Title Cased.
+- `views/GridDirector.vue` -> This will be interpreted in KebabCase by Vue. E.g. `GridDirector` becomes `grid-director`.
+- Components inside nested folders will have the folder name prepended. E.g. a file in `/components/block/Content.vue` becomes `<block-content>`.
+
+Icons and image assets should be named describing what they are, not what they represent:
+
+**Good:**
+
+- `icon-envelope.svg`
+- `icon-arrow-left.svg`
+
+**Bad:**
+
+- `icon-email.svg`
+- `icon-previous.svg`
+
+### Image Sizes
 
 When handeling images in WordPress, you'll generally need to define a set of sizes in `/functions/images.php` and then another set under `Settings > Media` in Wordpress.
 
@@ -261,28 +252,11 @@ add_image_size( 'fullscreen', 1920, 1080, false ); // Fullscreen image size
 
 As for the sizes in Settings > Media, we set the width for both "medium" and "large" to be the maximum content width for the site. The height of "medium" will be a 16:9 ratio of that width, and the height of "large" will be unlimited (so set it to 0). Thumbnails we generally set to something small and square, like 250px X 250px.
 
-Assuming that the max-width of .entry is 1200px, you'd have the following media settings in the backend:
+### Text Editor Plugins
 
-```
-Thumbnail size
-Width: 250px | Height: 250px | Crop: True
+Some Text Editor plugins you'll want to consider are:
 
-Medium size
-Max Width: 1200px | Max Height: 675px
-
-Large size
-Max Width: 1200px | Max Height: 0
-```
-
-#### Break Points
-
-These are some typical breakpoints you might have declared as variables in your `_vars.scss`
-
-```css
-// Breakpoints
-$gt-cinema: "only screen and (min-width: 1800px)";
-$lt-desktop: "only screen and (max-width: 1200px)";
-$lt-tablet: "only screen and (max-width: 900px)";
-$lt-phone: "only screen and (max-width: 750px)";
-$lt-phone-landscape: "only screen and (max-width: 750px) and (orientation: landscape)";
-```
+- Prettier
+- Teletype
+- VueJS
+- Terminal
