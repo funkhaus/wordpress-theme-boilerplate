@@ -289,3 +289,11 @@ Illustrator designs commonly have graphics that we need to use in the website su
 - Turn off responsive
 
 1. Now move the SVG into `/src/svgs` and use it in your application!
+
+### Helpful Links
+
+http://the-echoplex.net/flexyboxes/
+
+https://bennettfeely.com/clippy/
+
+http://www.nealgrosskopf.com/tech/resources/80/
