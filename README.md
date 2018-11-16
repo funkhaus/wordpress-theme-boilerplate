@@ -290,6 +290,14 @@ Illustrator designs commonly have graphics that we need to use in the website su
 
 1. Now move the SVG into `/src/svgs` and use it in your application!
 
+
+### Adding Fonts
+
+1. Add font files to `/static/fonts/font.css`.
+2. Add proper weights, names, etc for each font type.
+3. Load fonts in `/parts/font-loader.php`.
+4. Add fonts as variables to `/src/styles/_vars.scss`, and specify fallback fonts (ex: `Helvetica Neue, Helvetica, Arial, sans-serif`).
+
 ### Helpful Links
 
 http://the-echoplex.net/flexyboxes/
